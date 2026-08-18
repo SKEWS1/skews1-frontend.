@@ -84,7 +84,7 @@
       </div>
     </div>
 
-    <!-- Kolom 2: Key Metrics (3 Grid) - Baterai Dihilangkan -->
+    <!-- Kolom 2: Key Metrics (3 Grid) -->
     <div class="lg:col-span-3 dashboard-card p-6 space-y-6 flex flex-col justify-between">
       <h2 class="text-xs uppercase tracking-widest text-gray-400">Key Metrics</h2>
       
@@ -135,7 +135,7 @@
       </div>
     </div>
 
-    <!-- Bagian Bawah: Alarm System Status (Full Width tanpa Recommended Actions) -->
+    <!-- Bagian Bawah: Alarm System Status -->
     <div class="lg:col-span-12 dashboard-card p-6 flex flex-col justify-between">
       <div>
         <h2 class="text-xs uppercase tracking-widest text-gray-400">Alarm System Status</h2>
@@ -159,7 +159,7 @@
 
     let marker = null;
 
-    // Chart Setup
+    // Chart Setup (Multivariat dengan Kemiringan, Kelembaban, dan Pergeseran)
     const ctx = document.getElementById('sensorChart').getContext('2d');
     const sensorChart = new Chart(ctx, {
       type: 'line',
@@ -181,6 +181,14 @@
             borderWidth: 2,
             tension: 0.3,
             fill: false
+          },
+          {
+            label: 'Pergeseran (m)',
+            data: [],
+            borderColor: '#f59e0b',
+            borderWidth: 2,
+            tension: 0.3,
+            fill: false
           }
         ]
       },
@@ -188,7 +196,7 @@
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { labels: { color: '#94a3b8', boxWidth: 12, font: { size: 10 } } }
+          legend: { labels: { color: '#94a3b8', boxWidth: 12, font: { size: 9 } } }
         },
         scales: {
           x: { ticks: { color: '#64748b', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.02)' } },
@@ -260,11 +268,12 @@
           }
         }
 
-        // Update Chart
+        // Update Chart (Kemiringan, Kelembaban, dan Pergeseran)
         const reversed = [...data].reverse();
         sensorChart.data.labels = reversed.map(d => new Date(d.created_at).toLocaleTimeString());
         sensorChart.data.datasets[0].data = reversed.map(d => d.kemiringan_tanah);
         sensorChart.data.datasets[1].data = reversed.map(d => d.kelembaban_tanah);
+        sensorChart.data.datasets[2].data = reversed.map(d => parseFloat(d.pergeseran || 0));
         sensorChart.update();
 
         document.getElementById('last-update').innerText = `Sync: ${new Date().toLocaleTimeString()}`;
