@@ -56,7 +56,7 @@
   <!-- Main Grid -->
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <!-- Kolom Kiri: Peta, Status Bahaya, Key Metrics (4 Grid) -->
+    <!-- Kolom Kiri: Peta, Status Bahaya, Alarm System Status (4 Grid) -->
     <div class="lg:col-span-4 space-y-6">
       <div class="dashboard-card p-6">
         <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
@@ -82,78 +82,95 @@
         </div>
       </div>
 
-      <div class="dashboard-card p-6 space-y-4">
-        <h2 class="text-xs uppercase tracking-widest text-gray-400">Key Metrics</h2>
+      <!-- Alarm System Status di Samping Data Terbaru -->
+      <div class="dashboard-card p-6 flex flex-col justify-between">
         <div>
-          <div class="text-2xl font-bold text-red-500" id="val-kemiringan">0.0°</div>
-          <div class="text-xs text-gray-500 mt-0.5">Kemiringan Tanah</div>
-        </div>
-        <div>
-          <div class="text-2xl font-bold text-blue-400" id="val-kelembaban">0.0%</div>
-          <div class="text-xs text-gray-500 mt-0.5">Kelembaban Tanah</div>
-        </div>
-        <div>
-          <div class="text-2xl font-bold text-amber-400" id="val-pergeseran">0.00 m</div>
-          <div class="text-xs text-gray-500 mt-0.5">Pergeseran Alat (GPS)</div>
+          <h2 class="text-xs uppercase tracking-widest text-gray-400">Alarm System Status</h2>
+          <div class="text-2xl font-bold text-amber-500 mt-2" id="val-system-status">STANDBY</div>
+          <p class="text-xs text-gray-500 mt-2">Sistem pemantauan lereng aktif real-time.</p>
         </div>
       </div>
     </div>
 
-    <!-- Kolom Tengah & Kanan: Grafik Terpisah & Grafik Lingkaran (8 Grid) -->
-    <div class="lg:col-span-8 space-y-6">
+    <!-- Kolom Tengah: Data Terbaru (3 Grid) -->
+    <div class="lg:col-span-3 dashboard-card p-6 space-y-6 flex flex-col justify-between">
+      <h2 class="text-xs uppercase tracking-widest text-gray-400">Data Terbaru</h2>
       
-      <!-- Baris Atas Kolom Kanan: Grafik Lingkaran (Radar) & Grafik Status Trend -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Grafik Sensor Berbentuk Lingkaran (Radar) -->
-        <div class="dashboard-card p-6 flex flex-col items-center">
-          <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2 self-start">Sensor Velocity Radar (Lingkaran)</h2>
-          <div class="relative h-[220px] w-full flex justify-center items-center">
-            <canvas id="radarChart"></canvas>
-          </div>
-        </div>
+      <div>
+        <div class="text-2xl font-bold text-red-500" id="val-kemiringan">0.0°</div>
+        <div class="text-xs text-gray-500 mt-1">Kemiringan Tanah</div>
+      </div>
 
-        <!-- Grafik Status Trend -->
-        <div class="dashboard-card p-6">
-          <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-4">Trend Status Bahaya</h2>
-          <div class="relative h-[220px] w-full">
-            <canvas id="statusChart"></canvas>
-          </div>
+      <div>
+        <div class="text-2xl font-bold text-blue-400" id="val-kelembaban">0.0%</div>
+        <div class="text-xs text-gray-500 mt-1">Kelembaban Tanah</div>
+      </div>
+
+      <div>
+        <div class="text-2xl font-bold text-amber-400" id="val-pergeseran">0.00 m</div>
+        <div class="text-xs text-gray-500 mt-1">Pergeseran Alat (GPS)</div>
+      </div>
+    </div>
+
+    <!-- Kolom Kanan: Grafik Lingkaran Per Sensor & Trend Sensor (5 Grid) -->
+    <div class="lg:col-span-5 space-y-6">
+      
+      <!-- Trend Status Bahaya Sederhana -->
+      <div class="dashboard-card p-4">
+        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2">Trend Status Bahaya</h2>
+        <div class="relative h-[80px] w-full">
+          <canvas id="statusChart"></canvas>
         </div>
       </div>
 
-      <!-- Baris Bawah: Trend Sensor Dipisah (Kemiringan, Kelembaban, Pergeseran) -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="dashboard-card p-4">
-          <h2 class="text-[11px] uppercase tracking-widest text-red-400 mb-2">Trend Kemiringan (°)</h2>
-          <div class="relative h-[140px] w-full">
+      <!-- Trend Sensor Kemiringan (Lingkaran & Garis) -->
+      <div class="dashboard-card p-4 grid grid-cols-2 gap-4 items-center">
+        <div>
+          <h2 class="text-[11px] uppercase tracking-widest text-red-400 mb-2">Sensor Trend Kemiringan</h2>
+          <div class="relative h-[110px] w-full">
             <canvas id="chartKemiringan"></canvas>
           </div>
         </div>
+        <div class="flex flex-col items-center justify-center">
+          <span class="text-[10px] text-gray-400 mb-1">Rasio</span>
+          <div class="relative h-[110px] w-[110px]">
+            <canvas id="radarKemiringan"></canvas>
+          </div>
+        </div>
+      </div>
 
-        <div class="dashboard-card p-4">
-          <h2 class="text-[11px] uppercase tracking-widest text-blue-400 mb-2">Trend Kelembaban (%)</h2>
-          <div class="relative h-[140px] w-full">
+      <!-- Trend Sensor Kelembaban (Lingkaran & Garis) -->
+      <div class="dashboard-card p-4 grid grid-cols-2 gap-4 items-center">
+        <div>
+          <h2 class="text-[11px] uppercase tracking-widest text-blue-400 mb-2">Sensor Trend Kelembaban</h2>
+          <div class="relative h-[110px] w-full">
             <canvas id="chartKelembaban"></canvas>
           </div>
         </div>
-
-        <div class="dashboard-card p-4">
-          <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2">Trend Pergeseran (m)</h2>
-          <div class="relative h-[140px] w-full">
-            <canvas id="chartPergeseran"></canvas>
+        <div class="flex flex-col items-center justify-center">
+          <span class="text-[10px] text-gray-400 mb-1">Rasio</span>
+          <div class="relative h-[110px] w-[110px]">
+            <canvas id="radarKelembaban"></canvas>
           </div>
         </div>
       </div>
 
-    </div>
-
-    <!-- Bagian Bawah: Alarm System Status -->
-    <div class="lg:col-span-12 dashboard-card p-6 flex flex-col justify-between">
-      <div>
-        <h2 class="text-xs uppercase tracking-widest text-gray-400">Alarm System Status</h2>
-        <div class="text-3xl font-bold text-amber-500 mt-2" id="val-system-status">STANDBY</div>
-        <p class="text-xs text-gray-500 mt-2">Sistem pemantauan lereng aktif real-time. Sensor berfungsi normal.</p>
+      <!-- Trend Sensor Pergeseran (Lingkaran & Garis) -->
+      <div class="dashboard-card p-4 grid grid-cols-2 gap-4 items-center">
+        <div>
+          <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2">Sensor Trend Pergeseran</h2>
+          <div class="relative h-[110px] w-full">
+            <canvas id="chartPergeseran"></canvas>
+          </div>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <span class="text-[10px] text-gray-400 mb-1">Rasio</span>
+          <div class="relative h-[110px] w-[110px]">
+            <canvas id="radarPergeseran"></canvas>
+          </div>
+        </div>
       </div>
+
     </div>
 
   </div>
@@ -171,48 +188,43 @@
 
     let marker = null;
 
-    // 1. Grafik Lingkaran (Radar Sensor)
-    const radarCtx = document.getElementById('radarChart').getContext('2d');
-    const radarChart = new Chart(radarCtx, {
-      type: 'radar',
-      data: {
-        labels: ['Kemiringan', 'Kelembaban', 'Pergeseran', 'Stabilitas', 'Vibrasi'],
-        datasets: [{
-          label: 'Parameter Sensor',
-          data: [0, 0, 0, 50, 0],
-          borderColor: '#3b82f6',
-          backgroundColor: 'rgba(59, 130, 246, 0.2)',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          r: {
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            angleLines: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { display: false }
-          }
+    // Helper untuk membuat Doughnut Chart (Lingkaran per sensor)
+    function createRadarCircle(canvasId, color) {
+      return new Chart(document.getElementById(canvasId).getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: [0, 100],
+            backgroundColor: [color, '#1f2937'],
+            borderWidth: 0
+          }]
         },
-        plugins: { legend: { display: false } }
-      }
-    });
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '75%',
+          plugins: { legend: { display: false }, tooltip: { enabled: false } }
+        }
+      });
+    }
 
-    // 2. Grafik Status Trend
-    const statusCtx = document.getElementById('statusChart').getContext('2d');
-    const statusChart = new Chart(statusCtx, {
+    const radarKemiringan = createRadarCircle('radarKemiringan', '#ef4444');
+    const radarKelembaban = createRadarCircle('radarKelembaban', '#3b82f6');
+    const radarPergeseran = createRadarCircle('radarPergeseran', '#f59e0b');
+
+    // Trend Status Bahaya Sederhana
+    const statusChart = new Chart(document.getElementById('statusChart').getContext('2d'), {
       type: 'line',
       data: {
         labels: [],
         datasets: [{
-          label: 'Level Status (0:Aman, 1:Siaga, 2:Bahaya)',
           data: [],
           borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          backgroundColor: 'rgba(16, 185, 129, 0.05)',
           fill: true,
-          tension: 0.2,
-          borderWidth: 2
+          tension: 0.1,
+          borderWidth: 1.5,
+          pointRadius: 2
         }]
       },
       options: {
@@ -220,12 +232,12 @@
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: { ticks: { color: '#64748b', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.02)' } },
+          x: { display: false },
           y: { 
             min: 0, max: 2, 
             ticks: { 
               color: '#64748b', 
-              font: { size: 9 },
+              font: { size: 8 },
               callback: function(val) { return val === 2 ? 'Bahaya' : val === 1 ? 'Siaga' : 'Aman'; }
             }, 
             grid: { color: 'rgba(255,255,255,0.02)' } 
@@ -234,24 +246,22 @@
       }
     });
 
-    // 3. Grafik Terpisah: Kemiringan
+    // Trend Line Charts per Sensor
     const chartKemiringan = new Chart(document.getElementById('chartKemiringan').getContext('2d'), {
       type: 'line',
-      data: { labels: [], datasets: [{ data: [], borderColor: '#ef4444', borderWidth: 1.5, fill: false }] },
+      data: { labels: [], datasets: [{ data: [], borderColor: '#ef4444', borderWidth: 1.5, fill: false, pointRadius: 0 }] },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { ticks: { color: '#64748b', font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.02)' } } } }
     });
 
-    // 4. Grafik Terpisah: Kelembaban
     const chartKelembaban = new Chart(document.getElementById('chartKelembaban').getContext('2d'), {
       type: 'line',
-      data: { labels: [], datasets: [{ data: [], borderColor: '#3b82f6', borderWidth: 1.5, fill: false }] },
+      data: { labels: [], datasets: [{ data: [], borderColor: '#3b82f6', borderWidth: 1.5, fill: false, pointRadius: 0 }] },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { ticks: { color: '#64748b', font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.02)' } } } }
     });
 
-    // 5. Grafik Terpisah: Pergeseran
     const chartPergeseran = new Chart(document.getElementById('chartPergeseran').getContext('2d'), {
       type: 'line',
-      data: { labels: [], datasets: [{ data: [], borderColor: '#f59e0b', borderWidth: 1.5, fill: false }] },
+      data: { labels: [], datasets: [{ data: [], borderColor: '#f59e0b', borderWidth: 1.5, fill: false, pointRadius: 0 }] },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { ticks: { color: '#64748b', font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.02)' } } } }
     });
 
@@ -263,7 +273,7 @@
 
         const latest = data[0];
 
-        // Update Key Metrics
+        // Update Data Terbaru
         document.getElementById('val-kemiringan').innerText = `${latest.kemiringan_tanah}°`;
         document.getElementById('val-kelembaban').innerText = `${latest.kelembaban_tanah}%`;
         document.getElementById('val-pergeseran').innerText = `${latest.pergeseran || 0} m`;
@@ -280,15 +290,18 @@
         if (statusText === 'BAHAYA') {
           statusEl.className = 'text-3xl font-black text-red-500 tracking-wide';
           statusDesc.innerText = 'BAHAYA TINGGI! Evakuasi Segera';
-          sysStatus.className = 'text-3xl font-bold text-red-500 mt-2';
+          sysStatus.className = 'text-2xl font-bold text-red-500 mt-2';
+          statusChart.data.datasets[0].borderColor = '#ef4444';
         } else if (statusText === 'SIAGA') {
           statusEl.className = 'text-3xl font-black text-amber-400 tracking-wide';
           statusDesc.innerText = 'Waspada Pergerakan Tanah';
-          sysStatus.className = 'text-3xl font-bold text-amber-400 mt-2';
+          sysStatus.className = 'text-2xl font-bold text-amber-400 mt-2';
+          statusChart.data.datasets[0].borderColor = '#f59e0b';
         } else {
           statusEl.className = 'text-3xl font-black text-emerald-400 tracking-wide';
           statusDesc.innerText = 'Kondisi lereng stabil';
-          sysStatus.className = 'text-3xl font-bold text-emerald-400 mt-2';
+          sysStatus.className = 'text-2xl font-bold text-emerald-400 mt-2';
+          statusChart.data.datasets[0].borderColor = '#10b981';
         }
 
         // Update GPS Map
@@ -311,15 +324,19 @@
         const reversed = [...data].reverse();
         const labels = reversed.map(d => new Date(d.created_at).toLocaleTimeString());
 
-        // Radar Chart Update
-        radarChart.data.datasets[0].data = [
-          latest.kemiringan_tanah, 
-          latest.kelembaban_tanah, 
-          (parseFloat(latest.pergeseran || 0) * 10), // Skala pergeseran
-          100 - (latest.kemiringan_tanah * 2), 
-          50
-        ];
-        radarChart.update();
+        // Update Lingkaran Per Sensor (Doughnut)
+        const kemVal = parseFloat(latest.kemiringan_tanah || 0);
+        const kebVal = parseFloat(latest.kelembaban_tanah || 0);
+        const perVal = parseFloat(latest.pergeseran || 0);
+
+        radarKemiringan.data.datasets[0].data = [Math.min(kemVal * 5, 100), Math.max(100 - (kemVal * 5), 0)];
+        radarKemiringan.update();
+
+        radarKelembaban.data.datasets[0].data = [kebVal, Math.max(100 - kebVal, 0)];
+        radarKelembaban.update();
+
+        radarPergeseran.data.datasets[0].data = [Math.min(perVal * 50, 100), Math.max(100 - (perVal * 50), 0)];
+        radarPergeseran.update();
 
         // Status Trend Chart Update
         const statusLevels = reversed.map(d => {
@@ -330,7 +347,7 @@
         statusChart.data.datasets[0].data = statusLevels;
         statusChart.update();
 
-        // Separate Charts Update
+        // Line Charts Update
         chartKemiringan.data.labels = labels;
         chartKemiringan.data.datasets[0].data = reversed.map(d => d.kemiringan_tanah);
         chartKemiringan.update();
