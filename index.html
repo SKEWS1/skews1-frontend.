@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EWS Longsor - Real-Time Dashboard</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card-glass {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+    }
+    #map {
+      height: 280px;
+      border-radius: 8px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+  <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-gray-800 pb-4">
+    <div>
+      <h1 class="text-2xl md:text-3xl font-bold tracking-wider text-cyan-400 flex items-center gap-2">
+        <i data-lucide="shield-alert" class="w-8 h-8 text-cyan-400"></i>
+        EWS LONGSOR INTELLIGENCE
+      </h1>
+      <p class="text-xs md:text-sm text-gray-400 mt-1">REAL-TIME MONITORING & EARLY WARNING SYSTEM</p>
+    </div>
+    <div class="mt-4 md:mt-0 flex items-center gap-3">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2"></span>
+        SYSTEM ONLINE
+      </span>
+      <span id="last-update" class="text-xs text-gray-500">Updating...</span>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <div class="space-y-6">
+      
+      <div class="card-glass p-6">
+        <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+          <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i> KEY METRICS
+        </h2>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="p-4 rounded-lg bg-gray-900/50 border border-gray-800">
+            <span class="text-xs text-gray-400 block mb-1">Kemiringan Tanah</span>
+            <div class="text-2xl font-bold text-cyan-400" id="val-kemiringan">0.0°</div>
+            <span class="text-[10px] text-gray-500">Batas Aman: &lt; 15°</span>
+          </div>
+
+          <div class="p-4 rounded-lg bg-gray-900/50 border border-gray-800">
+            <span class="text-xs text-gray-400 block mb-1">Kelembaban Tanah</span>
+            <div class="text-2xl font-bold text-blue-400" id="val-kelembaban">0.0%</div>
+            <span class="text-[10px] text-gray-500">Batas Aman: &lt; 70%</span>
+          </div>
+        </div>
+
+        <div class="mt-4 p-4 rounded-lg bg-gray-900/80 border border-gray-800 flex justify-between items-center">
+          <div>
+            <span class="text-xs text-gray-400 block">Status Bahaya Saat Ini</span>
+            <div id="val-status" class="text-lg font-bold tracking-wider text-emerald-400">AMAN</div>
+          </div>
+          <div id="status-icon-box" class="p-3 rounded-full bg-emerald-500/10 text-emerald-400">
+            <i data-lucide="check-circle" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-glass p-6">
+        <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i> LOKASI ALAT SENSOR
+        </h2>
+        <div id="map"></div>
+        <div class="mt-3 flex justify-between text-xs text-gray-400">
+          <span>Lat: <strong id="val-lat" class="text-gray-200">-</strong></span>
+          <span>Lng: <strong id="val-lng" class="text-gray-200">-</strong></span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="lg:col-span-2 space-y-6">
+      
+      <div class="card-glass p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+            <i data-lucide="trending-up" class="w-4 h-4 text-cyan-400"></i> TREND OVERVIEW (HISTORI DATA)
+          </h2>
+          <span class="text-xs text-gray-500">50 Log Terakhir</span>
+        </div>
+        
+        <div class="relative h-[380px] w-full">
+          <canvas id="sensorChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card-glass p-6">
+        <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+          <i data-lucide="list" class="w-4 h-4 text-cyan-400"></i> LOG TERAKHIR
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-300">
+            <thead class="bg-gray-900/80 text-gray-400 uppercase border-b border-gray-800">
+              <tr>
+                <th class="p-2">Waktu</th>
+                <th class="p-2">Kemiringan</th>
+                <th class="p-2">Kelembaban</th>
+                <th class="p-2">Status</th>
+              </tr>
+            </thead>
+            <tbody id="table-body" class="divide-y divide-gray-800">
+              </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const API_URL = 'https://skews1-backend.vercel.app/api/data';
+
+    // Inisialisasi Lucide Icons
+    lucide.createIcons();
+
+    // Inisialisasi Leaflet Map
+    const map = L.map('map').setView([-7.123456, 110.456789], 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap & CARTO'
+    }).addTo(map);
+
+    let marker = L.marker([-7.123456, 110.456789]).addTo(map)
+      .bindPopup('<b>Alat EWS Longsor</b><br>Lokasi Sensor Aktif');
+
+    // Inisialisasi Chart.js
+    const ctx = document.getElementById('sensorChart').getContext('2d');
+    const sensorChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Kemiringan (°)',
+            data: [],
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Kelembaban (%)',
+            data: [],
+            borderColor: '#60a5fa',
+            backgroundColor: 'rgba(96, 165, 250, 0.1)',
+            tension: 0.4,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: '#94a3b8' } }
+        },
+        scales: {
+          x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        }
+      }
+    });
+
+    // Function Ambil Data dari API Vercel
+    async function fetchData() {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        if (!data || data.length === 0) return;
+
+        // Data Terbaru (Index 0 karena order created_at desc)
+        const latest = data[0];
+
+        // Update Key Metrics
+        document.getElementById('val-kemiringan').innerText = `${latest.kemiringan_tanah}°`;
+        document.getElementById('val-kelembaban').innerText = `${latest.kelembaban_tanah}%`;
+
+        // Update Status & Warna
+        const statusEl = document.getElementById('val-status');
+        const statusBox = document.getElementById('status-icon-box');
+        const statusText = (latest.status_bahaya || 'AMAN').toUpperCase();
+
+        statusEl.innerText = statusText;
+        if (statusText === 'BAHAYA') {
+          statusEl.className = 'text-lg font-bold tracking-wider text-red-500';
+          statusBox.className = 'p-3 rounded-full bg-red-500/20 text-red-500';
+        } else if (statusText === 'SIAGA') {
+          statusEl.className = 'text-lg font-bold tracking-wider text-amber-400';
+          statusBox.className = 'p-3 rounded-full bg-amber-500/20 text-amber-400';
+        } else {
+          statusEl.className = 'text-lg font-bold tracking-wider text-emerald-400';
+          statusBox.className = 'p-3 rounded-full bg-emerald-500/20 text-emerald-400';
+        }
+
+        // Update Map Marker
+        const lat = parseFloat(latest.latitude) || -7.123456;
+        const lng = parseFloat(latest.longitude) || 110.456789;
+        document.getElementById('val-lat').innerText = lat;
+        document.getElementById('val-lng').innerText = lng;
+        
+        const newLatLng = new L.LatLng(lat, lng);
+        marker.setLatLng(newLatLng);
+        map.panTo(newLatLng);
+
+        // Update Chart Data (Urutkan dari yang tertua ke terbaru)
+        const reversedData = [...data].reverse();
+        sensorChart.data.labels = reversedData.map(d => new Date(d.created_at).toLocaleTimeString());
+        sensorChart.data.datasets[0].data = reversedData.map(d => d.kemiringan_tanah);
+        sensorChart.data.datasets[1].data = reversedData.map(d => d.kelembaban_tanah);
+        sensorChart.update();
+
+        // Update Table Log (Top 5)
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = '';
+        data.slice(0, 5).forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="p-2">${new Date(row.created_at).toLocaleString()}</td>
+            <td class="p-2">${row.kemiringan_tanah}°</td>
+            <td class="p-2">${row.kelembaban_tanah}%</td>
+            <td class="p-2 font-semibold uppercase ${row.status_bahaya?.toUpperCase() === 'BAHAYA' ? 'text-red-400' : row.status_bahaya?.toUpperCase() === 'SIAGA' ? 'text-amber-400' : 'text-emerald-400'}">${row.status_bahaya || 'AMAN'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // Timestamp Terakhir Update
+        document.getElementById('last-update').innerText = `Update: ${new Date().toLocaleTimeString()}`;
+
+      } catch (error) {
+        console.error('Gagal mengambil data:', error);
+      }
+    }
+
+    // Load Data Pertama Kali & Auto Refresh Setiap 5 Detik
+    fetchData();
+    setInterval(fetchData, 5000);
+  </script>
+</body>
+</html>
