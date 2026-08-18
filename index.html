@@ -319,17 +319,20 @@
       let aman = 0, siaga = 0, bahaya = 0;
 
       dataArray.forEach(d => {
-        const val = parseFloat(d[sensorType] || 0);
-
+        let val = 0;
         if (sensorType === 'kemiringan_tanah') {
+          val = parseFloat(d.kemiringan_tanah || 0);
           if (val >= 30) bahaya++;
           else if (val >= 15) siaga++;
           else aman++;
         } else if (sensorType === 'kelembaban_tanah') {
+          val = parseFloat(d.kelembaban_tanah || 0);
           if (val >= 80) bahaya++;
           else if (val >= 60) siaga++;
           else aman++;
         } else if (sensorType === 'pergeseran') {
+          // Menangkap berbagai kemungkinan nama key pergeseran dari API
+          val = parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0)));
           if (val >= 1.0) bahaya++;
           else if (val >= 0.5) siaga++;
           else aman++;
@@ -341,7 +344,7 @@
 
       const pAman = Math.round((aman / total) * 100);
       const pSiaga = Math.round((siaga / total) * 100);
-      let pBahaya = 100 - (pAman + pSiaga); // Memastikan total pas 100%
+      let pBahaya = 100 - (pAman + pSiaga); 
       if (pBahaya < 0) pBahaya = 0;
 
       return [pAman, pSiaga, pBahaya];
@@ -355,10 +358,13 @@
 
         const latest = data[0];
 
+        // Ambil nilai pergeseran secara fleksibel untuk card terbaru
+        const valPergeseran Terbaru = latest.pergeseran !== undefined ? latest.pergeseran : (latest.pergeseran_tanah !== undefined ? latest.pergeseran_tanah : (latest.pergeseran_alat || 0));
+
         // Update Data Terbaru
         document.getElementById('val-kemiringan').innerText = `${latest.kemiringan_tanah}°`;
         document.getElementById('val-kelembaban').innerText = `${latest.kelembaban_tanah}%`;
-        document.getElementById('val-pergeseran').innerText = `${latest.pergeseran || 0} m`;
+        document.getElementById('val-pergeseran').innerText = `${valPergeseranTerbaru} m`;
 
         // Status Bahaya & Warna Gradasi Berdasarkan Status Global
         const statusEl = document.getElementById('val-status');
@@ -450,15 +456,15 @@
 
         // Line Charts Update
         chartKemiringan.data.labels = labels;
-        chartKemiringan.data.datasets[0].data = reversed.map(d => d.kemiringan_tanah);
+        chartKemiringan.data.datasets[0].data = reversed.map(d => parseFloat(d.kemiringan_tanah || 0));
         chartKemiringan.update();
 
         chartKelembaban.data.labels = labels;
-        chartKelembaban.data.datasets[0].data = reversed.map(d => d.kelembaban_tanah);
+        chartKelembaban.data.datasets[0].data = reversed.map(d => parseFloat(d.kelembaban_tanah || 0));
         chartKelembaban.update();
 
         chartPergeseran.data.labels = labels;
-        chartPergeseran.data.datasets[0].data = reversed.map(d => parseFloat(d.pergeseran || 0));
+        chartPergeseran.data.datasets[0].data = reversed.map(d => parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0))));
         chartPergeseran.update();
 
         document.getElementById('last-update').innerText = `Sync: ${new Date().toLocaleTimeString()}`;
