@@ -331,7 +331,6 @@
           else if (val >= 60) siaga++;
           else aman++;
         } else if (sensorType === 'pergeseran') {
-          // Menangkap berbagai kemungkinan nama key pergeseran dari API
           val = parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0)));
           if (val >= 1.0) bahaya++;
           else if (val >= 0.5) siaga++;
@@ -358,8 +357,8 @@
 
         const latest = data[0];
 
-        // Ambil nilai pergeseran secara fleksibel untuk card terbaru
-        const valPergeseran Terbaru = latest.pergeseran !== undefined ? latest.pergeseran : (latest.pergeseran_tanah !== undefined ? latest.pergeseran_tanah : (latest.pergeseran_alat || 0));
+        // Memperbaiki penamaan variabel tanpa spasi
+        const valPergeseranTerbaru = latest.pergeseran !== undefined ? latest.pergeseran : (latest.pergeseran_tanah !== undefined ? latest.pergeseran_tanah : (latest.pergeseran_alat || 0));
 
         // Update Data Terbaru
         document.getElementById('val-kemiringan').innerText = `${latest.kemiringan_tanah}°`;
