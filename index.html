@@ -196,13 +196,13 @@
     let marker = null;
 
     // Helper Doughnut Chart Lingkaran
-    function createRadarCircle(canvasId, color) {
+    function createRadarCircle(canvasId, defaultColor) {
       return new Chart(document.getElementById(canvasId).getContext('2d'), {
         type: 'doughnut',
         data: {
           datasets: [{
             data: [0, 100],
-            backgroundColor: [color, '#1f2937'],
+            backgroundColor: [defaultColor, '#1f2937'],
             borderWidth: 0
           }]
         },
@@ -215,11 +215,11 @@
       });
     }
 
-    const radarKemiringan = createRadarCircle('radarKemiringan', '#ef4444');
-    const radarKelembaban = createRadarCircle('radarKelembaban', '#3b82f6');
-    const radarPergeseran = createRadarCircle('radarPergeseran', '#f59e0b');
+    const radarKemiringan = createRadarCircle('radarKemiringan', '#10b981');
+    const radarKelembaban = createRadarCircle('radarKelembaban', '#10b981');
+    const radarPergeseran = createRadarCircle('radarPergeseran', '#10b981');
 
-    // Trend Status Bahaya (Menghindari label menumpuk dengan distinct ticks & filtering step)
+    // Trend Status Bahaya
     const statusChart = new Chart(document.getElementById('statusChart').getContext('2d'), {
       type: 'line',
       data: {
@@ -294,7 +294,7 @@
         document.getElementById('val-kelembaban').innerText = `${latest.kelembaban_tanah}%`;
         document.getElementById('val-pergeseran').innerText = `${latest.pergeseran || 0} m`;
 
-        // Status Bahaya
+        // Status Bahaya & Warna Dinamis Berdasarkan Status
         const statusEl = document.getElementById('val-status');
         const statusDesc = document.getElementById('val-status-desc');
         const sysStatus = document.getElementById('val-system-status');
@@ -303,22 +303,26 @@
         statusEl.innerText = statusText;
         sysStatus.innerText = statusText === 'BAHAYA' ? 'WARNING ACTIVE' : statusText;
 
+        let statusColor = '#10b981'; // Aman (Hijau)
         if (statusText === 'BAHAYA') {
           statusEl.className = 'text-3xl font-black text-red-500 tracking-wide';
           statusDesc.innerText = 'BAHAYA TINGGI! Evakuasi Segera';
           sysStatus.className = 'text-2xl font-bold text-red-500 mt-2';
+          statusColor = '#ef4444'; // Merah
           statusChart.data.datasets[0].borderColor = '#ef4444';
           statusChart.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.1)';
         } else if (statusText === 'SIAGA') {
           statusEl.className = 'text-3xl font-black text-amber-400 tracking-wide';
           statusDesc.innerText = 'Waspada Pergerakan Tanah';
           sysStatus.className = 'text-2xl font-bold text-amber-400 mt-2';
+          statusColor = '#f59e0b'; // Kuning/Amber
           statusChart.data.datasets[0].borderColor = '#f59e0b';
           statusChart.data.datasets[0].backgroundColor = 'rgba(245, 158, 11, 0.1)';
         } else {
           statusEl.className = 'text-3xl font-black text-emerald-400 tracking-wide';
           statusDesc.innerText = 'Kondisi lereng stabil';
           sysStatus.className = 'text-2xl font-bold text-emerald-400 mt-2';
+          statusColor = '#10b981'; // Hijau
           statusChart.data.datasets[0].borderColor = '#10b981';
           statusChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.1)';
         }
@@ -343,21 +347,24 @@
         const reversed = [...data].reverse();
         const labels = reversed.map(d => new Date(d.created_at).toLocaleTimeString());
 
-        // Update Lingkaran Per Sensor
+        // Update Lingkaran Per Sensor dengan Warna Berdasarkan Status Bahaya
         const kemVal = parseFloat(latest.kemiringan_tanah || 0);
         const kebVal = parseFloat(latest.kelembaban_tanah || 0);
         const perVal = parseFloat(latest.pergeseran || 0);
 
         radarKemiringan.data.datasets[0].data = [Math.min(kemVal * 5, 100), Math.max(100 - (kemVal * 5), 0)];
+        radarKemiringan.data.datasets[0].backgroundColor = [statusColor, '#1f2937'];
         radarKemiringan.update();
 
         radarKelembaban.data.datasets[0].data = [kebVal, Math.max(100 - kebVal, 0)];
+        radarKelembaban.data.datasets[0].backgroundColor = [statusColor, '#1f2937'];
         radarKelembaban.update();
 
         radarPergeseran.data.datasets[0].data = [Math.min(perVal * 50, 100), Math.max(100 - (perVal * 50), 0)];
+        radarPergeseran.data.datasets[0].backgroundColor = [statusColor, '#1f2937'];
         radarPergeseran.update();
 
-        // Status Trend Chart Update (Mengubah string status unik ke nilai numerik 0, 1, 2)
+        // Status Trend Chart Update
         const statusLevels = reversed.map(d => {
           const s = (d.status_bahaya || 'AMAN').toUpperCase();
           return s === 'BAHAYA' ? 2 : s === 'SIAGA' ? 1 : 0;
