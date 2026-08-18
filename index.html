@@ -204,14 +204,14 @@
 
     lucide.createIcons();
 
-    // Map Setup (Default pandangan awal universal/Indonesia sebelum ada sinyal GPS)
+    // Map Setup (Pusat awal netral di tengah Indonesia tanpa marker awal)
     const map = L.map('map').setView([-2.548926, 118.014863], 5);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap & CARTO'
     }).addTo(map);
 
-    let marker = null;
+    let marker = null; // Marker dikosongkan sampai data GPS diterima
 
     // Chart Setup
     const ctx = document.getElementById('sensorChart').getContext('2d');
@@ -223,7 +223,7 @@
           {
             label: 'Kemiringan (°)',
             data: [],
-            borderColor: '#ef4444', // Merah
+            borderColor: '#ef4444',
             backgroundColor: 'rgba(239, 68, 68, 0.1)',
             borderWidth: 2,
             tension: 0.3,
@@ -303,11 +303,11 @@
         }
         lucide.createIcons();
 
-        // Update Map Marker (Hanya jika data GPS dari database tersedia)
+        // Update Map Marker Berdasarkan GPS Realtime dari API
         const lat = parseFloat(latest.latitude);
         const lng = parseFloat(latest.longitude);
 
-        if (!isNaN(lat) && !isNaN(lng)) {
+        if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
           document.getElementById('val-lat').innerText = lat;
           document.getElementById('val-lng').innerText = lng;
 
