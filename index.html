@@ -30,9 +30,10 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
-    .glow-card-cyan {
-      border-left: 4px solid #06b6d4;
-      background: linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(15, 23, 42, 0.4) 100%);
+    /* Mengubah glow kartu Kemiringan menjadi merah */
+    .glow-card-red {
+      border-left: 4px solid #ef4444;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(15, 23, 42, 0.4) 100%);
     }
     .glow-card-blue {
       border-left: 4px solid #3b82f6;
@@ -53,11 +54,11 @@
   <!-- Header Section -->
   <header class="glow-box rounded-2xl p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center border border-slate-800">
     <div class="flex items-center gap-4">
-      <div class="p-3 bg-cyan-500/10 border border-cyan-500/30 rounded-xl text-cyan-400">
+      <div class="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-500">
         <i data-lucide="radar" class="w-8 h-8 animate-spin" style="animation-duration: 10s;"></i>
       </div>
       <div>
-        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-red-500 via-rose-400 to-amber-400 bg-clip-text text-transparent">
           EWS LONGSOR COMMAND CENTER
         </h1>
         <p class="text-xs md:text-sm text-slate-400 mt-0.5">Sistem Peringatan Dini & Pemantauan Pergeseran Tanah Realtime</p>
@@ -100,13 +101,13 @@
 
       <!-- Realtime Metrics Grid -->
       <div class="space-y-4">
-        <!-- Kemiringan -->
+        <!-- Kemiringan (Diubah menjadi Merah) -->
         <div class="glow-box glow-card-red p-5 rounded-xl flex justify-between items-center">
           <div>
             <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Kemiringan Tanah</span>
-            <div class="text-2xl font-bold text-cyan-400 mt-1" id="val-kemiringan">0.0°</div>
+            <div class="text-2xl font-bold text-red-500 mt-1" id="val-kemiringan">0.0°</div>
           </div>
-          <div class="p-3 bg-cyan-500/10 rounded-lg text-cyan-400">
+          <div class="p-3 bg-red-500/10 rounded-lg text-red-500">
             <i data-lucide="compass" class="w-6 h-6"></i>
           </div>
         </div>
@@ -138,7 +139,7 @@
       <div class="glow-box p-6 rounded-2xl">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-xs font-bold tracking-wider text-slate-400 uppercase flex items-center gap-2">
-            <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i> Peta Lokasi Sensor GPS
+            <i data-lucide="map-pin" class="w-4 h-4 text-red-500"></i> Peta Lokasi Sensor GPS
           </h2>
         </div>
         <div id="map"></div>
@@ -158,7 +159,7 @@
         <div class="flex justify-between items-center mb-6">
           <div>
             <h2 class="text-sm font-bold tracking-wider text-slate-300 uppercase flex items-center gap-2">
-              <i data-lucide="line-chart" class="w-4 h-4 text-cyan-400"></i> Grafik Trend Multivariat
+              <i data-lucide="line-chart" class="w-4 h-4 text-red-500"></i> Grafik Trend Multivariat
             </h2>
             <p class="text-xs text-slate-500 mt-0.5">Riwayat Perubahan Parameter Sensor</p>
           </div>
@@ -173,7 +174,7 @@
       <div class="glow-box p-6 rounded-2xl">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-sm font-bold tracking-wider text-slate-300 uppercase flex items-center gap-2">
-            <i data-lucide="database" class="w-4 h-4 text-cyan-400"></i> Log Telemetri Terakhir
+            <i data-lucide="database" class="w-4 h-4 text-red-500"></i> Log Telemetri Terakhir
           </h2>
         </div>
         <div class="overflow-x-auto">
@@ -222,8 +223,8 @@
           {
             label: 'Kemiringan (°)',
             data: [],
-            borderColor: '#06b6d4',
-            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+            borderColor: '#ef4444', // Diubah menjadi Merah
+            backgroundColor: 'rgba(239, 68, 68, 0.1)', // Transparansi Merah
             borderWidth: 2,
             tension: 0.3,
             fill: true
@@ -328,14 +329,14 @@
         sensorChart.data.datasets[2].data = reversedData.map(d => d.pergeseran || 0);
         sensorChart.update();
 
-        // Update Table
+        // Update Table (Diubah nilai kemiringan menjadi teks merah)
         const tbody = document.getElementById('table-body');
         tbody.innerHTML = '';
         data.slice(0, 5).forEach(row => {
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td class="p-3 text-slate-400">${new Date(row.created_at).toLocaleString()}</td>
-            <td class="p-3 font-semibold text-cyan-400">${row.kemiringan_tanah}°</td>
+            <td class="p-3 font-semibold text-red-500">${row.kemiringan_tanah}°</td>
             <td class="p-3 font-semibold text-blue-400">${row.kelembaban_tanah}%</td>
             <td class="p-3 font-semibold text-amber-400">${row.pergeseran || 0} m</td>
             <td class="p-3 font-bold uppercase ${row.status_bahaya?.toUpperCase() === 'BAHAYA' ? 'text-red-400' : row.status_bahaya?.toUpperCase() === 'SIAGA' ? 'text-amber-400' : 'text-emerald-400'}">${row.status_bahaya || 'AMAN'}</td>
