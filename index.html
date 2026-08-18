@@ -204,14 +204,14 @@
 
     lucide.createIcons();
 
-    // Map Setup (Leaflet Dark Theme - Tanpa Token)
-    const map = L.map('map').setView([-7.120583, 110.379528], 14);
+    // Map Setup (Default pandangan awal universal/Indonesia sebelum ada sinyal GPS)
+    const map = L.map('map').setView([-2.548926, 118.014863], 5);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap & CARTO'
     }).addTo(map);
 
-    let marker = L.marker([-7.120583, 110.379528]).addTo(map).bindPopup('<b>Stasiun SKEWS</b><br>Lokasi GPS Terkini');
+    let marker = null;
 
     // Chart Setup
     const ctx = document.getElementById('sensorChart').getContext('2d');
@@ -303,17 +303,22 @@
         }
         lucide.createIcons();
 
-        // Update Map Marker
+        // Update Map Marker (Hanya jika data GPS dari database tersedia)
         const lat = parseFloat(latest.latitude);
         const lng = parseFloat(latest.longitude);
 
-        if (lat && lng) {
+        if (!isNaN(lat) && !isNaN(lng)) {
           document.getElementById('val-lat').innerText = lat;
           document.getElementById('val-lng').innerText = lng;
 
           const newLatLng = new L.LatLng(lat, lng);
-          marker.setLatLng(newLatLng);
-          map.panTo(newLatLng);
+          if (!marker) {
+            marker = L.marker(newLatLng).addTo(map).bindPopup('<b>Stasiun SKEWS</b><br>Lokasi GPS Terkini');
+            map.setView(newLatLng, 15);
+          } else {
+            marker.setLatLng(newLatLng);
+            map.panTo(newLatLng);
+          }
         }
 
         // Update Chart
