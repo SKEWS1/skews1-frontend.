@@ -137,11 +137,11 @@
             </div>
           </div>
           <div class="flex flex-col items-center justify-center relative">
-            <span class="text-[10px] text-gray-400 mb-1">Rasio (%)</span>
+            <span class="text-[10px] text-gray-400 mb-1">Komposisi Status</span>
             <div class="relative h-[90px] w-[90px]">
               <canvas id="radarKemiringan"></canvas>
               <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span id="text-pct-kemiringan" class="text-xs font-bold text-red-400">0%</span>
+                <span id="text-dom-kemiringan" class="text-[11px] font-bold text-emerald-400">AMAN</span>
               </div>
             </div>
           </div>
@@ -156,11 +156,11 @@
             </div>
           </div>
           <div class="flex flex-col items-center justify-center relative">
-            <span class="text-[10px] text-gray-400 mb-1">Rasio (%)</span>
+            <span class="text-[10px] text-gray-400 mb-1">Komposisi Status</span>
             <div class="relative h-[90px] w-[90px]">
               <canvas id="radarKelembaban"></canvas>
               <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span id="text-pct-kelembaban" class="text-xs font-bold text-blue-400">0%</span>
+                <span id="text-dom-kelembaban" class="text-[11px] font-bold text-emerald-400">AMAN</span>
               </div>
             </div>
           </div>
@@ -175,11 +175,11 @@
             </div>
           </div>
           <div class="flex flex-col items-center justify-center relative">
-            <span class="text-[10px] text-gray-400 mb-1">Rasio (%)</span>
+            <span class="text-[10px] text-gray-400 mb-1">Komposisi Status</span>
             <div class="relative h-[90px] w-[90px]">
               <canvas id="radarPergeseran"></canvas>
               <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span id="text-pct-pergeseran" class="text-xs font-bold text-amber-400">0%</span>
+                <span id="text-dom-pergeseran" class="text-[11px] font-bold text-emerald-400">AMAN</span>
               </div>
             </div>
           </div>
@@ -204,14 +204,15 @@
 
     let marker = null;
 
-    // Helper Doughnut Chart Persenan Lingkaran
-    function createPercentCircle(canvasId, defaultColor) {
+    // Helper Doughnut Chart Komposisi Status (Aman, Siaga, Bahaya) dengan 3 Warna Berbeda
+    function createCompositionCircle(canvasId) {
       return new Chart(document.getElementById(canvasId).getContext('2d'), {
         type: 'doughnut',
         data: {
+          labels: ['Aman', 'Siaga', 'Bahaya'],
           datasets: [{
-            data: [0, 100],
-            backgroundColor: [defaultColor, '#1f2937'],
+            data: [33, 33, 34],
+            backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], // Hijau, Kuning, Merah
             borderWidth: 0
           }]
         },
@@ -219,14 +220,14 @@
           responsive: true,
           maintainAspectRatio: false,
           cutout: '75%',
-          plugins: { legend: { display: false }, tooltip: { enabled: false } }
+          plugins: { legend: { display: false }, tooltip: { enabled: true } }
         }
       });
     }
 
-    const radarKemiringan = createPercentCircle('radarKemiringan', '#ef4444');
-    const radarKelembaban = createPercentCircle('radarKelembaban', '#3b82f6');
-    const radarPergeseran = createPercentCircle('radarPergeseran', '#f59e0b');
+    const radarKemiringan = createCompositionCircle('radarKemiringan');
+    const radarKelembaban = createCompositionCircle('radarKelembaban');
+    const radarPergeseran = createCompositionCircle('radarPergeseran');
 
     // Trend Status Bahaya
     const statusChart = new Chart(document.getElementById('statusChart').getContext('2d'), {
@@ -271,7 +272,7 @@
       }
     });
 
-    // Trend Line Charts per Sensor (Menggunakan fill dengan gradasi dinamis nanti)
+    // Trend Line Charts per Sensor
     function createSensorChart(ctxId, color) {
       return new Chart(document.getElementById(ctxId).getContext('2d'), {
         type: 'line',
@@ -303,6 +304,24 @@
     const chartKelembaban = createSensorChart('chartKelembaban', '#3b82f6');
     const chartPergeseran = createSensorChart('chartPergeseran', '#f59e0b');
 
+    // Fungsi helper menghitung persentase kemunculan status dari riwayat data
+    function calculateStatusComposition(dataArray) {
+      if (!dataArray || dataArray.length === 0) return [33, 33, 34];
+      let aman = 0, siaga = 0, bahaya = 0;
+      dataArray.forEach(d => {
+        const s = (d.status_bahaya || 'AMAN').toUpperCase();
+        if (s === 'BAHAYA') bahaya++;
+        else if (s === 'SIAGA') siaga++;
+        else aman++;
+      });
+      const total = dataArray.length;
+      return [
+        Math.round((aman / total) * 100),
+        Math.round((siaga / total) * 100),
+        Math.round((bahaya / total) * 100)
+      ];
+    }
+
     async function fetchData() {
       try {
         const response = await fetch(API_URL);
@@ -325,19 +344,19 @@
         statusEl.innerText = statusText;
         sysStatus.innerText = statusText === 'BAHAYA' ? 'WARNING ACTIVE' : statusText;
 
-        let gradientRgba = 'rgba(16, 185, 129, 0.15)'; // Aman (Hijau transparan)
+        let gradientRgba = 'rgba(16, 185, 129, 0.15)';
         if (statusText === 'BAHAYA') {
           statusEl.className = 'text-3xl font-black text-red-500 tracking-wide';
           statusDesc.innerText = 'BAHAYA TINGGI! Evakuasi Segera';
           sysStatus.className = 'text-2xl font-bold text-red-500 mt-2';
-          gradientRgba = 'rgba(239, 68, 68, 0.2)'; // Merah transparan
+          gradientRgba = 'rgba(239, 68, 68, 0.2)';
           statusChart.data.datasets[0].borderColor = '#ef4444';
           statusChart.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.1)';
         } else if (statusText === 'SIAGA') {
           statusEl.className = 'text-3xl font-black text-amber-400 tracking-wide';
           statusDesc.innerText = 'Waspada Pergerakan Tanah';
           sysStatus.className = 'text-2xl font-bold text-amber-400 mt-2';
-          gradientRgba = 'rgba(245, 158, 11, 0.2)'; // Kuning transparan
+          gradientRgba = 'rgba(245, 158, 11, 0.2)';
           statusChart.data.datasets[0].borderColor = '#f59e0b';
           statusChart.data.datasets[0].backgroundColor = 'rgba(245, 158, 11, 0.1)';
         } else {
@@ -370,31 +389,41 @@
           }
         }
 
-        // Update Data Grafik
         const reversed = [...data].reverse();
         const labels = reversed.map(d => new Date(d.created_at).toLocaleTimeString());
 
-        // Perhitungan Persentase untuk Grafik Lingkaran
-        const kemVal = parseFloat(latest.kemiringan_tanah || 0);
-        const kebVal = parseFloat(latest.kelembaban_tanah || 0);
-        const perVal = parseFloat(latest.pergeseran || 0);
-
-        // Misal asumsi batas maksimal: Kemiringan max 45°, Kelembaban 100%, Pergeseran max 2 meter
-        const pctKem = Math.min(Math.round((kemVal / 45) * 100), 100);
-        const pctKeb = Math.min(Math.round(kebVal), 100);
-        const pctPer = Math.min(Math.round((perVal / 2) * 100), 100);
-
-        radarKemiringan.data.datasets[0].data = [pctKem, Math.max(100 - pctKem, 0)];
+        // Hitung Komposisi Persentase Status untuk Grafik Lingkaran Bergeser Dinamis
+        const compPct = calculateStatusComposition(data);
+        
+        radarKemiringan.data.datasets[0].data = compPct;
         radarKemiringan.update();
-        document.getElementById('text-pct-kemiringan').innerText = `${pctKem}%`;
-
-        radarKelembaban.data.datasets[0].data = [pctKeb, Math.max(100 - pctKeb, 0)];
+        
+        radarKelembaban.data.datasets[0].data = compPct;
         radarKelembaban.update();
-        document.getElementById('text-pct-kelembaban').innerText = `${pctKeb}%`;
-
-        radarPergeseran.data.datasets[0].data = [pctPer, Math.max(100 - pctPer, 0)];
+        
+        radarPergeseran.data.datasets[0].data = compPct;
         radarPergeseran.update();
-        document.getElementById('text-pct-pergeseran').innerText = `${pctPer}%`;
+
+        // Tentukan teks dominan di tengah lingkaran berdasarkan persentase terbanyak
+        const maxVal = Math.max(...compPct);
+        let dominantText = "AMAN";
+        let textColor = "#10b981";
+        if (maxVal === compPct[2] && compPct[2] > 0) {
+          dominantText = "BAHAYA";
+          textColor = "#ef4444";
+        } else if (maxVal === compPct[1] && compPct[1] > 0) {
+          dominantText = "SIAGA";
+          textColor = "#f59e0b";
+        }
+
+        document.getElementById('text-dom-kemiringan').innerText = `${dominantText} (${maxVal}%)`;
+        document.getElementById('text-dom-kemiringan').className = `text-[10px] font-bold text-[${textColor}]`;
+        
+        document.getElementById('text-dom-kelembaban').innerText = `${dominantText} (${maxVal}%)`;
+        document.getElementById('text-dom-kelembaban').className = `text-[10px] font-bold text-[${textColor}]`;
+        
+        document.getElementById('text-dom-pergeseran').innerText = `${dominantText} (${maxVal}%)`;
+        document.getElementById('text-dom-pergeseran').className = `text-[10px] font-bold text-[${textColor}]`;
 
         // Status Trend Chart Update
         const statusLevels = reversed.map(d => {
