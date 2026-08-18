@@ -128,7 +128,7 @@
       <!-- Trend Sensor 3 Berjejer ke Samping -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Sensor Kemiringan: Line Chart + Pie Chart Proporsi Status Spesifik Sensor Ini -->
+        <!-- Sensor Kemiringan -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
             <h2 class="text-[11px] uppercase tracking-widest text-red-400 mb-2">Trend Kemiringan</h2>
@@ -149,7 +149,7 @@
           </div>
         </div>
 
-        <!-- Sensor Kelembaban: Line Chart + Pie Chart Proporsi Status Spesifik Sensor Ini -->
+        <!-- Sensor Kelembaban -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
             <h2 class="text-[11px] uppercase tracking-widest text-blue-400 mb-2">Trend Kelembaban</h2>
@@ -170,7 +170,7 @@
           </div>
         </div>
 
-        <!-- Sensor Pergeseran: Line Chart + Pie Chart Proporsi Status Spesifik Sensor Ini -->
+        <!-- Sensor Pergeseran -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
             <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2">Trend Pergeseran</h2>
@@ -210,15 +210,15 @@
 
     let marker = null;
 
-    // Helper Pie/Doughnut Chart Infografis Proporsi Trend Status per Sensor
+    // Helper Pie Chart Infografis
     function createPieChart(canvasId) {
       return new Chart(document.getElementById(canvasId).getContext('2d'), {
-        type: 'pie', // Menggunakan pie chart infografis
+        type: 'pie',
         data: {
           labels: ['Aman', 'Siaga', 'Bahaya'],
           datasets: [{
             data: [33, 33, 34],
-            backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], // Hijau, Kuning, Merah
+            backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
             borderWidth: 1,
             borderColor: '#0c0c0c'
           }]
@@ -313,7 +313,7 @@
     const chartKelembaban = createSensorChart('chartKelembaban', '#3b82f6');
     const chartPergeseran = createSensorChart('chartPergeseran', '#f59e0b');
 
-    // Fungsi kalkulasi proporsi status spesifik berdasarkan ambang batas masing-masing jenis sensor pada histori data
+    // Kalkulasi Proporsi Berdasarkan Riwayat Nilai Aktual Masing-Masing Sensor
     function calculateSensorSpecificProportions(dataArray, sensorType) {
       if (!dataArray || dataArray.length === 0) return [33, 33, 34];
       let aman = 0, siaga = 0, bahaya = 0;
@@ -324,18 +324,18 @@
         else if (sensorType === 'kelembaban') val = parseFloat(d.kelembaban_tanah || 0);
         else if (sensorType === 'pergeseran') val = parseFloat(d.pergeseran || 0);
 
-        // Penentuan status spesifik berdasarkan nilai sensor aktual dalam trend
+        // Evaluasi nilai titik data untuk menentukan masuk kategori Aman, Siaga, atau Bahaya
         if (sensorType === 'kemiringan') {
-          if (val > 30) bahaya++;
-          else if (val > 15) siaga++;
+          if (val >= 30) bahaya++;
+          else if (val >= 15) siaga++;
           else aman++;
         } else if (sensorType === 'kelembaban') {
-          if (val > 80) bahaya++;
-          else if (val > 60) siaga++;
+          if (val >= 80) bahaya++;
+          else if (val >= 60) siaga++;
           else aman++;
         } else if (sensorType === 'pergeseran') {
-          if (val > 1.0) bahaya++;
-          else if (val > 0.5) siaga++;
+          if (val >= 1.0) bahaya++;
+          else if (val >= 0.5) siaga++;
           else aman++;
         }
       });
@@ -418,22 +418,22 @@
         const reversed = [...data].reverse();
         const labels = reversed.map(d => new Date(d.created_at).toLocaleTimeString());
 
-        // Hitung proporsi pie chart infografis spesifik untuk masing-masing sensor
-        const propKem = calculateSensorSpecificProportions(data, 'kemiringan');
+        // Update Pie Chart Infografis Berdasarkan Perubahan Trend Setiap Sensor
+        const propKem = calculateSensorSpecificProportions(reversed, 'kemiringan');
         pieKemiringan.data.datasets[0].data = propKem;
         pieKemiringan.update();
         document.getElementById('pct-kem-aman').innerText = `${propKem[0]}% A`;
         document.getElementById('pct-kem-siaga').innerText = `${propKem[1]}% S`;
         document.getElementById('pct-kem-bahaya').innerText = `${propKem[2]}% B`;
 
-        const propKeb = calculateSensorSpecificProportions(data, 'kelembaban');
+        const propKeb = calculateSensorSpecificProportions(reversed, 'kelembaban');
         pieKelembaban.data.datasets[0].data = propKeb;
         pieKelembaban.update();
         document.getElementById('pct-keb-aman').innerText = `${propKeb[0]}% A`;
         document.getElementById('pct-keb-siaga').innerText = `${propKeb[1]}% S`;
         document.getElementById('pct-keb-bahaya').innerText = `${propKeb[2]}% B`;
 
-        const propPer = calculateSensorSpecificProportions(data, 'pergeseran');
+        const propPer = calculateSensorSpecificProportions(reversed, 'pergeseran');
         piePergeseran.data.datasets[0].data = propPer;
         piePergeseran.update();
         document.getElementById('pct-per-aman').innerText = `${propPer[0]}% A`;
