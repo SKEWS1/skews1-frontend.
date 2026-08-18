@@ -109,7 +109,7 @@
       </div>
 
       <div>
-        <div class="text-2xl font-bold text-amber-400" id="val-pergeseran">0.00 m</div>
+        <div class="text-2xl font-bold text-amber-400" id="val-pergeseran">0.00 cm</div>
         <div class="text-xs text-gray-500 mt-1">Pergeseran Alat (GPS)</div>
       </div>
     </div>
@@ -313,7 +313,7 @@
     const chartKelembaban = createSensorChart('chartKelembaban', '#3b82f6');
     const chartPergeseran = createSensorChart('chartPergeseran', '#f59e0b');
 
-    // Kalkulasi Proporsi Berdasarkan Riwayat Nilai Aktual Masing-Masing Sensor Secara Spesifik
+    // Kalkulasi Proporsi Berdasarkan Nilai Aktual (Pergeseran Dikonversi ke cm)
     function calculateSensorSpecificProportions(dataArray, sensorType) {
       if (!dataArray || dataArray.length === 0) return [33, 33, 34];
       let aman = 0, siaga = 0, bahaya = 0;
@@ -331,7 +331,8 @@
           else if (val >= 60) siaga++;
           else aman++;
         } else if (sensorType === 'pergeseran') {
-          val = parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0)));
+          // Dikonversi ke cm (* 100)
+          val = parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0))) * 100;
           if (val >= 1.0) bahaya++;
           else if (val >= 0.5) siaga++;
           else aman++;
@@ -357,13 +358,13 @@
 
         const latest = data[0];
 
-        // Memperbaiki penamaan variabel tanpa spasi
-        const valPergeseranTerbaru = latest.pergeseran !== undefined ? latest.pergeseran : (latest.pergeseran_tanah !== undefined ? latest.pergeseran_tanah : (latest.pergeseran_alat || 0));
+        // Konversi Pergeseran dari Meter ke Centimeter (* 100)
+        const valPergeseranTerbaru = (latest.pergeseran !== undefined ? latest.pergeseran : (latest.pergeseran_tanah !== undefined ? latest.pergeseran_tanah : (latest.pergeseran_alat || 0))) * 100;
 
-        // Update Data Terbaru
+        // Update Data Terbaru (Satuan pergeseran menjadi cm)
         document.getElementById('val-kemiringan').innerText = `${latest.kemiringan_tanah}°`;
         document.getElementById('val-kelembaban').innerText = `${latest.kelembaban_tanah}%`;
-        document.getElementById('val-pergeseran').innerText = `${valPergeseranTerbaru} m`;
+        document.getElementById('val-pergeseran').innerText = `${valPergeseranTerbaru.toFixed(2)} cm`;
 
         // Status Bahaya & Warna Gradasi Berdasarkan Status Global
         const statusEl = document.getElementById('val-status');
@@ -453,7 +454,7 @@
         statusChart.data.datasets[0].data = statusLevels;
         statusChart.update();
 
-        // Line Charts Update
+        // Line Charts Update (Pergeseran dikalikan 100 untuk satuan cm)
         chartKemiringan.data.labels = labels;
         chartKemiringan.data.datasets[0].data = reversed.map(d => parseFloat(d.kemiringan_tanah || 0));
         chartKemiringan.update();
@@ -463,7 +464,7 @@
         chartKelembaban.update();
 
         chartPergeseran.data.labels = labels;
-        chartPergeseran.data.datasets[0].data = reversed.map(d => parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0))));
+        chartPergeseran.data.datasets[0].data = reversed.map(d => (parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0))) * 100));
         chartPergeseran.update();
 
         document.getElementById('last-update').innerText = `Sync: ${new Date().toLocaleTimeString()}`;
