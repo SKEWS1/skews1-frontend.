@@ -313,23 +313,19 @@
     const chartKelembaban = createSensorChart('chartKelembaban', '#3b82f6');
     const chartPergeseran = createSensorChart('chartPergeseran', '#f59e0b');
 
-    // Kalkulasi Proporsi Berdasarkan Riwayat Nilai Aktual Masing-Masing Sensor
+    // Kalkulasi Proporsi Berdasarkan Riwayat Nilai Aktual Masing-Masing Sensor Secara Spesifik
     function calculateSensorSpecificProportions(dataArray, sensorType) {
       if (!dataArray || dataArray.length === 0) return [33, 33, 34];
       let aman = 0, siaga = 0, bahaya = 0;
 
       dataArray.forEach(d => {
-        let val = 0;
-        if (sensorType === 'kemiringan') val = parseFloat(d.kemiringan_tanah || 0);
-        else if (sensorType === 'kelembaban') val = parseFloat(d.kelembaban_tanah || 0);
-        else if (sensorType === 'pergeseran') val = parseFloat(d.pergeseran || 0);
+        const val = parseFloat(d[sensorType] || 0);
 
-        // Evaluasi nilai titik data untuk menentukan masuk kategori Aman, Siaga, atau Bahaya
-        if (sensorType === 'kemiringan') {
+        if (sensorType === 'kemiringan_tanah') {
           if (val >= 30) bahaya++;
           else if (val >= 15) siaga++;
           else aman++;
-        } else if (sensorType === 'kelembaban') {
+        } else if (sensorType === 'kelembaban_tanah') {
           if (val >= 80) bahaya++;
           else if (val >= 60) siaga++;
           else aman++;
@@ -341,11 +337,14 @@
       });
 
       const total = dataArray.length;
-      return [
-        Math.round((aman / total) * 100),
-        Math.round((siaga / total) * 100),
-        Math.round((bahaya / total) * 100)
-      ];
+      if (total === 0) return [33, 33, 34];
+
+      const pAman = Math.round((aman / total) * 100);
+      const pSiaga = Math.round((siaga / total) * 100);
+      let pBahaya = 100 - (pAman + pSiaga); // Memastikan total pas 100%
+      if (pBahaya < 0) pBahaya = 0;
+
+      return [pAman, pSiaga, pBahaya];
     }
 
     async function fetchData() {
@@ -418,15 +417,15 @@
         const reversed = [...data].reverse();
         const labels = reversed.map(d => new Date(d.created_at).toLocaleTimeString());
 
-        // Update Pie Chart Infografis Berdasarkan Perubahan Trend Setiap Sensor
-        const propKem = calculateSensorSpecificProportions(reversed, 'kemiringan');
+        // Update Pie Chart Infografis Berdasarkan Perubahan Trend Masing-Masing Sensor
+        const propKem = calculateSensorSpecificProportions(reversed, 'kemiringan_tanah');
         pieKemiringan.data.datasets[0].data = propKem;
         pieKemiringan.update();
         document.getElementById('pct-kem-aman').innerText = `${propKem[0]}% A`;
         document.getElementById('pct-kem-siaga').innerText = `${propKem[1]}% S`;
         document.getElementById('pct-kem-bahaya').innerText = `${propKem[2]}% B`;
 
-        const propKeb = calculateSensorSpecificProportions(reversed, 'kelembaban');
+        const propKeb = calculateSensorSpecificProportions(reversed, 'kelembaban_tanah');
         pieKelembaban.data.datasets[0].data = propKeb;
         pieKelembaban.update();
         document.getElementById('pct-keb-aman').innerText = `${propKeb[0]}% A`;
