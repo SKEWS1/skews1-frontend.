@@ -34,7 +34,6 @@
       border-radius: 8px;
       z-index: 10;
     }
-    /* Tambahan Styling untuk Tombol Peta */
     .map-controls {
       position: absolute;
       top: 15px;
@@ -89,14 +88,13 @@
         <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
           <i data-lucide="map-pin" class="w-4 h-4 text-red-500"></i> Peta Lokasi SKEWS
         </h2>
-        <!-- Kontainer Peta dengan Tombol Re-center & Google Maps -->
         <div class="relative">
           <div id="map"></div>
           <div class="map-controls">
             <button onclick="recenterMap()" class="btn-map-control" title="Tengahkan Peta">
               🎯
             </button>
-            <a id="gmapsLink" href="#" target="_blank" class="btn-map-control" title="Buka di Google Maps">
+            <a id="gmapsLink" href="https://www.google.com/maps/search/?api=1&query=-2.548926,118.014863" target="_blank" class="btn-map-control" title="Buka di Google Maps">
               🗺️
             </a>
           </div>
@@ -147,7 +145,7 @@
       </div>
 
       <div>
-        <div class="text-2xl font-bold text-amber-400" id="val-pergeseran">0.00 m</div>
+        <div class="text-2xl font-bold text-amber-400" id="val-pergeseran">0.00 cm</div>
         <div class="text-xs text-gray-500 mt-1">Pergeseran Alat (GPS)</div>
       </div>
     </div>
@@ -211,7 +209,7 @@
         <!-- Sensor Pergeseran -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2">Trend Pergeseran</h2>
+            <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2">Trend Pergeseran (cm)</h2>
             <div class="relative h-[100px] w-full">
               <canvas id="chartPergeseran"></canvas>
             </div>
@@ -406,13 +404,14 @@
 
         const latest = data[0];
 
-        // Nilai pergeseran terbaru (Tampilan tetap meter, dibiarkan asli dalam m)
-        const valPergeseranTerbaru = latest.pergeseran !== undefined ? latest.pergeseran : (latest.pergeseran_tanah !== undefined ? latest.pergeseran_tanah : (latest.pergeseran_alat || 0));
+        // Konversi pergeseran terbaru ke sentimeter (* 100)
+        const valPergeseranRaw = latest.pergeseran !== undefined ? latest.pergeseran : (latest.pergeseran_tanah !== undefined ? latest.pergeseran_tanah : (latest.pergeseran_alat || 0));
+        const valPergeseranCm = parseFloat(valPergeseranRaw) * 100;
 
-        // Update Data Terbaru (Satuan m)
+        // Update Data Terbaru (Pergeseran dalam cm)
         document.getElementById('val-kemiringan').innerText = `${latest.kemiringan_tanah}°`;
         document.getElementById('val-kelembaban').innerText = `${latest.kelembaban_tanah}%`;
-        document.getElementById('val-pergeseran').innerText = `${parseFloat(valPergeseranTerbaru).toFixed(2)} m`;
+        document.getElementById('val-pergeseran').innerText = `${valPergeseranCm.toFixed(2)} cm`;
 
         // Status Bahaya & Warna Gradasi Berdasarkan Status Global
         const statusEl = document.getElementById('val-status');
@@ -452,7 +451,7 @@
         chartKelembaban.data.datasets[0].backgroundColor = gradientRgba;
         chartPergeseran.data.datasets[0].backgroundColor = gradientRgba;
 
-        // Update GPS Map & Link Google Maps
+        // Update GPS Map & Link Google Maps jika data valid
         const lat = parseFloat(latest.latitude);
         const lng = parseFloat(latest.longitude);
         if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
@@ -461,7 +460,6 @@
           document.getElementById('val-lat').innerText = lat;
           document.getElementById('val-lng').innerText = lng;
           
-          // Update Tautan Google Maps otomatis berdasarkan koordinat sensor
           document.getElementById('gmapsLink').href = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
 
           const newLatLng = new L.LatLng(lat, lng);
@@ -516,9 +514,12 @@
         chartKelembaban.data.datasets[0].data = reversed.map(d => parseFloat(d.kelembaban_tanah || 0));
         chartKelembaban.update();
 
-        // Line Chart Pergeseran tetap menampilkan satuan meter (m) di grafik
+        // Line Chart Pergeseran diubah ke satuan sentimeter (cm)
         chartPergeseran.data.labels = labels;
-        chartPergeseran.data.datasets[0].data = reversed.map(d => parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0))));
+        chartPergeseran.data.datasets[0].data = reversed.map(d => {
+          const valM = parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0)));
+          return valM * 100;
+        });
         chartPergeseran.update();
 
         document.getElementById('last-update').innerText = `Sync: ${new Date().toLocaleTimeString()}`;
