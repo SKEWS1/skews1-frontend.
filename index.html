@@ -150,30 +150,29 @@
       </div>
     </div>
 
-    <!-- Bagian Bawah: Trend Status & Trend Sensor Berjajar Ke Samping (12 Grid) -->
+    <!-- Bagian Bawah: Riwayat Status & Riwayat Sensor Berjajar Ke Samping (12 Grid) -->
     <div class="lg:col-span-12 space-y-6">
       
-      <!-- Trend Status (Aman, Siaga, Bahaya) -->
+      <!-- Riwayat Status (Aman, Siaga, Bahaya) -->
       <div class="dashboard-card p-6">
-        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2">Trend Status Bahaya</h2>
+        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2">Riwayat Status Bahaya</h2>
         <div class="relative h-[90px] w-full">
           <canvas id="statusChart"></canvas>
         </div>
       </div>
 
-      <!-- Trend Sensor 3 Berjejer ke Samping -->
+      <!-- Riwayat Sensor 3 Berjejer ke Samping -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         <!-- Sensor Kemiringan -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-red-400 mb-2">Trend Kemiringan</h2>
+            <h2 class="text-[11px] uppercase tracking-widest text-red-400 mb-2">Riwayat Kemiringan</h2>
             <div class="relative h-[100px] w-full">
               <canvas id="chartKemiringan"></canvas>
             </div>
           </div>
           <div class="flex flex-col items-center justify-center relative">
-            <span class="text-[10px] text-gray-400 mb-1">Proporsi Status</span>
             <div class="relative h-[90px] w-[90px]">
               <canvas id="pieKemiringan"></canvas>
             </div>
@@ -188,13 +187,12 @@
         <!-- Sensor Kelembaban -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-blue-400 mb-2">Trend Kelembaban</h2>
+            <h2 class="text-[11px] uppercase tracking-widest text-blue-400 mb-2">Riwayat Kelembaban</h2>
             <div class="relative h-[100px] w-full">
               <canvas id="chartKelembaban"></canvas>
             </div>
           </div>
           <div class="flex flex-col items-center justify-center relative">
-            <span class="text-[10px] text-gray-400 mb-1">Proporsi Status</span>
             <div class="relative h-[90px] w-[90px]">
               <canvas id="pieKelembaban"></canvas>
             </div>
@@ -209,13 +207,12 @@
         <!-- Sensor Pergeseran -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2">Trend Pergeseran (cm)</h2>
+            <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2">Riwayat Pergeseran (cm)</h2>
             <div class="relative h-[100px] w-full">
               <canvas id="chartPergeseran"></canvas>
             </div>
           </div>
           <div class="flex flex-col items-center justify-center relative">
-            <span class="text-[10px] text-gray-400 mb-1">Proporsi Status</span>
             <div class="relative h-[90px] w-[90px]">
               <canvas id="piePergeseran"></canvas>
             </div>
@@ -285,7 +282,7 @@
     const pieKelembaban = createPieChart('pieKelembaban');
     const piePergeseran = createPieChart('piePergeseran');
 
-    // Trend Status Bahaya Utama
+    // Riwayat Status Bahaya Utama
     const statusChart = new Chart(document.getElementById('statusChart').getContext('2d'), {
       type: 'line',
       data: {
@@ -328,7 +325,7 @@
       }
     });
 
-    // Trend Line Charts per Sensor
+    // Riwayat Line Charts per Sensor
     function createSensorChart(ctxId, color) {
       return new Chart(document.getElementById(ctxId).getContext('2d'), {
         type: 'line',
@@ -474,7 +471,7 @@
         const reversed = [...data].reverse();
         const labels = reversed.map(d => new Date(d.created_at).toLocaleTimeString());
 
-        // Update Pie Chart Infografis Berdasarkan Perubahan Trend Masing-Masing Sensor
+        // Update Pie Chart Infografis Berdasarkan Perubahan Riwayat Masing-Masing Sensor
         const propKem = calculateSensorSpecificProportions(reversed, 'kemiringan_tanah');
         pieKemiringan.data.datasets[0].data = propKem;
         pieKemiringan.update();
@@ -496,7 +493,7 @@
         document.getElementById('pct-per-siaga').innerText = `${propPer[1]}% S`;
         document.getElementById('pct-per-bahaya').innerText = `${propPer[2]}% B`;
 
-        // Status Trend Chart Update
+        // Riwayat Status Chart Update
         const statusLevels = reversed.map(d => {
           const s = (d.status_bahaya || 'AMAN').toUpperCase();
           return s === 'BAHAYA' ? 2 : s === 'SIAGA' ? 1 : 0;
