@@ -145,7 +145,7 @@
       </div>
 
       <div>
-        <div class="text-2xl font-bold text-amber-400" id="val-pergeseran">0.00 cm</div>
+        <div class="text-2xl font-bold text-amber-400" id="val-pergeseran">0 cm</div>
         <div class="text-xs text-gray-500 mt-1">Pergeseran Alat (GPS)</div>
       </div>
     </div>
@@ -404,14 +404,14 @@
 
         const latest = data[0];
 
-        // Konversi pergeseran terbaru ke sentimeter (* 100)
+        // Konversi pergeseran terbaru ke cm dan dibulatkan (Math.round) tanpa desimal
         const valPergeseranRaw = latest.pergeseran !== undefined ? latest.pergeseran : (latest.pergeseran_tanah !== undefined ? latest.pergeseran_tanah : (latest.pergeseran_alat || 0));
-        const valPergeseranCm = parseFloat(valPergeseranRaw) * 100;
+        const valPergeseranCm = Math.round(parseFloat(valPergeseranRaw) * 100);
 
-        // Update Data Terbaru (Pergeseran dalam cm)
+        // Update Data Terbaru (Pergeseran dalam cm tanpa desimal)
         document.getElementById('val-kemiringan').innerText = `${latest.kemiringan_tanah}°`;
         document.getElementById('val-kelembaban').innerText = `${latest.kelembaban_tanah}%`;
-        document.getElementById('val-pergeseran').innerText = `${valPergeseranCm.toFixed(2)} cm`;
+        document.getElementById('val-pergeseran').innerText = `${valPergeseranCm} cm`;
 
         // Status Bahaya & Warna Gradasi Berdasarkan Status Global
         const statusEl = document.getElementById('val-status');
@@ -514,11 +514,11 @@
         chartKelembaban.data.datasets[0].data = reversed.map(d => parseFloat(d.kelembaban_tanah || 0));
         chartKelembaban.update();
 
-        // Line Chart Pergeseran diubah ke satuan sentimeter (cm)
+        // Line Chart Pergeseran dalam cm tanpa desimal
         chartPergeseran.data.labels = labels;
         chartPergeseran.data.datasets[0].data = reversed.map(d => {
           const valM = parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0)));
-          return valM * 100;
+          return Math.round(valM * 100);
         });
         chartPergeseran.update();
 
