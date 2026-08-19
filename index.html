@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SKEWS - Command Center</title>
   
+  <!-- Favicon Icon (Mountain/Landslide Warning Theme) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='m8 3 4 8 5-5 5 15H2L8 3z'/></svg>">
+
   <!-- Google Fonts & Tailwind CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -67,8 +70,12 @@
   <!-- Header -->
   <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4">
     <div>
-      <h1 class="text-xl md:text-2xl font-light tracking-widest text-gray-200">SKEWS (SMART KEJI EARLY WARNING SYSTEM)</h1>
-      <p class="text-xs text-blue-400 mt-1">REAL-TIME TELEMETRY. PROACTIVE LANDSLIDE IMPACT PREVENTION.</p>
+      <h1 class="text-xl md:text-2xl font-light tracking-widest text-gray-200 flex items-center gap-2.5">
+        <i data-lucide="shield-alert" class="w-6 h-6 text-emerald-400"></i> SKEWS (SMART KEJI EARLY WARNING SYSTEM)
+      </h1>
+      <p class="text-xs text-blue-400 mt-1 flex items-center gap-1.5">
+        <i data-lucide="radio" class="w-3.5 h-3.5 animate-pulse"></i> REAL-TIME TELEMETRY. PROACTIVE LANDSLIDE IMPACT PREVENTION.
+      </p>
     </div>
     <div class="mt-2 md:mt-0 flex items-center gap-3">
       <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
@@ -109,7 +116,9 @@
     <!-- Kolom Tengah: Status Tingkat Bahaya, Alarm System Status (4 Grid) -->
     <div class="lg:col-span-4 space-y-6">
       <div class="dashboard-card p-6">
-        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2">Status Tingkat Bahaya</h2>
+        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-2">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-emerald-400"></i> Status Tingkat Bahaya
+        </h2>
         <div class="flex items-center justify-between mt-4">
           <div>
             <div id="val-status" class="text-3xl font-black text-emerald-400 tracking-wide">AMAN</div>
@@ -123,7 +132,9 @@
 
       <div class="dashboard-card p-6 flex flex-col justify-between">
         <div>
-          <h2 class="text-xs uppercase tracking-widest text-gray-400">Alarm System Status</h2>
+          <h2 class="text-xs uppercase tracking-widest text-gray-400 flex items-center gap-2">
+            <i data-lucide="bell-ring" class="w-4 h-4 text-amber-500"></i> Alarm System Status
+          </h2>
           <div class="text-2xl font-bold text-amber-500 mt-2" id="val-system-status">STANDBY</div>
           <p class="text-xs text-gray-500 mt-2">Sistem pemantauan lereng aktif real-time.</p>
         </div>
@@ -132,20 +143,28 @@
 
     <!-- Kolom Kanan: Data Terbaru (4 Grid) -->
     <div class="lg:col-span-4 dashboard-card p-6 space-y-6 flex flex-col justify-between">
-      <h2 class="text-xs uppercase tracking-widest text-gray-400">Data Terbaru</h2>
+      <h2 class="text-xs uppercase tracking-widest text-gray-400 flex items-center gap-2">
+        <i data-lucide="activity" class="w-4 h-4 text-blue-400"></i> Data Terbaru
+      </h2>
       
       <div>
-        <div class="text-2xl font-bold text-red-500" id="val-kemiringan">0.0°</div>
+        <div class="text-2xl font-bold text-red-500 flex items-center gap-2">
+          <i data-lucide="compass" class="w-5 h-5 text-red-500/70"></i> <span id="val-kemiringan">0.0°</span>
+        </div>
         <div class="text-xs text-gray-500 mt-1">Kemiringan Tanah</div>
       </div>
 
       <div>
-        <div class="text-2xl font-bold text-blue-400" id="val-kelembaban">0.0%</div>
+        <div class="text-2xl font-bold text-blue-400 flex items-center gap-2">
+          <i data-lucide="droplets" class="w-5 h-5 text-blue-400/70"></i> <span id="val-kelembaban">0.0%</span>
+        </div>
         <div class="text-xs text-gray-500 mt-1">Kelembaban Tanah</div>
       </div>
 
       <div>
-        <div class="text-2xl font-bold text-amber-400" id="val-pergeseran">0 cm</div>
+        <div class="text-2xl font-bold text-amber-400 flex items-center gap-2">
+          <i data-lucide="move" class="w-5 h-5 text-amber-400/70"></i> <span id="val-pergeseran">0 cm</span>
+        </div>
         <div class="text-xs text-gray-500 mt-1">Pergeseran Alat (GPS)</div>
       </div>
     </div>
@@ -155,7 +174,9 @@
       
       <!-- Riwayat Status (Aman, Siaga, Bahaya) -->
       <div class="dashboard-card p-6">
-        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2">Riwayat Status Bahaya</h2>
+        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-2">
+          <i data-lucide="line-chart" class="w-4 h-4 text-emerald-400"></i> Riwayat Status Bahaya
+        </h2>
         <div class="relative h-[90px] w-full">
           <canvas id="statusChart"></canvas>
         </div>
@@ -167,7 +188,9 @@
         <!-- Sensor Kemiringan -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-red-400 mb-2">Riwayat Kemiringan</h2>
+            <h2 class="text-[11px] uppercase tracking-widest text-red-400 mb-2 flex items-center gap-1.5">
+              <i data-lucide="compass" class="w-3.5 h-3.5"></i> Riwayat Kemiringan
+            </h2>
             <div class="relative h-[100px] w-full">
               <canvas id="chartKemiringan"></canvas>
             </div>
@@ -187,7 +210,9 @@
         <!-- Sensor Kelembaban -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-blue-400 mb-2">Riwayat Kelembaban</h2>
+            <h2 class="text-[11px] uppercase tracking-widest text-blue-400 mb-2 flex items-center gap-1.5">
+              <i data-lucide="droplets" class="w-3.5 h-3.5"></i> Riwayat Kelembaban
+            </h2>
             <div class="relative h-[100px] w-full">
               <canvas id="chartKelembaban"></canvas>
             </div>
@@ -207,7 +232,9 @@
         <!-- Sensor Pergeseran -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2">Riwayat Pergeseran (cm)</h2>
+            <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2 flex items-center gap-1.5">
+              <i data-lucide="move" class="w-3.5 h-3.5"></i> Riwayat Pergeseran (cm)
+            </h2>
             <div class="relative h-[100px] w-full">
               <canvas id="chartPergeseran"></canvas>
             </div>
