@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SKEWS - Command Center</title>
   
-  <!-- Favicon Icon (Mountain/Landslide Warning Theme) -->
+  <!-- Favicon Icon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='m8 3 4 8 5-5 5 15H2L8 3z'/></svg>">
 
   <!-- Google Fonts & Tailwind CSS -->
@@ -31,6 +31,12 @@
       background: #0c0c0c;
       border: 1px solid #1f2937;
       border-radius: 12px;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .dashboard-card:hover {
+      transform: translateY(-2px);
+      border-color: #374151;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
     }
     #map {
       height: 240px;
@@ -78,7 +84,7 @@
       </p>
     </div>
     <div class="mt-2 md:mt-0 flex items-center gap-3">
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2"></span>
         SISTEM AKTIF
       </span>
