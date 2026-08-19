@@ -38,6 +38,18 @@
       border-color: #374151;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
     }
+    .header-accent {
+      position: relative;
+    }
+    .header-accent::after {
+      content: '';
+      position: absolute;
+      bottom: -17px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #10b981, #3b82f6, transparent);
+    }
     #map {
       height: 240px;
       border-radius: 8px;
@@ -74,7 +86,7 @@
 <body class="p-4 md:p-8 min-h-screen">
 
   <!-- Header -->
-  <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4">
+  <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4 header-accent">
     <div>
       <h1 class="text-xl md:text-2xl font-light tracking-widest text-gray-200 flex items-center gap-2.5">
         <i data-lucide="shield-alert" class="w-6 h-6 text-emerald-400"></i> SKEWS (SMART KEJI EARLY WARNING SYSTEM)
@@ -98,8 +110,9 @@
     <!-- Kolom Kiri: Peta Lokasi SKEWS (4 Grid) -->
     <div class="lg:col-span-4 space-y-6">
       <div class="dashboard-card p-6">
-        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
-          <i data-lucide="map-pin" class="w-4 h-4 text-red-500"></i> Peta Lokasi SKEWS
+        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-4 flex items-center justify-between">
+          <span class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-red-500"></i> Peta Lokasi SKEWS</span>
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
         </h2>
         <div class="relative">
           <div id="map"></div>
