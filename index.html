@@ -128,8 +128,6 @@
         <div class="mt-4 pt-3 border-t border-gray-800 flex justify-between text-xs text-gray-400">
           <span>LAT: <strong id="val-lat" class="text-gray-200">Menunggu GPS...</strong></span>
           <span>LNG: <strong id="val-lng" class="text-gray-200">Menunggu GPS...</strong></span>
-          <span>LE : <strong id="val-Ing" class="text-gray-200">Menunggu GPS...</strong></span>
-          <span>LS : <strong id="val-Ing" class="text-gray-200">Menunggu GPS...</strong></span>
         </div>
       </div>
     </div>
@@ -176,7 +174,7 @@
         <div class="text-2xl font-bold text-amber-400 flex items-center gap-2">
           <i data-lucide="move" class="w-5 h-5 text-amber-400/70"></i> <span id="val-pergeseran">0 cm</span>
         </div>
-        <div class="text-xs text-gray-500 mt-1">Pergeseran Alat (GPS)</div>
+        <div class="text-xs text-gray-500 mt-1">Pergeseran</div>
       </div>
     </div>
 
@@ -211,9 +209,9 @@
               <canvas id="pieKemiringan"></canvas>
             </div>
             <div class="flex gap-2 text-[9px] text-gray-400 mt-1">
-              <span id="pct-kem-aman" class="text-emerald-400">0% A</span>
-              <span id="pct-kem-siaga" class="text-amber-400">0% S</span>
-              <span id="pct-kem-bahaya" class="text-red-400">0% B</span>
+              <span id="pct-kem-aman" class="text-green-400">0% Aman</span>
+              <span id="pct-kem-siaga" class="text-yellow-400">0% Siaga</span>
+              <span id="pct-kem-bahaya" class="text-red-400">0% Bahaya</span>
             </div>
           </div>
         </div>
@@ -233,8 +231,8 @@
               <canvas id="pieKelembaban"></canvas>
             </div>
             <div class="flex gap-2 text-[9px] text-gray-400 mt-1">
-              <span id="pct-keb-aman" class="text-emerald-400">0% A</span>
-              <span id="pct-keb-siaga" class="text-amber-400">0% S</span>
+              <span id="pct-keb-aman" class="text-green-400">0% A</span>
+              <span id="pct-keb-siaga" class="text-yellow-400">0% S</span>
               <span id="pct-keb-bahaya" class="text-red-400">0% B</span>
             </div>
           </div>
