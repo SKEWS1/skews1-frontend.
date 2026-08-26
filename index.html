@@ -92,7 +92,7 @@
         <i data-lucide="shield-alert" class="w-6 h-6 text-emerald-400"></i> SKEWS (SMART KEJI EARLY WARNING SYSTEM)
       </h1>
       <p class="text-xs text-blue-400 mt-1 flex items-center gap-1.5">
-        <i data-lucide="radio" class="w-3.5 h-3.5 animate-pulse"></i> SISTEM PEMAUTAUAN DAN PERINGATAN DINI BENCANA LONGSOR - DESA KEJI
+        <i data-lucide="radio" class="w-3.5 h-3.5 animate-pulse"></i> SISTEM PEMANTAUAN DAN PERINGATAN DINI BENCANA LONGSOR - DESA KEJI
       </p>
     </div>
     <div class="mt-2 md:mt-0 flex items-center gap-3">
@@ -403,7 +403,7 @@
     const chartKelembaban = createSensorChart('chartKelembaban', '#3b82f6');
     const chartPergeseran = createSensorChart('chartPergeseran', '#f59e0b');
 
-    // Kalkulasi Proporsi Sistem (Threshold dihitung dalam skala cm)
+    // Kalkulasi Proporsi Sistem
     function calculateSensorSpecificProportions(dataArray, sensorType) {
       if (!dataArray || dataArray.length === 0) return [33, 33, 34];
       let aman = 0, siaga = 0, bahaya = 0;
@@ -412,18 +412,18 @@
         let val = 0;
         if (sensorType === 'kemiringan_tanah') {
           val = parseFloat(d.kemiringan_tanah || 0);
-          if (val >= 30) bahaya++;
-          else if (val >= 15) siaga++;
+          if (val >= 10) bahaya++;
+          else if (val >= 6) siaga++;
           else aman++;
         } else if (sensorType === 'kelembaban_tanah') {
           val = parseFloat(d.kelembaban_tanah || 0);
-          if (val >= 80) bahaya++;
-          else if (val >= 60) siaga++;
+          if (val > 60) bahaya++;
+          else if (val >= 41) siaga++;
           else aman++;
         } else if (sensorType === 'pergeseran') {
-          val = parseFloat(d.pergeseran !== undefined ? d.pergeseran : (d.pergeseran_tanah !== undefined ? d.pergeseran_tanah : (d.pergeseran_alat || 0))) * 100;
-          if (val >= 1200) bahaya++;
-          else if (val >= 500) siaga++;
+          val = parseFloat(d.pergeseran || 0);
+          if (val > 30) bahaya++;
+          else if (val >= 21) siaga++;
           else aman++;
         }
       });
@@ -447,16 +447,23 @@
 
         const latest = data[0];
 
-        // Konversi pergeseran terbaru ke cm dan dibulatkan (Math.round) tanpa desimal
-        const valPergeseranRaw = latest.pergeseran !== undefined ? latest.pergeseran : (latest.pergeseran_tanah !== undefined ? latest.pergeseran_tanah : (latest.pergeseran_alat || 0));
-        const valPergeseranCm = Math.round(parseFloat(valPergeseranRaw) * 100);
+        // Format waktu update terakhir
+        if (latest.created_at) {
+          const dateObj = new Date(latest.created_at);
+          document.getElementById('last-update').innerText = `Update: ${dateObj.toLocaleTimeString('id-ID')}`;
+        }
 
-        // Update Data Terbaru (Pergeseran dalam cm tanpa desimal)
-        document.getElementById('val-kemiringan').innerText = `${latest.kemiringan_tanah}°`;
-        document.getElementById('val-kelembaban').innerText = `${latest.kelembaban_tanah}%`;
-        document.getElementById('val-pergeseran').innerText = `${valPergeseranCm} cm`;
+        // Ambil data terbaru dari kolom database Supabase
+        const valKemiringan = parseFloat(latest.kemiringan_tanah || 0);
+        const valKelembaban = parseFloat(latest.kelembaban_tanah || 0);
+        const valPergeseran = parseFloat(latest.pergeseran || 0);
 
-        // Status Bahaya & Warna Gradasi Berdasarkan Status Global
+        // Update Tampilan Nilai Kartu Utama
+        document.getElementById('val-kemiringan').innerText = `${valKemiringan.toFixed(1)}°`;
+        document.getElementById('val-kelembaban').innerText = `${valKelembaban.toFixed(1)}%`;
+        document.getElementById('val-pergeseran').innerText = `${valPergeseran.toFixed(1)} cm`;
+
+        // Status Bahaya & Indikator Tampilan
         const statusEl = document.getElementById('val-status');
         const statusDesc = document.getElementById('val-status-desc');
         const sysStatus = document.getElementById('val-system-status');
@@ -489,10 +496,86 @@
           statusChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.1)';
         }
 
-        // Terapkan gradasi area chart sensor berdasarkan status
-        chartKemiringan.data.datasets[0].backgroundColor = gradientRgba;
-        chartKelembaban.data.datasets[0].backgroundColor = gradientRgba;
-        chartPergeseran.data.datasets[0].backgroundColor = gradientRgba;
+        // Koordinat Peta
+        if (latest.latitude && latest.longitude) {
+          currentLat = parseFloat(latest.latitude);
+          currentLng = parseFloat(latest.longitude);
+          document.getElementById('val-lat').innerText = currentLat.toFixed(6);
+          document.getElementById('val-lng').innerText = currentLng.toFixed(6);
+          document.getElementById('gmapsLink').href = `https://www.google.com/maps/search/?api=1&query=${currentLat},${currentLng}`;
 
-        // Update GPS Map & Link Google Maps jika data valid
-        const la
+          if (!marker) {
+            marker = L.marker([currentLat, currentLng]).addTo(map);
+            map.setView([currentLat, currentLng], 15);
+          } else {
+            marker.setLatLng([currentLat, currentLng]);
+          }
+        }
+
+        // Proses Riwayat Data untuk Grafik (Dibalik agar urut dari masa lalu ke terbaru)
+        const sortedData = [...data].reverse();
+        const labels = sortedData.map(d => {
+          if (!d.created_at) return '';
+          return new Date(d.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        });
+
+        // Mapping Nilai Status untuk Grafik Garis Status (Aman=0, Siaga=1, Bahaya=2)
+        const statusNumeric = sortedData.map(d => {
+          const s = (d.status_bahaya || '').toUpperCase();
+          if (s === 'BAHAYA') return 2;
+          if (s === 'SIAGA') return 1;
+          return 0;
+        });
+
+        statusChart.data.labels = labels;
+        statusChart.data.datasets[0].data = statusNumeric;
+        statusChart.update();
+
+        // Update Grafik Sensor Kemiringan
+        chartKemiringan.data.labels = labels;
+        chartKemiringan.data.datasets[0].data = sortedData.map(d => parseFloat(d.kemiringan_tanah || 0));
+        chartKemiringan.update();
+
+        // Update Grafik Sensor Kelembaban
+        chartKelembaban.data.labels = labels;
+        chartKelembaban.data.datasets[0].data = sortedData.map(d => parseFloat(d.kelembaban_tanah || 0));
+        chartKelembaban.update();
+
+        // Update Grafik Sensor Pergeseran
+        chartPergeseran.data.labels = labels;
+        chartPergeseran.data.datasets[0].data = sortedData.map(d => parseFloat(d.pergeseran || 0));
+        chartPergeseran.update();
+
+        // Hitung dan Update Proporsi Pie Chart Infografis
+        const pKem = calculateSensorSpecificProportions(data, 'kemiringan_tanah');
+        pieKemiringan.data.datasets[0].data = pKem;
+        pieKemiringan.update();
+        document.getElementById('pct-kem-aman').innerText = `${pKem[0]}% A`;
+        document.getElementById('pct-kem-siaga').innerText = `${pKem[1]}% S`;
+        document.getElementById('pct-kem-bahaya').innerText = `${pKem[2]}% B`;
+
+        const pKeb = calculateSensorSpecificProportions(data, 'kelembaban_tanah');
+        pieKelembaban.data.datasets[0].data = pKeb;
+        pieKelembaban.update();
+        document.getElementById('pct-keb-aman').innerText = `${pKeb[0]}% A`;
+        document.getElementById('pct-keb-siaga').innerText = `${pKeb[1]}% S`;
+        document.getElementById('pct-keb-bahaya').innerText = `${pKeb[2]}% B`;
+
+        const pPer = calculateSensorSpecificProportions(data, 'pergeseran');
+        piePergeseran.data.datasets[0].data = pPer;
+        piePergeseran.update();
+        document.getElementById('pct-per-aman').innerText = `${pPer[0]}% A`;
+        document.getElementById('pct-per-siaga').innerText = `${pPer[1]}% S`;
+        document.getElementById('pct-per-bahaya').innerText = `${pPer[2]}% B`;
+
+      } catch (error) {
+        console.error("Gagal mengambil data API:", error);
+      }
+    }
+
+    // Jalankan fetch pertama kali, lalu refresh otomatis setiap 3 detik
+    fetchData();
+    setInterval(fetchData, 3000);
+  </script>
+</body>
+</html>
