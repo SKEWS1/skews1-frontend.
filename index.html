@@ -85,7 +85,7 @@
   <!-- Header -->
   <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4 header-accent">
     <div class="flex items-center gap-3">
-      <!-- LOGO SKEWS DI SINI -->
+      <!-- LOGO SKEWS -->
       <img src="logo.png" alt="Logo SKEWS" class="w-12 h-12 object-contain" />
       <div>
         <h1 class="text-xl md:text-2xl font-light tracking-widest text-gray-200 flex items-center gap-2.5">
@@ -97,7 +97,6 @@
       </div>
     </div>
     <div class="mt-2 md:mt-0 flex items-center gap-3">
-      <!-- ELEMEN STATUS SISTEM DINAMIS (AKTIF / TIDAK AKTIF) -->
       <span id="system-status-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
         <span id="system-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2"></span>
         <span id="system-status-text">SISTEM AKTIF</span>
@@ -177,7 +176,7 @@
       </div>
     </div>
 
-    <!-- Bagian Bawah: Riwayat Status & Riwayat Sensor Berjajar Ke Samping (12 Grid) -->
+    <!-- Bagian Bawah -->
     <div class="lg:col-span-12 space-y-6">
       <div class="dashboard-card p-6">
         <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-2">
@@ -188,7 +187,6 @@
         </div>
       </div>
       
-      <!-- Riwayat Sensor 3 Berjejer ke Samping -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Sensor Kemiringan -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
@@ -263,11 +261,11 @@
     const API_URL = 'https://skews1-backend.vercel.app/api/data';
     lucide.createIcons();
     
-    // Inisialisasi Peta
+    // Inisialisasi Peta menggunakan OpenStreetMap standar (Tanpa API Key Required)
     const map = L.map('map').setView([-2.548926, 118.014863], 5);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '© OpenStreetMap & CARTO'
+      attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
     let marker = null;
