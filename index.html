@@ -7,7 +7,6 @@
   
   <!-- Favicon Icon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='m8 3 4 8 5-5 5 15H2L8 3z'/></svg>">
-
   <!-- Google Fonts & Tailwind CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +19,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-
   <style>
     body {
       background-color: #050505;
@@ -84,29 +82,32 @@
   </style>
 </head>
 <body class="p-4 md:p-8 min-h-screen">
-
   <!-- Header -->
   <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4 header-accent">
-    <div>
-      <h1 class="text-xl md:text-2xl font-light tracking-widest text-gray-200 flex items-center gap-2.5">
-        <i data-lucide="shield-alert" class="w-6 h-6 text-emerald-400"></i> SKEWS (SMART KEJI EARLY WARNING SYSTEM)
-      </h1>
-      <p class="text-xs text-blue-400 mt-1 flex items-center gap-1.5">
-        <i data-lucide="radio" class="w-3.5 h-3.5 animate-pulse"></i> SISTEM PEMANTAUAN DAN PERINGATAN DINI BENCANA LONGSOR - DESA KEJI
-      </p>
+    <div class="flex items-center gap-3">
+      <!-- LOGO SKEWS DI SINI -->
+      <img src="logo.png" alt="Logo SKEWS" class="w-12 h-12 object-contain" />
+      <div>
+        <h1 class="text-xl md:text-2xl font-light tracking-widest text-gray-200 flex items-center gap-2.5">
+          SKEWS (SMART KEJI EARLY WARNING SYSTEM)
+        </h1>
+        <p class="text-xs text-blue-400 mt-1 flex items-center gap-1.5">
+          <i data-lucide="radio" class="w-3.5 h-3.5 animate-pulse"></i> SISTEM PEMANTAUAN DAN PERINGATAN DINI BENCANA LONGSOR - DESA KEJI
+        </p>
+      </div>
     </div>
     <div class="mt-2 md:mt-0 flex items-center gap-3">
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2"></span>
-        SISTEM AKTIF
+      <!-- ELEMEN STATUS SISTEM DINAMIS (AKTIF / TIDAK AKTIF) -->
+      <span id="system-status-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
+        <span id="system-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2"></span>
+        <span id="system-status-text">SISTEM AKTIF</span>
       </span>
       <span id="last-update" class="text-xs text-gray-500">Memuat...</span>
     </div>
   </header>
-
+  
   <!-- Main Grid -->
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
     <!-- Kolom Kiri: Peta Lokasi SKEWS (4 Grid) -->
     <div class="lg:col-span-4 space-y-6">
       <div class="dashboard-card p-6">
@@ -131,10 +132,10 @@
         </div>
       </div>
     </div>
-
-    <!-- Kolom Tengah: Status Tingkat Bahaya, Alarm System Status (4 Grid) -->
+    
+    <!-- Kolom Tengah: Status Tingkat Bahaya (4 Grid - Alarm System Status Dihapus) -->
     <div class="lg:col-span-4 space-y-6">
-      <div class="dashboard-card p-6">
+      <div class="dashboard-card p-6 h-full flex flex-col justify-center">
         <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-2">
           <i data-lucide="alert-triangle" class="w-4 h-4 text-emerald-400"></i> Tingkat Status
         </h2>
@@ -148,18 +149,8 @@
           </div>
         </div>
       </div>
-
-      <div class="dashboard-card p-6 flex flex-col justify-between">
-        <div>
-          <h2 class="text-xs uppercase tracking-widest text-gray-400 flex items-center gap-2">
-            <i data-lucide="bell-ring" class="w-4 h-4 text-amber-500"></i> Alarm System Status
-          </h2>
-          <div class="text-2xl font-bold text-amber-500 mt-2" id="val-system-status">STANDBY</div>
-          <p class="text-xs text-gray-500 mt-2">Sistem pemantauan lereng aktif real-time.</p>
-        </div>
-      </div>
     </div>
-
+    
     <!-- Kolom Kanan: Data Terbaru (4 Grid) -->
     <div class="lg:col-span-4 dashboard-card p-6 space-y-6 flex flex-col justify-between">
       <h2 class="text-xs uppercase tracking-widest text-gray-400 flex items-center gap-2">
@@ -172,14 +163,12 @@
         </div>
         <div class="text-xs text-gray-500 mt-1">Kemiringan Tanah</div>
       </div>
-
       <div>
         <div class="text-2xl font-bold text-blue-400 flex items-center gap-2">
           <i data-lucide="droplets" class="w-5 h-5 text-blue-400/70"></i> <span id="val-kelembaban">0.0%</span>
         </div>
         <div class="text-xs text-gray-500 mt-1">Kelembaban Tanah</div>
       </div>
-
       <div>
         <div class="text-2xl font-bold text-amber-400 flex items-center gap-2">
           <i data-lucide="move" class="w-5 h-5 text-amber-400/70"></i> <span id="val-pergeseran">0 cm</span>
@@ -190,8 +179,6 @@
 
     <!-- Bagian Bawah: Riwayat Status & Riwayat Sensor Berjajar Ke Samping (12 Grid) -->
     <div class="lg:col-span-12 space-y-6">
-      
-      <!-- Riwayat Status (Aman, Siaga, Bahaya) -->
       <div class="dashboard-card p-6">
         <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-2">
           <i data-lucide="line-chart" class="w-4 h-4 text-emerald-400"></i> Riwayat Status
@@ -200,10 +187,9 @@
           <canvas id="statusChart"></canvas>
         </div>
       </div>
-
+      
       <!-- Riwayat Sensor 3 Berjejer ke Samping -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
         <!-- Sensor Kemiringan -->
         <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
           <div>
@@ -269,20 +255,17 @@
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
-
   </div>
 
   <script>
     const API_URL = 'https://skews1-backend.vercel.app/api/data';
     lucide.createIcons();
-
-    // Inisialisasi Peta
+    
+    // Inisialisasi Peta - TILE LAYER DIPERBAIKI (TIDAK ADA TULISAN API KEY REQUIRED)
     const map = L.map('map').setView([-2.548926, 118.014863], 5);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap & CARTO'
     }).addTo(map);
@@ -291,7 +274,6 @@
     let currentLat = -2.548926;
     let currentLng = 118.014863;
 
-    // Fungsi Re-center Peta
     function recenterMap() {
       if (marker) {
         map.setView(marker.getLatLng(), 16);
@@ -300,7 +282,6 @@
       }
     }
 
-    // Helper Pie Chart Infografis
     function createPieChart(canvasId) {
       return new Chart(document.getElementById(canvasId).getContext('2d'), {
         type: 'pie',
@@ -316,10 +297,7 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { 
-            legend: { display: false }, 
-            tooltip: { enabled: true } 
-          }
+          plugins: { legend: { display: false }, tooltip: { enabled: true } }
         }
       });
     }
@@ -328,7 +306,6 @@
     const pieKelembaban = createPieChart('pieKelembaban');
     const piePergeseran = createPieChart('piePergeseran');
 
-    // Riwayat Status Bahaya Utama
     const statusChart = new Chart(document.getElementById('statusChart').getContext('2d'), {
       type: 'line',
       data: {
@@ -348,10 +325,7 @@
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: { 
-            ticks: { color: '#64748b', font: { size: 9 }, maxTicksLimit: 8 }, 
-            grid: { color: 'rgba(255,255,255,0.02)' } 
-          },
+          x: { ticks: { color: '#64748b', font: { size: 9 }, maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.02)' } },
           y: { 
             min: 0, max: 2, 
             ticks: { 
@@ -371,7 +345,6 @@
       }
     });
 
-    // Riwayat Line Charts per Sensor
     function createSensorChart(ctxId, color) {
       return new Chart(document.getElementById(ctxId).getContext('2d'), {
         type: 'line',
@@ -403,107 +376,110 @@
     const chartKelembaban = createSensorChart('chartKelembaban', '#3b82f6');
     const chartPergeseran = createSensorChart('chartPergeseran', '#f59e0b');
 
-    // Kalkulasi Proporsi Sistem
     function calculateSensorSpecificProportions(dataArray, sensorType) {
       if (!dataArray || dataArray.length === 0) return [33, 33, 34];
       let aman = 0, siaga = 0, bahaya = 0;
-
       dataArray.forEach(d => {
         let val = 0;
         if (sensorType === 'kemiringan_tanah') {
           val = parseFloat(d.kemiringan_tanah || 0);
-          if (val >= 10) bahaya++;
-          else if (val >= 6) siaga++;
+          if (val >= 11) bahaya++;
+          else if (val >= 5) siaga++;
           else aman++;
         } else if (sensorType === 'kelembaban_tanah') {
           val = parseFloat(d.kelembaban_tanah || 0);
-          if (val > 60) bahaya++;
+          if (val > 61) bahaya++;
           else if (val >= 41) siaga++;
           else aman++;
         } else if (sensorType === 'pergeseran') {
           val = parseFloat(d.pergeseran || 0);
-          if (val > 30) bahaya++;
-          else if (val >= 21) siaga++;
+          if (val >= 11) bahaya++;
+          else if (val >= 6) siaga++;
           else aman++;
         }
       });
-
       const total = dataArray.length;
       if (total === 0) return [33, 33, 34];
-
       const pAman = Math.round((aman / total) * 100);
       const pSiaga = Math.round((siaga / total) * 100);
       let pBahaya = 100 - (pAman + pSiaga); 
       if (pBahaya < 0) pBahaya = 0;
-
       return [pAman, pSiaga, pBahaya];
+    }
+
+    // UPDATE DARI SISTEM AKTIF / TIDAK AKTIF
+    function updateSystemStatus(isOnline) {
+      const badge = document.getElementById('system-status-badge');
+      const dot = document.getElementById('system-status-dot');
+      const text = document.getElementById('system-status-text');
+
+      if (isOnline) {
+        badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]";
+        dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2";
+        text.innerText = "SISTEM AKTIF";
+      } else {
+        badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/30 shadow-[0_0_12px_rgba(239,68,68,0.15)]";
+        dot.className = "w-2 h-2 rounded-full bg-red-400 animate-pulse mr-2";
+        text.innerText = "SISTEM TIDAK AKTIF";
+      }
     }
 
     async function fetchData() {
       try {
         const response = await fetch(API_URL);
+        if (!response.ok) throw new Error("API Error");
+        
         const data = await response.json();
-        if (!data || data.length === 0) return;
+        if (!data || data.length === 0) {
+          updateSystemStatus(false);
+          return;
+        }
 
+        // Jika data terkirim/diterima sukses
+        updateSystemStatus(true);
         const latest = data[0];
 
-        // Format waktu update terakhir
         if (latest.created_at) {
           const dateObj = new Date(latest.created_at);
           document.getElementById('last-update').innerText = `Update: ${dateObj.toLocaleTimeString('id-ID')}`;
         }
 
-        // Ambil data terbaru dari kolom database Supabase
         const valKemiringan = parseFloat(latest.kemiringan_tanah || 0);
         const valKelembaban = parseFloat(latest.kelembaban_tanah || 0);
         const valPergeseran = parseFloat(latest.pergeseran || 0);
 
-        // Update Tampilan Nilai Kartu Utama
         document.getElementById('val-kemiringan').innerText = `${valKemiringan.toFixed(1)}°`;
         document.getElementById('val-kelembaban').innerText = `${valKelembaban.toFixed(1)}%`;
         document.getElementById('val-pergeseran').innerText = `${valPergeseran.toFixed(1)} cm`;
 
-        // Status Bahaya & Indikator Tampilan
         const statusEl = document.getElementById('val-status');
         const statusDesc = document.getElementById('val-status-desc');
-        const sysStatus = document.getElementById('val-system-status');
         const statusText = (latest.status_bahaya || 'AMAN').toUpperCase();
-
         statusEl.innerText = statusText;
-        sysStatus.innerText = statusText === 'BAHAYA' ? 'WARNING ACTIVE' : statusText;
 
-        let gradientRgba = 'rgba(16, 185, 129, 0.15)';
         if (statusText === 'BAHAYA') {
           statusEl.className = 'text-3xl font-black text-red-500 tracking-wide';
           statusDesc.innerText = 'BAHAYA TINGGI! Evakuasi Segera';
-          sysStatus.className = 'text-2xl font-bold text-red-500 mt-2';
-          gradientRgba = 'rgba(239, 68, 68, 0.2)';
           statusChart.data.datasets[0].borderColor = '#ef4444';
           statusChart.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.1)';
         } else if (statusText === 'SIAGA') {
           statusEl.className = 'text-3xl font-black text-amber-400 tracking-wide';
           statusDesc.innerText = 'Waspada Pergerakan Tanah';
-          sysStatus.className = 'text-2xl font-bold text-amber-400 mt-2';
-          gradientRgba = 'rgba(245, 158, 11, 0.2)';
           statusChart.data.datasets[0].borderColor = '#f59e0b';
           statusChart.data.datasets[0].backgroundColor = 'rgba(245, 158, 11, 0.1)';
         } else {
           statusEl.className = 'text-3xl font-black text-emerald-400 tracking-wide';
           statusDesc.innerText = 'Kondisi lereng stabil';
-          sysStatus.className = 'text-2xl font-bold text-emerald-400 mt-2';
-          gradientRgba = 'rgba(16, 185, 129, 0.15)';
           statusChart.data.datasets[0].borderColor = '#10b981';
           statusChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.1)';
         }
 
-        // Koordinat Peta
         if (latest.latitude && latest.longitude) {
           currentLat = parseFloat(latest.latitude);
           currentLng = parseFloat(latest.longitude);
           document.getElementById('val-lat').innerText = currentLat.toFixed(6);
           document.getElementById('val-lng').innerText = currentLng.toFixed(6);
           document.getElementById('gmapsLink').href = `https://www.google.com/maps/search/?api=1&query=${currentLat},${currentLng}`;
-
           if (!marker) {
             marker = L.marker([currentLat, currentLng]).addTo(map);
             map.setView([currentLat, currentLng], 15);
@@ -512,14 +488,12 @@
           }
         }
 
-        // Proses Riwayat Data untuk Grafik (Dibalik agar urut dari masa lalu ke terbaru)
         const sortedData = [...data].reverse();
         const labels = sortedData.map(d => {
           if (!d.created_at) return '';
           return new Date(d.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         });
 
-        // Mapping Nilai Status untuk Grafik Garis Status (Aman=0, Siaga=1, Bahaya=2)
         const statusNumeric = sortedData.map(d => {
           const s = (d.status_bahaya || '').toUpperCase();
           if (s === 'BAHAYA') return 2;
@@ -531,22 +505,18 @@
         statusChart.data.datasets[0].data = statusNumeric;
         statusChart.update();
 
-        // Update Grafik Sensor Kemiringan
         chartKemiringan.data.labels = labels;
         chartKemiringan.data.datasets[0].data = sortedData.map(d => parseFloat(d.kemiringan_tanah || 0));
         chartKemiringan.update();
 
-        // Update Grafik Sensor Kelembaban
         chartKelembaban.data.labels = labels;
         chartKelembaban.data.datasets[0].data = sortedData.map(d => parseFloat(d.kelembaban_tanah || 0));
         chartKelembaban.update();
 
-        // Update Grafik Sensor Pergeseran
         chartPergeseran.data.labels = labels;
         chartPergeseran.data.datasets[0].data = sortedData.map(d => parseFloat(d.pergeseran || 0));
         chartPergeseran.update();
 
-        // Hitung dan Update Proporsi Pie Chart Infografis
         const pKem = calculateSensorSpecificProportions(data, 'kemiringan_tanah');
         pieKemiringan.data.datasets[0].data = pKem;
         pieKemiringan.update();
@@ -570,10 +540,10 @@
 
       } catch (error) {
         console.error("Gagal mengambil data API:", error);
+        updateSystemStatus(false); // Mengubah status menjadi SISTEM TIDAK AKTIF saat fetch gagal
       }
     }
 
-    // Jalankan fetch pertama kali, lalu refresh otomatis setiap 3 detik
     fetchData();
     setInterval(fetchData, 3000);
   </script>
