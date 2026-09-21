@@ -119,18 +119,9 @@
       position:relative;
       height:443px;
       overflow:hidden;
-      background-image:
-        linear-gradient(90deg,rgba(6,28,26,.70) 0%,rgba(6,28,26,.43) 34%,rgba(6,28,26,.15) 62%,rgba(6,28,26,.16) 100%),
-        url('hero-map.png');
+      background-image:url('hero-map.png');
       background-size:cover;
       background-position:center 54%;
-    }
-    .hero:after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(180deg,rgba(7,29,26,.12),rgba(7,29,26,.05) 45%,rgba(4,28,23,.27) 100%);
-      pointer-events:none;
     }
     .hero-inner{
       position:relative;
@@ -226,13 +217,23 @@
       width:170px;height:6px;background:#4df0a0;border-radius:100%;margin-top:13px;transform:rotate(-8deg);display:block;
     }
 
+    /* Hero right-side text/decoration removed; weather/time remains visible. */
+    .hero-script,
+    .hero-map-label,
+    .quote-box,
+    .north,
+    .scale{
+      display:none !important;
+    }
+
     /* weather card */
     .weather{
       position:absolute;
       z-index:5;
       right:41px;
       top:18px;
-      width:282px;
+      bottom:auto;
+      width:min(282px,calc(100% - 36px));
       min-height:62px;
       display:flex;
       align-items:center;
@@ -445,13 +446,13 @@
     }
     @media(max-width:920px){
       .header{height:auto;min-height:72px;padding:12px 22px;flex-wrap:wrap;gap:10px}.brand{min-width:auto}.nav{order:3;width:100%;justify-content:flex-start;overflow-x:auto;padding-bottom:2px}.header-cta{display:none}
-      .hero{height:500px}.hero-inner{padding:30px 28px}.hero-left{width:65%}.hero h1{font-size:43px}.hero-script{left:auto;right:5%;top:72px}.quote-box{right:20px;bottom:50px}.weather{right:20px}.label-setoyo{right:12%}.label-keji{right:31%}
+      .hero{height:500px}.hero-inner{padding:30px 28px}.hero-left{width:65%}.hero h1{font-size:43px}.weather{right:20px;top:18px;bottom:auto}
       .ews-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.footer{flex-wrap:wrap;padding:18px 28px;gap:16px}.footer-nav{order:3;width:100%;justify-content:center}
     }
     @media(max-width:650px){
       .header{padding:10px 16px}.brand-title{font-size:22px}.brand-sub{font-size:10px}.brand-mark{width:44px;height:44px}.nav a{padding:9px 13px;font-size:12px}
       .hero{height:615px;background-position:58% center}.hero-inner{padding:24px 18px}.hero-left{width:100%;max-width:none}.eyebrow{font-size:11px}.hero h1{font-size:38px;letter-spacing:-1.1px}.hero h2{font-size:20px}.hero-copy{font-size:13px;max-width:345px}.benefits{gap:12px;flex-wrap:wrap}.benefit{min-width:120px}.benefit + .benefit{padding-left:12px}
-      .hero-script{top:222px;right:20px;width:210px}.weather{top:auto;right:18px;bottom:20px;width:calc(100% - 36px)}.quote-box{display:none}.hero-map-label{transform:scale(.88);transform-origin:right top}.label-setoyo{top:29%;right:4%}.label-keji{top:48%;right:19%}.north{display:none}.scale{display:none}
+      .weather{top:18px;right:18px;bottom:auto;width:calc(100% - 36px)}
       .content-wrap{width:calc(100% - 18px);padding:13px 11px}.section-head{align-items:flex-start}.section-title h3{font-size:18px}.section-title p{font-size:10px}.map-full{font-size:10px;padding:8px 12px}
       .ews-card{grid-template-columns:1fr;min-height:auto}.ews-image{min-height:255px}.stats{min-height:245px}.quick-grid{grid-template-columns:1fr}.quick{padding:12px 20px}.footer{padding:20px 18px;justify-content:center}.footer-nav,.footer-social{display:none}.footer-end{width:100%;justify-content:center}
       .modal-data{grid-template-columns:1fr}
@@ -572,8 +573,8 @@
     <section class="content-wrap" id="ews">
       <div class="section-head">
         <div class="section-title">
-          <h3>Pilih Sistem SKEWS</h3>
-          <p>Akses informasi peringatan dini sesuai lokasi pemasangan alat.</p>
+          <h3>Sistem SKEWS</h3>
+          
         </div>
         <a class="map-full" href="#ews"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5-6 2.5Z"/><path d="M9 4v13.5M15 6.5V20"/></svg>Lihat Peta Lengkap</a>
       </div>
