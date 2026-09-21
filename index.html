@@ -1,547 +1,716 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SKEWS_DESA KEJI - (Pemantauan Peringatan Dini Tanah Longsor)</title>
-  
-  <!-- Favicon Icon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='m8 3 4 8 5-5 5 15H2L8 3z'/></svg>">
-  <!-- Google Fonts & Tailwind CSS -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Chart.js & Leaflet GIS -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <meta name="theme-color" content="#07533f" />
+  <meta name="description" content="EWS Desa Keji - Pantau Risiko Tanah Longsor Desa Keji, Ungaran Barat." />
+  <title>EWS Desa Keji | Pantau Risiko Tanah Longsor</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
   <style>
-    body {
-      background-color: #050505;
-      color: #e2e8f0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+    :root{
+      --green:#075540;
+      --green-2:#0b6a51;
+      --mint:#c9f7df;
+      --mint-2:#eafaf2;
+      --lime:#51f0a2;
+      --text:#0d1716;
+      --muted:#64716f;
+      --line:#dce7e2;
+      --white:#fff;
+      --danger:#f42f3f;
+      --blue:#2196f3;
+      --shadow:0 12px 35px rgba(0,0,0,.09);
+      --radius:22px;
     }
-    .dashboard-card {
-      background: #0c0c0c;
-      border: 1px solid #1f2937;
-      border-radius: 12px;
-      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Poppins,Arial,sans-serif;
+      color:var(--text);
+      background:#f7fbf9;
+      -webkit-font-smoothing:antialiased;
     }
-    .dashboard-card:hover {
-      transform: translateY(-2px);
-      border-color: #374151;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    button{font:inherit}
+    a{text-decoration:none;color:inherit}
+
+    /* ===================== HEADER ===================== */
+    .header{
+      height:72px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      padding:0 60px;
+      position:relative;
+      z-index:20;
+      border-bottom:1px solid rgba(8,75,57,.06);
     }
-    .header-accent {
-      position: relative;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:270px;
     }
-    .header-accent::after {
-      content: '';
-      position: absolute;
-      bottom: -17px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, #10b981, #3b82f6, transparent);
+    .brand-mark{
+      width:50px;
+      height:50px;
+      flex:none;
     }
-    #map {
-      height: 240px;
-      border-radius: 8px;
-      z-index: 10;
+    .brand-title{
+      font-size:25px;
+      line-height:1;
+      font-weight:800;
+      letter-spacing:-.7px;
     }
-    .map-controls {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .brand-sub{
+      margin-top:4px;
+      font-size:11.5px;
+      line-height:1.12;
+      color:#22302e;
+      font-weight:500;
     }
-    .btn-map-control {
-      background: rgba(12, 12, 12, 0.85);
-      border: 1px solid #374151;
-      color: #e2e8f0;
-      padding: 6px 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      transition: background 0.2s;
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:15px;
+      flex:1;
     }
-    .btn-map-control:hover {
-      background: rgba(31, 41, 55, 0.95);
+    .nav a{
+      padding:11px 18px;
+      border-radius:15px;
+      font-size:14px;
+      font-weight:500;
+      transition:.2s ease;
+    }
+    .nav a:hover{background:#f1faf5}
+    .nav a.active{
+      background:#e3f8ee;
+      font-weight:700;
+    }
+    .header-cta{
+      min-width:316px;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      gap:11px;
+      background:#0b5a44;
+      color:#fff;
+      border-radius:15px;
+      padding:11px 20px;
+      font-size:13px;
+      font-weight:600;
+      box-shadow:0 5px 12px rgba(8,74,55,.12);
+    }
+    .cta svg{width:20px;height:20px}
+
+    /* ===================== HERO ===================== */
+    .hero{
+      position:relative;
+      height:443px;
+      overflow:hidden;
+      background-image:
+        linear-gradient(90deg,rgba(6,28,26,.70) 0%,rgba(6,28,26,.43) 34%,rgba(6,28,26,.15) 62%,rgba(6,28,26,.16) 100%),
+        url('assets/hero-map.png');
+      background-size:cover;
+      background-position:center 54%;
+    }
+    .hero:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(7,29,26,.12),rgba(7,29,26,.05) 45%,rgba(4,28,23,.27) 100%);
+      pointer-events:none;
+    }
+    .hero-inner{
+      position:relative;
+      z-index:2;
+      height:100%;
+      padding:38px 64px 30px;
+      display:flex;
+      justify-content:space-between;
+    }
+    .hero-left{width:50%;max-width:690px;color:#fff;position:relative}
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(16,190,125,.24);
+      border:1px solid rgba(90,251,174,.52);
+      padding:6px 13px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:.05px;
+    }
+    .eyebrow .dot{
+      width:8px;height:8px;border-radius:50%;background:#52f3ab;display:inline-block;
+      box-shadow:0 0 0 3px rgba(82,243,171,.16)
+    }
+    .hero h1{
+      margin:13px 0 0;
+      font-size:55px;
+      line-height:.98;
+      letter-spacing:-2px;
+      font-weight:800;
+    }
+    .hero h1 span{display:block;color:#58f0a2}
+    .hero h2{
+      margin:7px 0 0;
+      font-size:24px;
+      line-height:1.15;
+      font-weight:800;
+    }
+    .hero-copy{
+      margin:18px 0 16px;
+      max-width:505px;
+      font-size:15px;
+      line-height:1.45;
+      font-weight:400;
+    }
+    .hero-actions{display:flex;gap:17px;align-items:center}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:11px;
+      min-height:45px;
+      padding:0 24px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      border:1.5px solid transparent;
+    }
+    .btn-primary{background:#59f0a7;color:#002c20}
+    .btn-secondary{background:rgba(2,28,23,.12);border-color:#fff;color:#fff}
+    .btn svg{width:18px;height:18px}
+
+    .benefits{
+      display:flex;
+      gap:24px;
+      margin-top:22px;
+      align-items:center;
+    }
+    .benefit{display:flex;align-items:center;gap:10px;color:#fff;min-width:140px}
+    .benefit + .benefit{padding-left:23px;border-left:1px solid rgba(255,255,255,.45)}
+    .benefit svg{width:29px;height:29px;stroke:#56efaa;stroke-width:2.2;flex:none}
+    .benefit b{display:block;font-size:13px;line-height:1.18}
+    .benefit small{display:block;font-size:10.5px;line-height:1.2;margin-top:4px;color:rgba(255,255,255,.9)}
+
+    /* handwritten slogan on hero */
+    .hero-script{
+      position:absolute;
+      left:51.2%;
+      top:46px;
+      width:250px;
+      color:#fff;
+      font-family:Caveat,cursive;
+      font-size:28px;
+      line-height:1.02;
+      transform:rotate(-3deg);
+      text-shadow:0 2px 6px rgba(0,0,0,.22);
+    }
+    .hero-script small{font-size:24px;display:block;margin-top:2px}
+    .hero-script .underline{
+      width:170px;height:6px;background:#4df0a0;border-radius:100%;margin-top:13px;transform:rotate(-8deg);display:block;
+    }
+
+    /* weather card */
+    .weather{
+      position:absolute;
+      z-index:5;
+      right:41px;
+      top:18px;
+      width:282px;
+      min-height:62px;
+      display:flex;
+      align-items:center;
+      gap:15px;
+      padding:10px 14px;
+      border:1px solid rgba(255,255,255,.23);
+      border-radius:16px;
+      background:rgba(20,48,50,.38);
+      backdrop-filter:blur(8px);
+      color:#fff;
+    }
+    .weather-icon{font-size:29px;line-height:1}
+    .temp{font-size:18px;font-weight:800;line-height:1}
+    .weather-place{font-size:9.5px;margin-top:4px;color:#e6efed}
+    .weather-divider{width:1px;height:38px;background:rgba(255,255,255,.32);margin-left:auto}
+    .date{text-align:left;font-size:10px;line-height:1.42;white-space:nowrap;color:#f0f4f3}
+    .date b{font-size:11px}
+
+    .hero-map-label{
+      position:absolute;
+      z-index:4;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      padding:7px 12px 7px 7px;
+      background:#fff;
+      color:#0d1514;
+      border-radius:16px;
+      box-shadow:0 5px 18px rgba(0,0,0,.17);
+      font-size:12px;
+      line-height:1.1;
+      font-weight:600;
+    }
+    .map-label-icon{
+      width:31px;height:31px;border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:0 4px 8px rgba(0,0,0,.16)
+    }
+    .map-label-icon.blue{background:#2697ef}
+    .map-label-icon.red{background:#f33240}
+    .map-label-icon svg{width:20px;height:20px}
+    .label-keji{right:35%;top:69%}
+    .label-setoyo{right:14.5%;top:32%}
+
+    .north{
+      position:absolute;right:19.7%;bottom:20px;z-index:4;color:#fff;text-align:center;font-weight:600;font-size:12px
+    }
+    .north svg{display:block;width:46px;height:46px;margin:0 auto 2px}
+    .scale{
+      position:absolute;right:65px;bottom:26px;z-index:4;color:#fff;font-size:11px;text-align:center;white-space:nowrap
+    }
+    .scale .ticks{display:flex;align-items:end;justify-content:space-between;width:147px;margin-top:5px}
+    .scale .line{width:147px;height:4px;border:1.5px solid #fff;border-top:0;display:block}
+
+    .quote-box{
+      position:absolute;
+      right:41px;
+      bottom:66px;
+      width:237px;
+      padding:14px 17px 15px;
+      border-radius:15px;
+      background:rgba(47,68,68,.58);
+      border:1px solid rgba(255,255,255,.1);
+      box-shadow:0 8px 20px rgba(0,0,0,.1);
+      color:#fff;
+      font-family:Caveat,cursive;
+      font-size:21px;
+      line-height:1.02;
+      transform:rotate(-1deg);
+    }
+    .quote-mark{font-family:Arial,sans-serif;font-size:36px;line-height:.6;color:#52efaa;vertical-align:-8px;margin-right:5px;font-weight:800}
+    .quote-line{display:block;width:100px;height:5px;border-radius:50px;background:#49ef9e;margin:10px 0 0 auto;transform:rotate(-8deg)}
+
+    /* ===================== EWS CONTENT ===================== */
+    .content-wrap{
+      position:relative;
+      z-index:8;
+      width:calc(100% - 82px);
+      margin:-2px auto 0;
+      background:rgba(250,253,252,.97);
+      border:1px solid rgba(5,77,60,.08);
+      box-shadow:var(--shadow);
+      border-radius:21px;
+      padding:14px 22px 14px;
+    }
+    .section-head{display:flex;align-items:center;justify-content:space-between;margin:0 5px 13px}
+    .section-title h3{margin:0;font-size:20px;line-height:1.15;color:#174a3c}
+    .section-title p{margin:4px 0 0;color:#707f7b;font-size:11px}
+    .map-full{
+      display:inline-flex;align-items:center;gap:9px;padding:10px 18px;border:1px solid #0c5b46;border-radius:999px;background:#fbfffd;color:#0c5b46;font-size:12px;font-weight:700
+    }
+    .map-full svg{width:17px;height:17px}
+
+    .ews-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .ews-card{
+      min-height:224px;
+      overflow:hidden;
+      border-radius:14px;
+      background:#fff;
+      display:grid;
+      grid-template-columns:69.4% 30.6%;
+      border:1.5px solid;
+    }
+    .ews-card.blue{border-color:#4aa0ec}
+    .ews-card.red{border-color:#ec5562}
+
+    .ews-image{
+      position:relative;
+      min-height:224px;
+      background:#224c3e center/cover no-repeat;
+      color:#fff;
+      overflow:hidden;
+    }
+    .ews-image:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,35,31,.73),rgba(8,35,31,.12) 74%,rgba(8,35,31,.03))}
+    .ews-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .ews-left-content{position:relative;z-index:2;height:100%;padding:30px 28px 17px}
+    .badge-big{
+      position:absolute;left:28px;top:27px;width:70px;height:70px;border-radius:50%;display:grid;place-items:center;color:#fff
+    }
+    .badge-big.blue{background:#2494ef}.badge-big.red{background:#f12f3d}
+    .badge-big svg{width:38px;height:38px}
+    .ews-name{padding-left:89px;margin-top:5px}
+    .ews-name strong{display:block;font-size:25px;line-height:1;font-weight:800}
+    .ews-name span{display:block;margin-top:4px;font-size:20px;line-height:1.05;font-weight:700}
+    .ews-description{max-width:390px;margin-top:22px;font-size:13px;line-height:1.55;color:rgba(255,255,255,.98)}
+    .open-btn{position:absolute;left:28px;bottom:17px;border:0;border-radius:999px;background:#fff;color:#101816;padding:10px 17px 10px 18px;display:inline-flex;align-items:center;gap:13px;font-size:12px;font-weight:700;cursor:pointer}
+    .open-btn svg{width:17px;height:17px}
+
+    .stats{
+      background:rgba(251,254,253,.97);
+      padding:17px 18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .stat{display:grid;grid-template-columns:31px 1fr;gap:8px;align-items:center}
+    .stat-icon{width:29px;height:29px;display:grid;place-items:center;color:#289ad4}
+    .stat-icon svg{width:28px;height:28px}
+    .stat-status .stat-icon{color:#1ebd7a}
+    .red-status .stat-icon{color:#f4ba16}
+    .stat-label{font-size:10px;color:#61706d;line-height:1.1}
+    .stat-value{font-size:13px;color:#0b1715;font-weight:700;line-height:1.25;margin-top:2px}
+    .status-pill{display:flex;align-items:center;gap:10px}
+    .status-text b{display:block;font-size:13px}
+    .status-green{color:#0e9f66}
+    .status-yellow{color:#e3a90b}
+
+    .quick-grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:1.05fr 1.08fr 1fr 1fr;
+      gap:16px;
+    }
+    .quick{
+      min-height:69px;
+      border-radius:11px;
+      background:#edf5f2;
+      display:flex;
+      align-items:center;
+      gap:17px;
+      padding:12px 30px;
+    }
+    .quick svg{width:35px;height:35px;color:#065b46;stroke-width:1.9;flex:none}
+    .quick .q-label{font-size:9.5px;color:#6b7b77;line-height:1.2}
+    .quick .q-value{font-size:11.7px;font-weight:700;line-height:1.35;color:#21312e;margin-top:2px}
+    .quick.report .q-value{display:flex;align-items:center;gap:10px}
+
+    /* ===================== FOOTER ===================== */
+    .footer{
+      margin-top:14px;
+      min-height:78px;
+      background:#064738;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 62px;
+    }
+    .footer-brand{display:flex;align-items:center;gap:10px}
+    .footer-mark{width:36px;height:36px}
+    .footer-title{font-size:12px;font-weight:700;line-height:1.2}
+    .footer-title span{display:block;font-size:9px;font-weight:500;margin-top:3px}
+    .footer-nav{display:flex;gap:37px;font-size:10.5px}
+    .footer-social{display:flex;align-items:center;gap:19px}
+    .footer-social svg{width:19px;height:19px}
+    .footer-end{display:flex;align-items:center;gap:10px;font-size:9.5px}
+    .footer-end svg{width:18px;height:18px}
+
+    /* ===================== MODAL ===================== */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.54);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}
+    .modal.show{display:flex}
+    .modal-card{max-width:520px;width:100%;background:#fff;border-radius:20px;padding:26px;box-shadow:0 24px 70px rgba(0,0,0,.24)}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .modal-head h4{margin:0;color:#0b533f;font-size:22px}
+    .close{border:0;background:#eff7f4;border-radius:50%;width:36px;height:36px;cursor:pointer;display:grid;place-items:center}
+    .modal-card p{color:#5d6b68;line-height:1.65;font-size:13px}
+    .modal-data{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+    .data-box{padding:13px;background:#f2f8f5;border-radius:12px}
+    .data-box small{display:block;color:#72807d;font-size:10px}
+    .data-box b{display:block;margin-top:3px;font-size:15px}
+
+    /* ===================== MOBILE ===================== */
+    @media(max-width:1180px){
+      .header{padding:0 28px}.brand{min-width:225px}.header-cta{min-width:230px}.cta{padding:10px 15px}.nav{gap:6px}
+      .hero-inner{padding-left:42px}.hero h1{font-size:49px}.hero-script{left:52%}.label-keji{right:35%;top:68%}
+      .content-wrap{width:calc(100% - 42px)}
+      .footer{padding:0 35px}.footer-nav{gap:20px}
+    }
+    @media(max-width:920px){
+      .header{height:auto;min-height:72px;padding:12px 22px;flex-wrap:wrap;gap:10px}.brand{min-width:auto}.nav{order:3;width:100%;justify-content:flex-start;overflow-x:auto;padding-bottom:2px}.header-cta{display:none}
+      .hero{height:500px}.hero-inner{padding:30px 28px}.hero-left{width:65%}.hero h1{font-size:43px}.hero-script{left:auto;right:5%;top:72px}.quote-box{right:20px;bottom:50px}.weather{right:20px}.label-setoyo{right:12%}.label-keji{right:31%}
+      .ews-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.footer{flex-wrap:wrap;padding:18px 28px;gap:16px}.footer-nav{order:3;width:100%;justify-content:center}
+    }
+    @media(max-width:650px){
+      .header{padding:10px 16px}.brand-title{font-size:22px}.brand-sub{font-size:10px}.brand-mark{width:44px;height:44px}.nav a{padding:9px 13px;font-size:12px}
+      .hero{height:615px;background-position:58% center}.hero-inner{padding:24px 18px}.hero-left{width:100%;max-width:none}.eyebrow{font-size:11px}.hero h1{font-size:38px;letter-spacing:-1.1px}.hero h2{font-size:20px}.hero-copy{font-size:13px;max-width:345px}.benefits{gap:12px;flex-wrap:wrap}.benefit{min-width:120px}.benefit + .benefit{padding-left:12px}
+      .hero-script{top:222px;right:20px;width:210px}.weather{top:auto;right:18px;bottom:20px;width:calc(100% - 36px)}.quote-box{display:none}.hero-map-label{transform:scale(.88);transform-origin:right top}.label-setoyo{top:29%;right:4%}.label-keji{top:48%;right:19%}.north{display:none}.scale{display:none}
+      .content-wrap{width:calc(100% - 18px);padding:13px 11px}.section-head{align-items:flex-start}.section-title h3{font-size:18px}.section-title p{font-size:10px}.map-full{font-size:10px;padding:8px 12px}
+      .ews-card{grid-template-columns:1fr;min-height:auto}.ews-image{min-height:255px}.stats{min-height:245px}.quick-grid{grid-template-columns:1fr}.quick{padding:12px 20px}.footer{padding:20px 18px;justify-content:center}.footer-nav,.footer-social{display:none}.footer-end{width:100%;justify-content:center}
+      .modal-data{grid-template-columns:1fr}
     }
   </style>
 </head>
-<body class="p-4 md:p-8 min-h-screen">
-  <!-- Header -->
-  <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4 header-accent">
-    <div class="flex items-center gap-3">
-      <!-- LOGO SKEWS -->
-      <img src="logo.png" alt="Logo SKEWS" class="w-12 h-12 object-contain" />
+
+<body>
+  <header class="header">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 50 50" aria-hidden="true">
+        <path d="M12 39c-4-9-3-18 4-25 7-7 17-10 26-10-1 11-4 22-12 29-7 7-12 8-18 9Z" fill="#2eb367"/>
+        <path d="M13 42C20 30 29 22 39 14" fill="none" stroke="#0a7f4b" stroke-width="3.3" stroke-linecap="round"/>
+        <path d="M17 29C26 22 31 18 35 14" fill="none" stroke="#baf6d1" stroke-width="2" stroke-linecap="round"/>
+      </svg>
       <div>
-        <h1 class="text-xl md:text-2xl font-light tracking-widest text-gray-200 flex items-center gap-2.5">
-          SKEWS (SMART KEJI EARLY WARNING SYSTEM)
-        </h1>
-        <p class="text-xs text-blue-400 mt-1 flex items-center gap-1.5">
-          <i data-lucide="radio" class="w-3.5 h-3.5 animate-pulse"></i> SISTEM PEMANTAUAN DAN PERINGATAN DINI BENCANA LONGSOR - DESA KEJI
-        </p>
+        <div class="brand-title">EWS</div>
+        <div class="brand-sub">Desa Keji<br/>Ungaran Barat</div>
       </div>
     </div>
-    <div class="mt-2 md:mt-0 flex items-center gap-3">
-      <span id="system-status-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
-        <span id="system-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2"></span>
-        <span id="system-status-text">SISTEM AKTIF</span>
-      </span>
-      <span id="last-update" class="text-xs text-gray-500">Memuat...</span>
+
+    <nav class="nav" aria-label="Navigasi utama">
+      <a class="active" href="#beranda">Beranda</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#ews">EWS</a>
+      <a href="#berita">Berita</a>
+      <a href="#kontak">Kontak</a>
+    </nav>
+
+    <div class="header-cta">
+      <div class="cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+          <path d="M3 13c4-7 8-9 18-11-1 6-3 12-8 15-4 2-7 0-10-4Z"/>
+          <path d="M5 20c4-5 8-8 13-11"/>
+        </svg>
+        Bersama untuk Desa yang Lebih Aman
+      </div>
     </div>
   </header>
-  
-  <!-- Main Grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-    <!-- Kolom Kiri: Peta Lokasi SKEWS (4 Grid) -->
-    <div class="lg:col-span-4 space-y-6">
-      <div class="dashboard-card p-6">
-        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-4 flex items-center justify-between">
-          <span class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-red-500"></i> Peta Lokasi SKEWS</span>
-          <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-        </h2>
-        <div class="relative">
-          <div id="map"></div>
-          <div class="map-controls">
-            <button onclick="recenterMap()" class="btn-map-control" title="Tengahkan Peta">
-              🎯
-            </button>
-            <a id="gmapsLink" href="https://www.google.com/maps/search/?api=1&query=-2.548926,118.014863" target="_blank" class="btn-map-control" title="Buka di Google Maps">
-              🗺️
+
+  <main>
+    <section class="hero" id="beranda">
+      <div class="weather">
+        <div class="weather-icon">🌤️</div>
+        <div>
+          <div class="temp">24°C</div>
+          <div class="weather-place">Ungaran Barat</div>
+        </div>
+        <div class="weather-divider"></div>
+        <div class="date"><b>Senin, 20 Sep 2026</b><br/>14:30 WIB</div>
+      </div>
+
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div class="eyebrow"><span class="dot"></span>Sistem Peringatan Dini</div>
+          <h1>Pantau Risiko<span>Tanah Longsor</span></h1>
+          <h2>Desa Keji, Ungaran Barat</h2>
+          <p class="hero-copy">Memanfaatkan teknologi untuk melindungi masyarakat,<br class="desktop"/> lingkungan, dan masa depan desa.</p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#ews">Jelajahi EWS
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg>
             </a>
+            <a class="btn btn-secondary" href="#tentang">Tentang Kami</a>
           </div>
-        </div>
-        <div class="mt-4 pt-3 border-t border-gray-800 flex justify-between text-xs text-gray-400">
-          <span>LAT: <strong id="val-lat" class="text-gray-200">Menunggu GPS...</strong></span>
-          <span>LNG: <strong id="val-lng" class="text-gray-200">Menunggu GPS...</strong></span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Kolom Tengah: Status Tingkat Bahaya (4 Grid) -->
-    <div class="lg:col-span-4 space-y-6">
-      <div class="dashboard-card p-6 h-full flex flex-col justify-center">
-        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-2">
-          <i data-lucide="alert-triangle" class="w-4 h-4 text-emerald-400"></i> Tingkat Status
-        </h2>
-        <div class="flex items-center justify-between mt-4">
-          <div>
-            <div id="val-status" class="text-3xl font-black text-emerald-400 tracking-wide">AMAN</div>
-            <p id="val-status-desc" class="text-xs text-gray-500 mt-1">Kondisi lereng stabil</p>
-          </div>
-          <div id="status-icon-box" class="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-            <i data-lucide="check-circle-2" class="w-8 h-8"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Kolom Kanan: Data Terbaru (4 Grid) -->
-    <div class="lg:col-span-4 dashboard-card p-6 space-y-6 flex flex-col justify-between">
-      <h2 class="text-xs uppercase tracking-widest text-gray-400 flex items-center gap-2">
-        <i data-lucide="activity" class="w-4 h-4 text-blue-400"></i> Data Terbaru
-      </h2>
-      
-      <div>
-        <div class="text-2xl font-bold text-red-500 flex items-center gap-2">
-          <i data-lucide="compass" class="w-5 h-5 text-red-500/70"></i> <span id="val-kemiringan">0.0°</span>
-        </div>
-        <div class="text-xs text-gray-500 mt-1">Kemiringan Tanah</div>
-      </div>
-      <div>
-        <div class="text-2xl font-bold text-blue-400 flex items-center gap-2">
-          <i data-lucide="droplets" class="w-5 h-5 text-blue-400/70"></i> <span id="val-kelembaban">0.0%</span>
-        </div>
-        <div class="text-xs text-gray-500 mt-1">Kelembaban Tanah</div>
-      </div>
-      <div>
-        <div class="text-2xl font-bold text-amber-400 flex items-center gap-2">
-          <i data-lucide="move" class="w-5 h-5 text-amber-400/70"></i> <span id="val-pergeseran">0 cm</span>
-        </div>
-        <div class="text-xs text-gray-500 mt-1">Pergeseran Alat (GPS)</div>
-      </div>
-    </div>
 
-    <!-- Bagian Bawah -->
-    <div class="lg:col-span-12 space-y-6">
-      <div class="dashboard-card p-6">
-        <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-2">
-          <i data-lucide="line-chart" class="w-4 h-4 text-emerald-400"></i> Riwayat Status
-        </h2>
-        <div class="relative h-[90px] w-full">
-          <canvas id="statusChart"></canvas>
-        </div>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Sensor Kemiringan -->
-        <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
-          <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-red-400 mb-2 flex items-center gap-1.5">
-              <i data-lucide="compass" class="w-3.5 h-3.5"></i> Riwayat Kemiringan
-            </h2>
-            <div class="relative h-[100px] w-full">
-              <canvas id="chartKemiringan"></canvas>
+          <div class="benefits">
+            <div class="benefit">
+              <svg viewBox="0 0 24 24" fill="none"><path d="m20 6-9.5 11L5 12"/><path d="M12 22a9.5 9.5 0 0 0 9.5-9.5V5.2L12 2 2.5 5.2v7.3A9.5 9.5 0 0 0 12 22Z"/></svg>
+              <div><b>Lebih Aman</b><small>Untuk Masyarakat</small></div>
             </div>
-          </div>
-          <div class="flex flex-col items-center justify-center relative">
-            <div class="relative h-[90px] w-[90px]">
-              <canvas id="pieKemiringan"></canvas>
+            <div class="benefit">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 21c6-3 9-8 9-15C14 6 8 9 6 13c-2 4 0 7 6 8Z"/><path d="M8 18c3-5 6-8 10-11"/></svg>
+              <div><b>Lebih Tangguh</b><small>Untuk Lingkungan</small></div>
             </div>
-            <div class="flex gap-2 text-[9px] text-gray-400 mt-1">
-              <span id="pct-kem-aman" class="text-emerald-400">0% A</span>
-              <span id="pct-kem-siaga" class="text-amber-400">0% S</span>
-              <span id="pct-kem-bahaya" class="text-red-400">0% B</span>
+            <div class="benefit">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c.5-4 2.7-6 5.5-6s5 2 5.5 6"/><path d="M13 17c.5-2.5 2-4 4-4s3.8 1.5 4.5 4"/></svg>
+              <div><b>Lebih Siap</b><small>Menghadapi Bencana</small></div>
             </div>
           </div>
         </div>
 
-        <!-- Sensor Kelembaban -->
-        <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
-          <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-blue-400 mb-2 flex items-center gap-1.5">
-              <i data-lucide="droplets" class="w-3.5 h-3.5"></i> Riwayat Kelembaban
-            </h2>
-            <div class="relative h-[100px] w-full">
-              <canvas id="chartKelembaban"></canvas>
-            </div>
-          </div>
-          <div class="flex flex-col items-center justify-center relative">
-            <div class="relative h-[90px] w-[90px]">
-              <canvas id="pieKelembaban"></canvas>
-            </div>
-            <div class="flex gap-2 text-[9px] text-gray-400 mt-1">
-              <span id="pct-keb-aman" class="text-emerald-400">0% A</span>
-              <span id="pct-keb-siaga" class="text-amber-400">0% S</span>
-              <span id="pct-keb-bahaya" class="text-red-400">0% B</span>
-            </div>
-          </div>
+        <div class="hero-script">
+          “Desa Keji<br/>Tangguh,<br/><small>Bersama Cegah Longsor”</small>
+          <span class="underline"></span>
         </div>
 
-        <!-- Sensor Pergeseran -->
-        <div class="dashboard-card p-4 grid grid-cols-2 gap-2 items-center">
-          <div>
-            <h2 class="text-[11px] uppercase tracking-widest text-amber-400 mb-2 flex items-center gap-1.5">
-              <i data-lucide="move" class="w-3.5 h-3.5"></i> Riwayat Pergeseran (cm)
-            </h2>
-            <div class="relative h-[100px] w-full">
-              <canvas id="chartPergeseran"></canvas>
-            </div>
-          </div>
-          <div class="flex flex-col items-center justify-center relative">
-            <div class="relative h-[90px] w-[90px]">
-              <canvas id="piePergeseran"></canvas>
-            </div>
-            <div class="flex gap-2 text-[9px] text-gray-400 mt-1">
-              <span id="pct-per-aman" class="text-emerald-400">0% A</span>
-              <span id="pct-per-siaga" class="text-amber-400">0% S</span>
-              <span id="pct-per-bahaya" class="text-red-400">0% B</span>
-            </div>
-          </div>
+        <div class="hero-map-label label-setoyo">
+          <span class="map-label-icon red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6 7-12a7 7 0 1 0-14 0c0 6 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>
+          </span>
+          <span>EWS<br/><b>Dusun Setoyo</b></span>
         </div>
+
+        <div class="hero-map-label label-keji">
+          <span class="map-label-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 3 6 6 .9-4.5 4.4 1.1 6.2L12 17.5 6.4 20.5 7.5 14 3 9.9 9 9l3-6Z"/></svg>
+          </span>
+          <span>EWS<br/><b>Dusun Keji</b></span>
+        </div>
+
+        <div class="quote-box">
+          <span class="quote-mark">“</span> Masyarakat<br/>Siap, Alam Terjaga,<br/>Desa Keji Lebih Aman ”
+          <span class="quote-line"></span>
+        </div>
+
+        <div class="north">
+          <div>N</div>
+          <svg viewBox="0 0 50 50" aria-hidden="true">
+            <path d="M25 4 34 27 25 23 16 27Z" fill="#fff"/>
+            <path d="M25 46 16 23 25 27 34 23Z" fill="rgba(255,255,255,.35)" stroke="#fff" stroke-width="1"/>
+            <circle cx="25" cy="25" r="20" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="scale">
+          <div class="ticks"><span>0</span><span>1</span><span>2 km</span></div>
+          <span class="line"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-wrap" id="ews">
+      <div class="section-head">
+        <div class="section-title">
+          <h3>Pilih Sistem EWS</h3>
+          <p>Akses informasi peringatan dini sesuai lokasi pemasangan alat.</p>
+        </div>
+        <a class="map-full" href="#ews"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5-6 2.5Z"/><path d="M9 4v13.5M15 6.5V20"/></svg>Lihat Peta Lengkap</a>
+      </div>
+
+      <div class="ews-grid">
+        <!-- EWS 1 -->
+        <article class="ews-card blue">
+          <div class="ews-image">
+            <img src="assets/ews1.png" alt="Perangkat EWS Dusun Keji" />
+            <div class="ews-left-content">
+              <div class="badge-big blue">
+                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 29c4-7 10-10 15-16l6 8 7 3"/><path d="m10 30 7-8 5 7"/><path d="M25 10 31 7 35 11"/></svg>
+              </div>
+              <div class="ews-name"><strong>EWS 1</strong><span>Dusun Keji</span></div>
+              <div class="ews-description">Pemantauan risiko tanah longsor di wilayah<br/>Dusun Keji, Desa Keji.</div>
+              <button class="open-btn" data-target="modal-keji">Buka EWS Dusun Keji <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 18h9.5a3.5 3.5 0 1 0-1.4-6.7A5 5 0 1 0 11 20H8"/><path d="M13 8.5h.01"/></svg></div><div><div class="stat-label">Curah Hujan</div><div class="stat-value">12 mm</div></div></div>
+            <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3s6 7.2 6 11a6 6 0 0 1-12 0c0-3.8 6-11 6-11Z"/><path d="M9 15c0 1.2 1.1 2.4 3 2.4"/></svg></div><div><div class="stat-label">Kelembapan Tanah</div><div class="stat-value">68 %</div></div></div>
+            <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l1.8-5 3.4 10 2.1-6H21"/></svg></div><div><div class="stat-label">Pergerakan Tanah</div><div class="stat-value">0.3 mm/hari</div></div></div>
+            <div class="stat stat-status"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16.5 9"/></svg></div><div><div class="stat-label">Status</div><div class="stat-value status-green">Aman</div></div></div>
+          </div>
+        </article>
+
+        <!-- EWS 2 -->
+        <article class="ews-card red">
+          <div class="ews-image">
+            <img src="assets/ews2.png" alt="Perangkat EWS Dusun Setoyo" />
+            <div class="ews-left-content">
+              <div class="badge-big red">
+                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 29c4-7 10-10 15-16l6 8 7 3"/><path d="m10 30 7-8 5 7"/><path d="M25 10 31 7 35 11"/></svg>
+              </div>
+              <div class="ews-name"><strong>EWS 2</strong><span>Dusun Setoyo</span></div>
+              <div class="ews-description">Pemantauan risiko tanah longsor di wilayah<br/>Dusun Setoyo, Desa Keji.</div>
+              <button class="open-btn" data-target="modal-setoyo">Buka EWS Dusun Setoyo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 18h9.5a3.5 3.5 0 1 0-1.4-6.7A5 5 0 1 0 11 20H8"/><path d="M13 8.5h.01"/></svg></div><div><div class="stat-label">Curah Hujan</div><div class="stat-value">8 mm</div></div></div>
+            <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3s6 7.2 6 11a6 6 0 0 1-12 0c0-3.8 6-11 6-11Z"/><path d="M9 15c0 1.2 1.1 2.4 3 2.4"/></svg></div><div><div class="stat-label">Kelembapan Tanah</div><div class="stat-value">75 %</div></div></div>
+            <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l1.8-5 3.4 10 2.1-6H21"/></svg></div><div><div class="stat-label">Pergerakan Tanah</div><div class="stat-value">0.8 mm/hari</div></div></div>
+            <div class="stat red-status"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2.9 19a2 2 0 0 0 1.74 3h14.72A2 2 0 0 0 21.1 19L12 3Z"/><path d="M12 9v5" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/><circle cx="12" cy="17.4" r="1.05" fill="#fff"/></svg></div><div><div class="stat-label">Status</div><div class="stat-value status-yellow">Siaga</div></div></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="quick-grid">
+        <div class="quick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="7" r="3"/><path d="M2.5 20c.4-4 2.8-6 6.5-6s6 2 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M14 20c.4-2.8 1.7-4.6 4.3-5.4 1.8.6 3 2.3 3.2 5.4"/></svg><div><div class="q-label">Jumlah Alat EWS</div><div class="q-value">2 Unit</div></div></div>
+        <div class="quick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s7-5.8 7-12a7 7 0 1 0-14 0c0 6.2 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg><div><div class="q-label">Lokasi</div><div class="q-value">Desa Keji, Kec. Ungaran Barat<br/>Kabupaten Semarang</div></div></div>
+        <div class="quick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><div><div class="q-label">Terakhir Diperbarui</div><div class="q-value">20 Sep 2026<br/>14:30 WIB</div></div></div>
+        <div class="quick report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg><div><div class="q-label">Laporan</div><div class="q-value">Lihat Data &amp; Laporan <span aria-hidden="true">→</span></div></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="kontak">
+    <div class="footer-brand">
+      <svg class="footer-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M10 31C7 24 8 16 14 10c5-5 11-7 18-8-1 8-4 15-9 21-4 5-8 7-13 8Z" fill="#fff"/>
+        <path d="M10 34c5-8 11-14 20-20" fill="none" stroke="#75eab3" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <div class="footer-title">EWS Desa Keji<span>Ungaran Barat</span></div>
+    </div>
+
+    <div class="footer-nav">
+      <a href="#beranda">Beranda</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#ews">EWS</a>
+      <a href="#berita">Berita</a>
+      <a href="#kontak">Kontak</a>
+    </div>
+
+    <div class="footer-social" aria-label="Media sosial">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-2.8 0-5 2.2-5 5v3H6v4h3v5h4v-5h3.1l.9-4H13V9c0-.6.4-1 1-1Z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.3 7.2c-.3-1-1.1-1.8-2.1-2.1C17.4 4.5 12 4.5 12 4.5s-5.4 0-7.2.6c-1 .3-1.8 1.1-2.1 2.1C2.1 9 2.1 12 2.1 12s0 3 .6 4.8c.3 1 1.1 1.8 2.1 2.1 1.8.6 7.2.6 7.2.6s5.4 0 7.2-.6c1-.3 1.8-1.1 2.1-2.1.6-1.8.6-4.8.6-4.8s0-3-.6-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.4 3.8 5.4 3.8 9S14.5 18.6 12 21M12 3C9.5 5.4 8.2 8.4 8.2 12S9.5 18.6 12 21"/></svg>
+    </div>
+
+    <div class="footer-end">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21C7 17 4 12.5 4 8.5A8.5 8.5 0 0 1 12 0a8.5 8.5 0 0 1 8 8.5c0 4-3 8.5-8 12.5Z" transform="scale(.78) translate(3 2)" fill="none"/></svg>
+      Untuk Masa Depan yang Lebih Aman
+    </div>
+  </footer>
+
+  <!-- MODAL EWS 1 -->
+  <div class="modal" id="modal-keji" role="dialog" aria-modal="true" aria-labelledby="modal-keji-title">
+    <div class="modal-card">
+      <div class="modal-head"><h4 id="modal-keji-title">EWS 1 — Dusun Keji</h4><button class="close" type="button" aria-label="Tutup">✕</button></div>
+      <p>Detail pemantauan sistem peringatan dini tanah longsor di wilayah Dusun Keji.</p>
+      <div class="modal-data">
+        <div class="data-box"><small>Curah Hujan</small><b>12 mm</b></div>
+        <div class="data-box"><small>Kelembapan Tanah</small><b>68 %</b></div>
+        <div class="data-box"><small>Pergerakan Tanah</small><b>0.3 mm/hari</b></div>
+        <div class="data-box"><small>Status</small><b style="color:#129565">AMAN</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL EWS 2 -->
+  <div class="modal" id="modal-setoyo" role="dialog" aria-modal="true" aria-labelledby="modal-setoyo-title">
+    <div class="modal-card">
+      <div class="modal-head"><h4 id="modal-setoyo-title">EWS 2 — Dusun Setoyo</h4><button class="close" type="button" aria-label="Tutup">✕</button></div>
+      <p>Detail pemantauan sistem peringatan dini tanah longsor di wilayah Dusun Setoyo.</p>
+      <div class="modal-data">
+        <div class="data-box"><small>Curah Hujan</small><b>8 mm</b></div>
+        <div class="data-box"><small>Kelembapan Tanah</small><b>75 %</b></div>
+        <div class="data-box"><small>Pergerakan Tanah</small><b>0.8 mm/hari</b></div>
+        <div class="data-box"><small>Status</small><b style="color:#e2ab12">SIAGA</b></div>
       </div>
     </div>
   </div>
 
   <script>
-    const API_URL = 'https://skews1-backend.vercel.app/api/data';
-    lucide.createIcons();
-    
-    // Inisialisasi Peta menggunakan OpenStreetMap standar (Tanpa API Key Required)
-    const map = L.map('map').setView([-2.548926, 118.014863], 5);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    let marker = null;
-    let currentLat = -2.548926;
-    let currentLng = 118.014863;
-
-    function recenterMap() {
-      if (marker) {
-        map.setView(marker.getLatLng(), 16);
-      } else {
-        map.setView([currentLat, currentLng], 15);
-      }
-    }
-
-    function createPieChart(canvasId) {
-      return new Chart(document.getElementById(canvasId).getContext('2d'), {
-        type: 'pie',
-        data: {
-          labels: ['Aman', 'Siaga', 'Bahaya'],
-          datasets: [{
-            data: [33, 33, 34],
-            backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
-            borderWidth: 1,
-            borderColor: '#0c0c0c'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false }, tooltip: { enabled: true } }
-        }
+    // Tombol EWS membuka modal detail
+    document.querySelectorAll('.open-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const modal = document.getElementById(btn.dataset.target);
+        if (modal) modal.classList.add('show');
       });
-    }
-
-    const pieKemiringan = createPieChart('pieKemiringan');
-    const pieKelembaban = createPieChart('pieKelembaban');
-    const piePergeseran = createPieChart('piePergeseran');
-
-    const statusChart = new Chart(document.getElementById('statusChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: [],
-        datasets: [{
-          data: [],
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.05)',
-          fill: true,
-          tension: 0.1,
-          borderWidth: 2,
-          pointRadius: 3
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { ticks: { color: '#64748b', font: { size: 9 }, maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.02)' } },
-          y: { 
-            min: 0, max: 2, 
-            ticks: { 
-              stepSize: 1,
-              color: '#64748b', 
-              font: { size: 10 },
-              callback: function(val) { 
-                if (val === 2) return 'Bahaya'; 
-                if (val === 1) return 'Siaga'; 
-                if (val === 0) return 'Aman';
-                return ''; 
-              }
-            }, 
-            grid: { color: 'rgba(255,255,255,0.05)' } 
-          }
-        }
-      }
     });
 
-    function createSensorChart(ctxId, color) {
-      return new Chart(document.getElementById(ctxId).getContext('2d'), {
-        type: 'line',
-        data: { 
-          labels: [], 
-          datasets: [{ 
-            data: [], 
-            borderColor: color, 
-            borderWidth: 1.5, 
-            fill: true, 
-            backgroundColor: 'rgba(255,255,255,0.02)',
-            tension: 0.2,
-            pointRadius: 0 
-          }] 
-        },
-        options: { 
-          responsive: true, 
-          maintainAspectRatio: false, 
-          plugins: { legend: { display: false } }, 
-          scales: { 
-            x: { display: false }, 
-            y: { ticks: { color: '#64748b', font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.02)' } } 
-          } 
+    // Tutup modal
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', e => {
+        if (e.target === modal || e.target.classList.contains('close')) {
+          modal.classList.remove('show');
         }
       });
-    }
+    });
 
-    const chartKemiringan = createSensorChart('chartKemiringan', '#ef4444');
-    const chartKelembaban = createSensorChart('chartKelembaban', '#3b82f6');
-    const chartPergeseran = createSensorChart('chartPergeseran', '#f59e0b');
-
-    function calculateSensorSpecificProportions(dataArray, sensorType) {
-      if (!dataArray || dataArray.length === 0) return [33, 33, 34];
-      let aman = 0, siaga = 0, bahaya = 0;
-      dataArray.forEach(d => {
-        let val = 0;
-        if (sensorType === 'kemiringan_tanah') {
-          val = parseFloat(d.kemiringan_tanah || 0);
-          if (val >= 11) bahaya++;
-          else if (val >= 5) siaga++;
-          else aman++;
-        } else if (sensorType === 'kelembaban_tanah') {
-          val = parseFloat(d.kelembaban_tanah || 0);
-          if (val > 61) bahaya++;
-          else if (val >= 41) siaga++;
-          else aman++;
-        } else if (sensorType === 'pergeseran') {
-          val = parseFloat(d.pergeseran || 0);
-          if (val >= 11) bahaya++;
-          else if (val >= 6) siaga++;
-          else aman++;
-        }
-      });
-      const total = dataArray.length;
-      if (total === 0) return [33, 33, 34];
-      const pAman = Math.round((aman / total) * 100);
-      const pSiaga = Math.round((siaga / total) * 100);
-      let pBahaya = 100 - (pAman + pSiaga); 
-      if (pBahaya < 0) pBahaya = 0;
-      return [pAman, pSiaga, pBahaya];
-    }
-
-    function updateSystemStatus(isOnline) {
-      const badge = document.getElementById('system-status-badge');
-      const dot = document.getElementById('system-status-dot');
-      const text = document.getElementById('system-status-text');
-
-      if (isOnline) {
-        badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]";
-        dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2";
-        text.innerText = "SISTEM AKTIF";
-      } else {
-        badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/30 shadow-[0_0_12px_rgba(239,68,68,0.15)]";
-        dot.className = "w-2 h-2 rounded-full bg-red-400 animate-pulse mr-2";
-        text.innerText = "SISTEM TIDAK AKTIF";
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal.show').forEach(m => m.classList.remove('show'));
       }
-    }
-
-    async function fetchData() {
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error("API Error");
-        
-        const data = await response.json();
-        if (!data || data.length === 0) {
-          updateSystemStatus(false);
-          return;
-        }
-
-        updateSystemStatus(true);
-        const latest = data[0];
-
-        if (latest.created_at) {
-          const dateObj = new Date(latest.created_at);
-          document.getElementById('last-update').innerText = `Update: ${dateObj.toLocaleTimeString('id-ID')}`;
-        }
-
-        const valKemiringan = parseFloat(latest.kemiringan_tanah || 0);
-        const valKelembaban = parseFloat(latest.kelembaban_tanah || 0);
-        const valPergeseran = parseFloat(latest.pergeseran || 0);
-
-        document.getElementById('val-kemiringan').innerText = `${valKemiringan.toFixed(1)}°`;
-        document.getElementById('val-kelembaban').innerText = `${valKelembaban.toFixed(1)}%`;
-        document.getElementById('val-pergeseran').innerText = `${valPergeseran.toFixed(1)} cm`;
-
-        const statusEl = document.getElementById('val-status');
-        const statusDesc = document.getElementById('val-status-desc');
-        const statusText = (latest.status_bahaya || 'AMAN').toUpperCase();
-        statusEl.innerText = statusText;
-
-        if (statusText === 'BAHAYA') {
-          statusEl.className = 'text-3xl font-black text-red-500 tracking-wide';
-          statusDesc.innerText = 'BAHAYA TINGGI! Evakuasi Segera';
-          statusChart.data.datasets[0].borderColor = '#ef4444';
-          statusChart.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.1)';
-        } else if (statusText === 'SIAGA') {
-          statusEl.className = 'text-3xl font-black text-amber-400 tracking-wide';
-          statusDesc.innerText = 'Waspada Pergerakan Tanah';
-          statusChart.data.datasets[0].borderColor = '#f59e0b';
-          statusChart.data.datasets[0].backgroundColor = 'rgba(245, 158, 11, 0.1)';
-        } else {
-          statusEl.className = 'text-3xl font-black text-emerald-400 tracking-wide';
-          statusDesc.innerText = 'Kondisi lereng stabil';
-          statusChart.data.datasets[0].borderColor = '#10b981';
-          statusChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.1)';
-        }
-
-        if (latest.latitude && latest.longitude) {
-          currentLat = parseFloat(latest.latitude);
-          currentLng = parseFloat(latest.longitude);
-          document.getElementById('val-lat').innerText = currentLat.toFixed(6);
-          document.getElementById('val-lng').innerText = currentLng.toFixed(6);
-          document.getElementById('gmapsLink').href = `https://www.google.com/maps/search/?api=1&query=${currentLat},${currentLng}`;
-          if (!marker) {
-            marker = L.marker([currentLat, currentLng]).addTo(map);
-            map.setView([currentLat, currentLng], 15);
-          } else {
-            marker.setLatLng([currentLat, currentLng]);
-          }
-        }
-
-        const sortedData = [...data].reverse();
-        const labels = sortedData.map(d => {
-          if (!d.created_at) return '';
-          return new Date(d.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        });
-
-        const statusNumeric = sortedData.map(d => {
-          const s = (d.status_bahaya || '').toUpperCase();
-          if (s === 'BAHAYA') return 2;
-          if (s === 'SIAGA') return 1;
-          return 0;
-        });
-
-        statusChart.data.labels = labels;
-        statusChart.data.datasets[0].data = statusNumeric;
-        statusChart.update();
-
-        chartKemiringan.data.labels = labels;
-        chartKemiringan.data.datasets[0].data = sortedData.map(d => parseFloat(d.kemiringan_tanah || 0));
-        chartKemiringan.update();
-
-        chartKelembaban.data.labels = labels;
-        chartKelembaban.data.datasets[0].data = sortedData.map(d => parseFloat(d.kelembaban_tanah || 0));
-        chartKelembaban.update();
-
-        chartPergeseran.data.labels = labels;
-        chartPergeseran.data.datasets[0].data = sortedData.map(d => parseFloat(d.pergeseran || 0));
-        chartPergeseran.update();
-
-        const pKem = calculateSensorSpecificProportions(data, 'kemiringan_tanah');
-        pieKemiringan.data.datasets[0].data = pKem;
-        pieKemiringan.update();
-        document.getElementById('pct-kem-aman').innerText = `${pKem[0]}% A`;
-        document.getElementById('pct-kem-siaga').innerText = `${pKem[1]}% S`;
-        document.getElementById('pct-kem-bahaya').innerText = `${pKem[2]}% B`;
-
-        const pKeb = calculateSensorSpecificProportions(data, 'kelembaban_tanah');
-        pieKelembaban.data.datasets[0].data = pKeb;
-        pieKelembaban.update();
-        document.getElementById('pct-keb-aman').innerText = `${pKeb[0]}% A`;
-        document.getElementById('pct-keb-siaga').innerText = `${pKeb[1]}% S`;
-        document.getElementById('pct-keb-bahaya').innerText = `${pKeb[2]}% B`;
-
-        const pPer = calculateSensorSpecificProportions(data, 'pergeseran');
-        piePergeseran.data.datasets[0].data = pPer;
-        piePergeseran.update();
-        document.getElementById('pct-per-aman').innerText = `${pPer[0]}% A`;
-        document.getElementById('pct-per-siaga').innerText = `${pPer[1]}% S`;
-        document.getElementById('pct-per-bahaya').innerText = `${pPer[2]}% B`;
-
-      } catch (error) {
-        console.error("Gagal mengambil data API:", error);
-        updateSystemStatus(false);
-      }
-    }
-
-    fetchData();
-    setInterval(fetchData, 3000);
+    });
   </script>
 </body>
 </html>
