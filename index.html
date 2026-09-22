@@ -113,6 +113,7 @@
       box-shadow:0 5px 12px rgba(8,74,55,.12);
     }
     .cta svg{width:20px;height:20px}
+    .cta .header-logo{width:24px;height:24px;object-fit:contain;flex:none}
 
     /* ===================== HERO ===================== */
     .hero{
@@ -507,10 +508,7 @@
 
     <div class="header-cta">
       <div class="cta">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
-          <path d="M3 13c4-7 8-9 18-11-1 6-3 12-8 15-4 2-7 0-10-4Z"/>
-          <path d="M5 20c4-5 8-8 13-11"/>
-        </svg>
+        <img class="header-logo" src="logo-skews.png" alt="Logo SKEWS" />
         Bersama untuk Desa yang Lebih Aman
       </div>
     </div>
@@ -603,7 +601,7 @@
           <h3>Sistem SKEWS</h3>
           
         </div>
-        <a class="map-full" href="#ews"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5-6 2.5Z"/><path d="M9 4v13.5M15 6.5V20"/></svg>Lihat Peta Lengkap</a>
+        <a class="map-full" href="https://www.google.com/maps/dir/?api=1&origin=-7.1164830%2C110.3900140&destination=-7.1294947%2C110.3785400" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5-6 2.5Z"/><path d="M9 4v13.5M15 6.5V20"/></svg>Lihat Peta Lengkap</a>
       </div>
 
       <div class="ews-grid">
@@ -617,7 +615,7 @@
               </div>
               <div class="ews-name"><strong>SKEWS 1</strong><span>Dusun Keji</span></div>
               <div class="ews-description">Pemantauan risiko tanah longsor di wilayah<br/>Dusun Keji, Desa Keji.</div>
-              <a class="open-btn" href="dashboard-keji.html">Buka SKEWS Dusun Keji <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></a>
+              <button class="open-btn" data-target="modal-keji">Buka SKEWS Dusun Keji <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
             </div>
           </div>
           <div class="stats">
@@ -643,7 +641,7 @@
               </div>
               <div class="ews-name"><strong>SKEWS 2</strong><span>Dusun Setoyo</span></div>
               <div class="ews-description">Pemantauan risiko tanah longsor di wilayah<br/>Dusun Setoyo, Desa Keji.</div>
-              <a class="open-btn" href="dashboard-setoyo.html">Buka SKEWS Dusun Setoyo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></a>
+              <button class="open-btn" data-target="modal-setoyo">Buka SKEWS Dusun Setoyo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
             </div>
           </div>
           <div class="stats">
@@ -960,6 +958,13 @@
 
     // Siap dipanggil oleh backend/API setelah data diterima.
     window.updateSKEWSData = updateSKEWSData;
+
+    document.querySelectorAll(".open-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const modal = document.getElementById(btn.dataset.target);
+        if (modal) modal.classList.add("show");
+      });
+    });
 
     document.querySelectorAll(".modal").forEach(modal => {
       modal.addEventListener("click", event => {
