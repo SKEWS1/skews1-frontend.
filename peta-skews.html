@@ -3,62 +3,978 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#075540" />
-  <title>Peta SKEWS Desa Keji</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3Q7w3Q7e7x5H6Q2i6h9Z2w0gB1E0A=" crossorigin="" />
+  <meta name="theme-color" content="#07533f" />
+  <meta name="description" content="SKEWS Desa Keji - Pantau Risiko Tanah Longsor Desa Keji, Ungaran Barat." />
+  <title>SKEWS Desa Keji | Pantau Risiko Tanah Longsor</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
   <style>
-    html,body{height:100%;margin:0;font-family:Poppins,Arial,sans-serif;background:#f4f9f7}
-    .top{position:fixed;z-index:1000;top:18px;left:18px;right:18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .title{background:rgba(255,255,255,.96);border:1px solid #dce9e4;border-radius:14px;padding:11px 15px;box-shadow:0 8px 25px rgba(8,54,43,.12);color:#075540}
-    .title strong{display:block;font-size:15px}.title span{display:block;margin-top:2px;font-size:10px;color:#71807b}
-    .back{display:inline-flex;align-items:center;gap:7px;background:#075540;color:#fff;border-radius:999px;padding:10px 15px;font-size:11px;font-weight:700;text-decoration:none;box-shadow:0 8px 25px rgba(8,54,43,.18)}
-    #map{height:100%;width:100%}
-    .leaflet-popup-content{font-family:Poppins,Arial,sans-serif}.leaflet-popup-content b{color:#075540;font-size:13px}.leaflet-popup-content span{display:block;color:#65736f;font-size:10px;margin-top:4px;line-height:1.5}
-    .legend{position:fixed;z-index:1000;left:18px;bottom:18px;background:rgba(255,255,255,.96);border:1px solid #dce9e4;border-radius:14px;padding:11px 14px;box-shadow:0 8px 25px rgba(8,54,43,.12);font-size:10px;color:#43534e}
-    .legend div{display:flex;align-items:center;gap:8px;margin:4px 0}.dot{width:10px;height:10px;border-radius:50%;display:inline-block}.blue{background:#2494ef}.red{background:#f12f3d}
+    :root{
+      --green:#075540;
+      --green-2:#0b6a51;
+      --mint:#c9f7df;
+      --mint-2:#eafaf2;
+      --lime:#51f0a2;
+      --text:#0d1716;
+      --muted:#64716f;
+      --line:#dce7e2;
+      --white:#fff;
+      --danger:#f42f3f;
+      --blue:#2196f3;
+      --shadow:0 12px 35px rgba(0,0,0,.09);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Poppins,Arial,sans-serif;
+      color:var(--text);
+      background:#f7fbf9;
+      -webkit-font-smoothing:antialiased;
+    }
+    button{font:inherit}
+    a{text-decoration:none;color:inherit}
+
+    /* ===================== HEADER ===================== */
+    .header{
+      height:72px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      padding:0 60px;
+      position:relative;
+      z-index:20;
+      border-bottom:1px solid rgba(8,75,57,.06);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:270px;
+    }
+    .brand-mark{
+      width:50px;
+      height:50px;
+      flex:none;
+      object-fit:contain;
+    }
+    .brand-title{
+      font-size:25px;
+      line-height:1;
+      font-weight:800;
+      letter-spacing:-.7px;
+    }
+    .brand-sub{
+      margin-top:4px;
+      font-size:11.5px;
+      line-height:1.12;
+      color:#22302e;
+      font-weight:500;
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:15px;
+      flex:1;
+    }
+    .nav a{
+      padding:11px 18px;
+      border-radius:15px;
+      font-size:14px;
+      font-weight:500;
+      transition:.2s ease;
+    }
+    .nav a:hover{background:#f1faf5}
+    .nav a.active{
+      background:#e3f8ee;
+      font-weight:700;
+    }
+    .header-cta{
+      min-width:316px;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      gap:11px;
+      background:#0b5a44;
+      color:#fff;
+      border-radius:15px;
+      padding:11px 20px;
+      font-size:13px;
+      font-weight:600;
+      box-shadow:0 5px 12px rgba(8,74,55,.12);
+    }
+    .cta svg{width:20px;height:20px}
+    .cta .header-logo{width:24px;height:24px;object-fit:contain;flex:none}
+
+    /* ===================== HERO ===================== */
+    .hero{
+      position:relative;
+      height:443px;
+      overflow:hidden;
+      background-image:
+        linear-gradient(rgba(0,24,20,.34), rgba(0,24,20,.34)),
+        url('hero-map.png');
+      background-size:cover;
+      background-position:center 54%;
+      background-attachment:fixed;
+      background-repeat:no-repeat;
+    }
+    .hero-inner{
+      position:relative;
+      z-index:2;
+      height:100%;
+      padding:38px 64px 30px;
+      display:flex;
+      justify-content:space-between;
+    }
+    .hero-left{width:50%;max-width:690px;color:#fff;position:relative}
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(16,190,125,.24);
+      border:1px solid rgba(90,251,174,.52);
+      padding:6px 13px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:.05px;
+    }
+    .eyebrow .dot{
+      width:8px;height:8px;border-radius:50%;background:#52f3ab;display:inline-block;
+      box-shadow:0 0 0 3px rgba(82,243,171,.16)
+    }
+    .hero h1{
+      margin:13px 0 0;
+      font-size:55px;
+      line-height:.98;
+      letter-spacing:-2px;
+      font-weight:800;
+    }
+    .hero h1 span{display:block;color:#58f0a2}
+    .hero h2{
+      margin:7px 0 0;
+      font-size:24px;
+      line-height:1.15;
+      font-weight:800;
+    }
+    .hero-copy{
+      margin:18px 0 16px;
+      max-width:505px;
+      font-size:15px;
+      line-height:1.45;
+      font-weight:400;
+    }
+    .hero-actions{display:flex;gap:17px;align-items:center}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:11px;
+      min-height:45px;
+      padding:0 24px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      border:1.5px solid transparent;
+    }
+    .btn-primary{background:#59f0a7;color:#002c20}
+    .btn-secondary{background:rgba(2,28,23,.12);border-color:#fff;color:#fff}
+    .btn svg{width:18px;height:18px}
+
+    .benefits{
+      display:flex;
+      gap:24px;
+      margin-top:22px;
+      align-items:center;
+    }
+    .benefit{display:flex;align-items:center;gap:10px;color:#fff;min-width:140px}
+    .benefit + .benefit{padding-left:23px;border-left:1px solid rgba(255,255,255,.45)}
+    .benefit svg{width:29px;height:29px;stroke:#56efaa;stroke-width:2.2;flex:none}
+    .benefit b{display:block;font-size:13px;line-height:1.18}
+    .benefit small{display:block;font-size:10.5px;line-height:1.2;margin-top:4px;color:rgba(255,255,255,.9)}
+
+    /* handwritten slogan on hero */
+    .hero-script{
+      position:absolute;
+      left:51.2%;
+      top:46px;
+      width:250px;
+      color:#fff;
+      font-family:Caveat,cursive;
+      font-size:28px;
+      line-height:1.02;
+      transform:rotate(-3deg);
+      text-shadow:0 2px 6px rgba(0,0,0,.22);
+    }
+    .hero-script small{font-size:24px;display:block;margin-top:2px}
+    .hero-script .underline{
+      width:170px;height:6px;background:#4df0a0;border-radius:100%;margin-top:13px;transform:rotate(-8deg);display:block;
+    }
+
+    /* Hero right-side text/decoration removed; weather/time remains visible. */
+    .hero-script,
+    .hero-map-label,
+    .quote-box,
+    .north,
+    .scale{
+      display:none !important;
+    }
+
+    /* weather card */
+    .weather{
+      position:absolute;
+      z-index:5;
+      right:41px;
+      top:18px;
+      bottom:auto;
+      width:min(282px,calc(100% - 36px));
+      min-height:62px;
+      display:flex;
+      align-items:center;
+      gap:15px;
+      padding:10px 14px;
+      border:1px solid rgba(255,255,255,.23);
+      border-radius:16px;
+      background:rgba(20,48,50,.38);
+      backdrop-filter:blur(8px);
+      color:#fff;
+    }
+    .weather-icon{font-size:29px;line-height:1}
+    .temp{font-size:18px;font-weight:800;line-height:1}
+    .weather-place{font-size:9.5px;margin-top:4px;color:#e6efed}
+    .weather-divider{width:1px;height:38px;background:rgba(255,255,255,.32);margin-left:auto}
+    .date{text-align:left;font-size:10px;line-height:1.42;white-space:nowrap;color:#f0f4f3}
+    .date b{font-size:11px}
+
+    .hero-map-label{
+      position:absolute;
+      z-index:4;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      padding:7px 12px 7px 7px;
+      background:#fff;
+      color:#0d1514;
+      border-radius:16px;
+      box-shadow:0 5px 18px rgba(0,0,0,.17);
+      font-size:12px;
+      line-height:1.1;
+      font-weight:600;
+    }
+    .map-label-icon{
+      width:31px;height:31px;border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:0 4px 8px rgba(0,0,0,.16)
+    }
+    .map-label-icon.blue{background:#2697ef}
+    .map-label-icon.red{background:#f33240}
+    .map-label-icon svg{width:20px;height:20px}
+    .label-keji{right:35%;top:69%}
+    .label-setoyo{right:14.5%;top:32%}
+
+    .north{
+      position:absolute;right:19.7%;bottom:20px;z-index:4;color:#fff;text-align:center;font-weight:600;font-size:12px
+    }
+    .north svg{display:block;width:46px;height:46px;margin:0 auto 2px}
+    .scale{
+      position:absolute;right:65px;bottom:26px;z-index:4;color:#fff;font-size:11px;text-align:center;white-space:nowrap
+    }
+    .scale .ticks{display:flex;align-items:end;justify-content:space-between;width:147px;margin-top:5px}
+    .scale .line{width:147px;height:4px;border:1.5px solid #fff;border-top:0;display:block}
+
+    .quote-box{
+      position:absolute;
+      right:41px;
+      bottom:66px;
+      width:237px;
+      padding:14px 17px 15px;
+      border-radius:15px;
+      background:rgba(47,68,68,.58);
+      border:1px solid rgba(255,255,255,.1);
+      box-shadow:0 8px 20px rgba(0,0,0,.1);
+      color:#fff;
+      font-family:Caveat,cursive;
+      font-size:21px;
+      line-height:1.02;
+      transform:rotate(-1deg);
+    }
+    .quote-mark{font-family:Arial,sans-serif;font-size:36px;line-height:.6;color:#52efaa;vertical-align:-8px;margin-right:5px;font-weight:800}
+    .quote-line{display:block;width:100px;height:5px;border-radius:50px;background:#49ef9e;margin:10px 0 0 auto;transform:rotate(-8deg)}
+
+    /* ===================== SKEWS CONTENT ===================== */
+    .content-wrap{
+      position:relative;
+      z-index:8;
+      width:calc(100% - 82px);
+      margin:-2px auto 0;
+      background:rgba(250,253,252,.97);
+      border:1px solid rgba(5,77,60,.08);
+      box-shadow:var(--shadow);
+      border-radius:21px;
+      padding:14px 22px 14px;
+    }
+    .section-head{display:flex;align-items:center;justify-content:space-between;margin:0 5px 13px}
+    .section-title h3{margin:0;font-size:20px;line-height:1.15;color:#174a3c}
+    .section-title p{margin:4px 0 0;color:#707f7b;font-size:11px}
+    .map-full{
+      display:inline-flex;align-items:center;gap:9px;padding:10px 18px;border:1px solid #0c5b46;border-radius:999px;background:#fbfffd;color:#0c5b46;font-size:12px;font-weight:700
+    }
+    .map-full svg{width:17px;height:17px}
+
+    .ews-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .ews-card{
+      min-height:224px;
+      overflow:hidden;
+      border-radius:14px;
+      background:#fff;
+      display:grid;
+      grid-template-columns:69.4% 30.6%;
+      border:1.5px solid;
+    }
+    .ews-card.blue{border-color:#4aa0ec}
+    .ews-card.red{border-color:#ec5562}
+
+    .ews-image{
+      position:relative;
+      min-height:224px;
+      background:#224c3e center/cover no-repeat;
+      color:#fff;
+      overflow:hidden;
+    }
+    .ews-image:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,35,31,.73),rgba(8,35,31,.12) 74%,rgba(8,35,31,.03))}
+    .ews-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .ews-left-content{position:relative;z-index:2;height:100%;padding:30px 28px 17px}
+    .badge-big{
+      position:absolute;left:28px;top:27px;width:70px;height:70px;border-radius:50%;display:grid;place-items:center;color:#fff
+    }
+    .badge-big.blue{background:#2494ef}.badge-big.red{background:#f12f3d}
+    .badge-big svg{width:38px;height:38px}
+    .ews-name{padding-left:89px;margin-top:5px}
+    .ews-name strong{display:block;font-size:25px;line-height:1;font-weight:800}
+    .ews-name span{display:block;margin-top:4px;font-size:20px;line-height:1.05;font-weight:700}
+    .ews-description{max-width:390px;margin-top:22px;font-size:13px;line-height:1.55;color:rgba(255,255,255,.98)}
+    .open-btn{position:absolute;left:28px;bottom:17px;border:0;border-radius:999px;background:#fff;color:#101816;padding:10px 17px 10px 18px;display:inline-flex;align-items:center;gap:13px;font-size:12px;font-weight:700;cursor:pointer}
+    .open-btn svg{width:17px;height:17px}
+
+    .stats{
+      background:rgba(251,254,253,.97);
+      padding:17px 18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .stat{display:grid;grid-template-columns:31px 1fr;gap:8px;align-items:center}
+    .stat-icon{width:29px;height:29px;display:grid;place-items:center;color:#289ad4}
+    .stat-icon svg{width:28px;height:28px}
+    .stat-status .stat-icon{color:#1ebd7a}
+    .red-status .stat-icon{color:#f4ba16}
+    .stat-label{font-size:10px;color:#61706d;line-height:1.1}
+    .stat-value{font-size:13px;color:#0b1715;font-weight:700;line-height:1.25;margin-top:2px}
+    .status-pill{display:flex;align-items:center;gap:10px}
+    .status-text b{display:block;font-size:13px}
+    .status-green{color:#0e9f66}
+    .status-yellow{color:#e3a90b}
+    .pending-value{color:#7a8783!important;font-weight:600!important;font-style:italic}
+    .pending-status .stat-icon{color:#83908c!important}
+    .status-red{color:#df3446!important}
+    .stats{gap:7px}
+
+    .quick-grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:1.05fr 1.08fr 1fr 1fr;
+      gap:16px;
+    }
+    .quick{
+      min-height:69px;
+      border-radius:11px;
+      background:#edf5f2;
+      display:flex;
+      align-items:center;
+      gap:17px;
+      padding:12px 30px;
+    }
+    .quick svg{width:35px;height:35px;color:#065b46;stroke-width:1.9;flex:none}
+    .quick .quick-logo{width:35px;height:35px;object-fit:contain;flex:none}
+    .quick .q-label{font-size:9.5px;color:#6b7b77;line-height:1.2}
+    .quick .q-value{font-size:11.7px;font-weight:700;line-height:1.35;color:#21312e;margin-top:2px}
+    .quick.report .q-value{display:flex;align-items:center;gap:10px}
+
+    /* ===================== FOOTER ===================== */
+    .footer{
+      margin-top:14px;
+      min-height:78px;
+      background:#064738;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 62px;
+    }
+    .footer-brand{display:flex;align-items:center;gap:10px}
+    .footer-mark{width:36px;height:36px;object-fit:contain}
+    .footer-title{font-size:12px;font-weight:700;line-height:1.2}
+    .footer-title span{display:block;font-size:9px;font-weight:500;margin-top:3px}
+    .footer-nav{display:flex;gap:37px;font-size:10.5px}
+    .footer-social{display:flex;align-items:center;gap:19px}
+    .footer-social svg{width:19px;height:19px}
+    .footer-end{display:flex;align-items:center;gap:10px;font-size:9.5px}
+    .footer-end svg{width:18px;height:18px}
+
+    /* ===================== MODAL ===================== */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.54);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}
+    .modal.show{display:flex}
+    .modal-card{max-width:520px;width:100%;background:#fff;border-radius:20px;padding:26px;box-shadow:0 24px 70px rgba(0,0,0,.24)}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .modal-head h4{margin:0;color:#0b533f;font-size:22px}
+    .close{border:0;background:#eff7f4;border-radius:50%;width:36px;height:36px;cursor:pointer;display:grid;place-items:center}
+    .modal-card p{color:#5d6b68;line-height:1.65;font-size:13px}
+    .modal-data{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+    .data-box{padding:13px;background:#f2f8f5;border-radius:12px}
+    .data-box small{display:block;color:#72807d;font-size:10px}
+    .data-box b{display:block;margin-top:3px;font-size:15px}
+
+    /* ===================== MODAL DASHBOARD SKEWS ===================== */
+    .modal{background:rgba(3,18,15,.72);backdrop-filter:blur(7px);padding:18px}
+    .modal-card{width:min(1080px,96vw);max-width:none;max-height:92vh;overflow-y:auto;background:linear-gradient(180deg,#f9fdfb 0%,#f2f8f5 100%);border:1px solid rgba(9,79,59,.12);border-radius:24px;padding:24px;box-shadow:0 30px 90px rgba(0,0,0,.36)}
+    .modal-card::-webkit-scrollbar{width:8px}.modal-card::-webkit-scrollbar-thumb{background:#b9cbc4;border-radius:20px}
+    .modal-head{padding-bottom:15px;border-bottom:1px solid #dce8e3}
+    .modal-head h4{font-size:24px;color:#073f31;letter-spacing:-.4px}
+    .modal-subtitle{margin-top:5px;color:#71807b;font-size:11px}
+    .close{width:38px;height:38px;background:#e7f2ee;color:#0a503d;font-size:16px}
+    .modal-card p{font-size:12px;color:#687872;margin-top:12px}
+    .latest-grid{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:10px;margin-top:18px}
+    .latest-box{position:relative;overflow:hidden;min-height:92px;padding:13px 13px 12px;border:1px solid #dce9e4;border-radius:15px;background:#fff;box-shadow:0 5px 16px rgba(8,54,43,.05)}
+    .latest-box:before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:linear-gradient(90deg,#2fce79,#82efae)}
+    .latest-box small{display:block;color:#71807b;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.35px}
+    .latest-box b{display:block;margin-top:8px;color:#10211d;font-size:16px;line-height:1.15}
+    .latest-box.status b{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;font-size:12px;background:#eaf8f0;color:#0e9f66}
+    .latest-box.status b.siaga{background:#fff6d8;color:#c79207}.latest-box.status b.bahaya{background:#ffe8eb;color:#dc3548}.latest-box.status b.pending{background:#edf1ef;color:#77847f}
+    .history-section{margin-top:20px}.history-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:800;color:#164c3d}.history-title:before{content:"";width:5px;height:20px;border-radius:10px;background:#35cf7a}.history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+    .history-card{min-height:215px;padding:13px;border:1px solid #d9e7e1;border-radius:16px;background:#fff;box-shadow:0 5px 16px rgba(8,54,43,.04)}
+    .history-card.wide{grid-column:1/-1}.history-card h5{font-size:11px;color:#26473e;margin-bottom:8px}.history-chart{width:100%;height:170px;display:block}.status-chart-wrap{display:grid;grid-template-columns:200px 1fr;gap:12px;align-items:center;min-height:175px}.status-pie{width:190px;height:190px;display:block}.status-legend{display:grid;gap:10px}.legend-item{display:flex;align-items:center;gap:8px;font-size:10px;color:#536760}.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block}.history-empty{min-height:170px;display:flex;align-items:center;justify-content:center;border-radius:11px;background:#f4f8f6;color:#7a8883;font-size:11px;text-align:center}.status-trend{width:100%;height:170px;display:block}.modal-footer-note{margin-top:15px;padding:10px 12px;border-radius:12px;background:#eaf6f1;color:#5e716a;font-size:10px;line-height:1.5}
+    @media(max-width:980px){.latest-grid{grid-template-columns:repeat(3,1fr)}.history-grid{grid-template-columns:1fr}.history-card.wide{grid-column:auto}.status-chart-wrap{grid-template-columns:180px 1fr}}
+    @media(max-width:650px){.modal{padding:10px}.modal-card{width:100%;max-height:94vh;padding:16px;border-radius:18px}.modal-head h4{font-size:19px}.latest-grid{grid-template-columns:1fr 1fr}.latest-box{min-height:84px}.latest-box b{font-size:14px}.status-chart-wrap{grid-template-columns:1fr}.status-pie{margin:auto}.history-card{min-height:205px}.history-chart,.status-trend{height:155px}}
+
+    /* ===================== MOBILE ===================== */
+    @media(max-width:1180px){
+      .header{padding:0 28px}.brand{min-width:225px}.header-cta{min-width:230px}.cta{padding:10px 15px}.nav{gap:6px}
+      .hero-inner{padding-left:42px}.hero h1{font-size:49px}.hero-script{left:52%}.label-keji{right:35%;top:68%}
+      .content-wrap{width:calc(100% - 42px)}
+      .footer{padding:0 35px}.footer-nav{gap:20px}
+    }
+    @media(max-width:920px){
+      .header{height:auto;min-height:72px;padding:12px 22px;flex-wrap:wrap;gap:10px}.brand{min-width:auto}.nav{order:3;width:100%;justify-content:flex-start;overflow-x:auto;padding-bottom:2px}.header-cta{display:none}
+      .hero{height:500px}.hero-inner{padding:30px 28px}.hero-left{width:65%}.hero h1{font-size:43px}.weather{right:20px;top:18px;bottom:auto}
+      .ews-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.footer{flex-wrap:wrap;padding:18px 28px;gap:16px}.footer-nav{order:3;width:100%;justify-content:center}
+    }
+    @media(max-width:650px){
+      .header{padding:10px 16px}.brand-title{font-size:22px}.brand-sub{font-size:10px}.brand-mark{width:44px;height:44px}.nav a{padding:9px 13px;font-size:12px}
+      .hero{height:615px;background-position:58% center;background-attachment:fixed;background-size:cover}.hero-inner{padding:24px 18px}.hero-left{width:100%;max-width:none}.eyebrow{font-size:11px}.hero h1{font-size:38px;letter-spacing:-1.1px}.hero h2{font-size:20px}.hero-copy{font-size:13px;max-width:345px}.benefits{gap:12px;flex-wrap:wrap}.benefit{min-width:120px}.benefit + .benefit{padding-left:12px}
+      .weather{top:18px;right:18px;bottom:auto;width:calc(100% - 36px)}
+      .content-wrap{width:calc(100% - 18px);padding:13px 11px}.section-head{align-items:flex-start}.section-title h3{font-size:18px}.section-title p{font-size:10px}.map-full{font-size:10px;padding:8px 12px}
+      .ews-card{grid-template-columns:1fr;min-height:auto}.ews-image{min-height:255px}.stats{min-height:245px}.quick-grid{grid-template-columns:1fr}.quick{padding:12px 20px}.footer{padding:20px 18px;justify-content:center}.footer-nav,.footer-social{display:none}.footer-end{width:100%;justify-content:center}
+      .modal-data{grid-template-columns:1fr}
+    }
   </style>
 </head>
+
 <body>
-  <div class="top">
-    <div class="title"><strong>Peta Lokasi SKEWS</strong><span>Desa Keji, Ungaran Barat</span></div>
-    <a class="back" href="index.html">← Kembali</a>
-  </div>
-  <div id="map" aria-label="Peta lokasi dua alat SKEWS"></div>
-  <div class="legend">
-    <div><span class="dot blue"></span>SKEWS 1 — Dusun Keji</div>
-    <div><span class="dot red"></span>SKEWS 2 — Dusun Setoyo</div>
+  <header class="header">
+    <div class="brand">
+      <img class="brand-mark" src="logo-skews.png" alt="Logo SKEWS" />
+      <div>
+        <div class="brand-title">SKEWS</div>
+        <div class="brand-sub">Desa Keji<br/>Ungaran Barat</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Navigasi utama">
+      <a class="active" href="#beranda">Beranda</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#ews">SKEWS</a>
+      <a href="#berita">Berita</a>
+      <a href="#kontak">Kontak</a>
+    </nav>
+
+    <div class="header-cta">
+      <div class="cta">
+        <img class="header-logo" src="logo-skews.png" alt="Logo SKEWS" />
+        Bersama untuk Desa yang Lebih Aman
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="beranda">
+      <div class="weather">
+        <div class="weather-icon">🌤️</div>
+        <div>
+          <div class="temp">24°C</div>
+          <div class="weather-place">Ungaran Barat</div>
+        </div>
+        <div class="weather-divider"></div>
+        <div class="date"><b>Senin, 20 Sep 2026</b><br/>14:30 WIB</div>
+      </div>
+
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div class="eyebrow"><span class="dot"></span>Sistem Peringatan Dini</div>
+          <h1>Pantau Risiko<span>Tanah Longsor</span></h1>
+          <h2>Desa Keji, Ungaran Barat</h2>
+          <p class="hero-copy">Memanfaatkan teknologi untuk melindungi masyarakat,<br class="desktop"/> lingkungan, dan masa depan desa.</p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#ews">Jelajahi SKEWS
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-secondary" href="https://desakeji-nyawiji.com/" target="_blank" rel="noopener noreferrer">Tentang Desa</a>
+          </div>
+
+          <div class="benefits">
+            <div class="benefit">
+              <svg viewBox="0 0 24 24" fill="none"><path d="m20 6-9.5 11L5 12"/><path d="M12 22a9.5 9.5 0 0 0 9.5-9.5V5.2L12 2 2.5 5.2v7.3A9.5 9.5 0 0 0 12 22Z"/></svg>
+              <div><b>Lebih Aman</b><small>Untuk Masyarakat</small></div>
+            </div>
+            <div class="benefit">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 21c6-3 9-8 9-15C14 6 8 9 6 13c-2 4 0 7 6 8Z"/><path d="M8 18c3-5 6-8 10-11"/></svg>
+              <div><b>Lebih Tangguh</b><small>Untuk Lingkungan</small></div>
+            </div>
+            <div class="benefit">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c.5-4 2.7-6 5.5-6s5 2 5.5 6"/><path d="M13 17c.5-2.5 2-4 4-4s3.8 1.5 4.5 4"/></svg>
+              <div><b>Lebih Siap</b><small>Menghadapi Bencana</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-script">
+          “Desa Keji<br/>Tangguh,<br/><small>Bersama Cegah Longsor”</small>
+          <span class="underline"></span>
+        </div>
+
+        <div class="hero-map-label label-setoyo">
+          <span class="map-label-icon red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6 7-12a7 7 0 1 0-14 0c0 6 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>
+          </span>
+          <span>SKEWS<br/><b>Dusun Setoyo</b></span>
+        </div>
+
+        <div class="hero-map-label label-keji">
+          <span class="map-label-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 3 6 6 .9-4.5 4.4 1.1 6.2L12 17.5 6.4 20.5 7.5 14 3 9.9 9 9l3-6Z"/></svg>
+          </span>
+          <span>SKEWS<br/><b>Dusun Keji</b></span>
+        </div>
+
+        <div class="quote-box">
+          <span class="quote-mark">“</span> Masyarakat<br/>Siap, Alam Terjaga,<br/>Desa Keji Lebih Aman ”
+          <span class="quote-line"></span>
+        </div>
+
+        <div class="north">
+          <div>N</div>
+          <svg viewBox="0 0 50 50" aria-hidden="true">
+            <path d="M25 4 34 27 25 23 16 27Z" fill="#fff"/>
+            <path d="M25 46 16 23 25 27 34 23Z" fill="rgba(255,255,255,.35)" stroke="#fff" stroke-width="1"/>
+            <circle cx="25" cy="25" r="20" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="scale">
+          <div class="ticks"><span>0</span><span>1</span><span>2 km</span></div>
+          <span class="line"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-wrap" id="ews">
+      <div class="section-head">
+        <div class="section-title">
+          <h3>Sistem SKEWS</h3>
+          
+        </div>
+        <a class="map-full" href="peta-skews.html" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5-6 2.5Z"/><path d="M9 4v13.5M15 6.5V20"/></svg>Lihat Peta Lengkap</a>
+      </div>
+
+      <div class="ews-grid">
+        <!-- SKEWS 1 -->
+        <article class="ews-card blue" data-station="keji">
+          <div class="ews-image">
+            <img src="ews1.png" alt="Perangkat SKEWS Dusun Keji" />
+            <div class="ews-left-content">
+              <div class="badge-big blue">
+                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 29c4-7 10-10 15-16l6 8 7 3"/><path d="m10 30 7-8 5 7"/><path d="M25 10 31 7 35 11"/></svg>
+              </div>
+              <div class="ews-name"><strong>SKEWS 1</strong><span>Dusun Keji</span></div>
+              <div class="ews-description">Pemantauan risiko tanah longsor di wilayah<br/>Dusun Keji, Desa Keji.</div>
+              <button class="open-btn" data-target="modal-keji">Buka SKEWS Dusun Keji <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
+            </div>
+          </div>
+          <div class="stats">
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 18h10a4 4 0 0 0 .3-8A6 6 0 0 0 5 11.3 3.2 3.2 0 0 0 7 18Z"/><path d="M8 20l-1 2M12 20l-1 2M16 20l-1 2"/></svg></div><div><div class="stat-label">Curah Hujan</div><div class="stat-value pending-value" data-field="curahHujan">Menunggu data</div></div></div>
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 19h18M5 18 14 7l5 11"/><path d="M9 18a4 4 0 0 1 3.7-3"/><path d="M13 8h4"/></svg></div><div><div class="stat-label">Kemiringan</div><div class="stat-value pending-value" data-field="kemiringan">Menunggu data</div></div></div>
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16"/><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg></div><div><div class="stat-label">Pergeseran</div><div class="stat-value pending-value" data-field="pergeseran">Menunggu data</div></div></div>
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3s6 7.2 6 11a6 6 0 0 1-12 0c0-3.8 6-11 6-11Z"/><path d="M9 15c0 1.2 1.1 2.4 3 2.4"/></svg></div><div><div class="stat-label">Kelembaban Tanah</div><div class="stat-value pending-value" data-field="kelembabanTanah">Menunggu data</div></div></div>
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 14.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/><path d="M12 3a2 2 0 0 0-2 2v10.2a5 5 0 1 0 4 0V5a2 2 0 0 0-2-2Z"/><path d="M12 8v8"/></svg></div><div><div class="stat-label">Suhu</div><div class="stat-value pending-value" data-field="suhu">Menunggu data</div></div></div>
+      <div class="stat stat-status pending-status">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5"/><circle cx="12" cy="16.5" r=".8" fill="currentColor" stroke="none"/></svg></div>
+        <div><div class="stat-label">Status</div><div class="stat-value pending-value" data-field="status">Menunggu data</div></div>
+      </div>
+    </div>
+        </article>
+
+        <!-- SKEWS 2 -->
+        <article class="ews-card red" data-station="setoyo">
+          <div class="ews-image">
+            <img src="ews2.png" alt="Perangkat SKEWS Dusun Setoyo" />
+            <div class="ews-left-content">
+              <div class="badge-big red">
+                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 29c4-7 10-10 15-16l6 8 7 3"/><path d="m10 30 7-8 5 7"/><path d="M25 10 31 7 35 11"/></svg>
+              </div>
+              <div class="ews-name"><strong>SKEWS 2</strong><span>Dusun Setoyo</span></div>
+              <div class="ews-description">Pemantauan risiko tanah longsor di wilayah<br/>Dusun Setoyo, Desa Keji.</div>
+              <button class="open-btn" data-target="modal-setoyo">Buka SKEWS Dusun Setoyo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
+            </div>
+          </div>
+          <div class="stats">
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 18h10a4 4 0 0 0 .3-8A6 6 0 0 0 5 11.3 3.2 3.2 0 0 0 7 18Z"/><path d="M8 20l-1 2M12 20l-1 2M16 20l-1 2"/></svg></div><div><div class="stat-label">Curah Hujan</div><div class="stat-value pending-value" data-field="curahHujan">Menunggu data</div></div></div>
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 19h18M5 18 14 7l5 11"/><path d="M9 18a4 4 0 0 1 3.7-3"/><path d="M13 8h4"/></svg></div><div><div class="stat-label">Kemiringan</div><div class="stat-value pending-value" data-field="kemiringan">Menunggu data</div></div></div>
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16"/><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg></div><div><div class="stat-label">Pergeseran</div><div class="stat-value pending-value" data-field="pergeseran">Menunggu data</div></div></div>
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3s6 7.2 6 11a6 6 0 0 1-12 0c0-3.8 6-11 6-11Z"/><path d="M9 15c0 1.2 1.1 2.4 3 2.4"/></svg></div><div><div class="stat-label">Kelembaban Tanah</div><div class="stat-value pending-value" data-field="kelembabanTanah">Menunggu data</div></div></div>
+      <div class="stat"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 14.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/><path d="M12 3a2 2 0 0 0-2 2v10.2a5 5 0 1 0 4 0V5a2 2 0 0 0-2-2Z"/><path d="M12 8v8"/></svg></div><div><div class="stat-label">Suhu</div><div class="stat-value pending-value" data-field="suhu">Menunggu data</div></div></div>
+      <div class="stat red-status pending-status">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5"/><circle cx="12" cy="16.5" r=".8" fill="currentColor" stroke="none"/></svg></div>
+        <div><div class="stat-label">Status</div><div class="stat-value pending-value" data-field="status">Menunggu data</div></div>
+      </div>
+    </div>
+        </article>
+      </div>
+
+      <div class="quick-grid">
+        <div class="quick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="7" r="3"/><path d="M2.5 20c.4-4 2.8-6 6.5-6s6 2 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M14 20c.4-2.8 1.7-4.6 4.3-5.4 1.8.6 3 2.3 3.2 5.4"/></svg><div><div class="q-label">Jumlah Alat SKEWS</div><div class="q-value">2 Unit</div></div></div>
+        <div class="quick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s7-5.8 7-12a7 7 0 1 0-14 0c0 6.2 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg><div><div class="q-label">Lokasi</div><div class="q-value">Desa Keji, Kec. Ungaran Barat<br/>Kabupaten Semarang</div></div></div>
+        <div class="quick"><img class="quick-logo" src="logo-skews.png" alt="Logo SKEWS" /><div><div class="q-label">Develop By</div><div class="q-value">PPKO Ormawa PSC FH &amp; Warga Desa Keji</div></div></div>
+        <a class="quick report" href="https://docs.google.com/spreadsheets/d/1tjFi4ztTM1ZbZe6o_MKp5enPaLhGLoeE7zdIGImhfAc/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg><div><div class="q-label">Laporan</div><div class="q-value">Lihat Data &amp; Laporan <span aria-hidden="true">→</span></div></div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="kontak">
+    <div class="footer-brand">
+      <img class="footer-mark" src="logo-skews.png" alt="Logo SKEWS" />
+      <div class="footer-title">SKEWS Desa Keji<span>Ungaran Barat</span></div>
+    </div>
+
+    <div class="footer-nav">
+      <a href="#beranda">Beranda</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#ews">SKEWS</a>
+      <a href="#berita">Berita</a>
+      <a href="#kontak">Kontak</a>
+    </div>
+
+    <div class="footer-social" aria-label="Media sosial">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-2.8 0-5 2.2-5 5v3H6v4h3v5h4v-5h3.1l.9-4H13V9c0-.6.4-1 1-1Z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.3 7.2c-.3-1-1.1-1.8-2.1-2.1C17.4 4.5 12 4.5 12 4.5s-5.4 0-7.2.6c-1 .3-1.8 1.1-2.1 2.1C2.1 9 2.1 12 2.1 12s0 3 .6 4.8c.3 1 1.1 1.8 2.1 2.1 1.8.6 7.2.6 7.2.6s5.4 0 7.2-.6c1-.3 1.8-1.1 2.1-2.1.6-1.8.6-4.8.6-4.8s0-3-.6-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.4 3.8 5.4 3.8 9S14.5 18.6 12 21M12 3C9.5 5.4 8.2 8.4 8.2 12S9.5 18.6 12 21"/></svg>
+    </div>
+
+    <div class="footer-end">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21C7 17 4 12.5 4 8.5A8.5 8.5 0 0 1 12 0a8.5 8.5 0 0 1 8 8.5c0 4-3 8.5-8 12.5Z" transform="scale(.78) translate(3 2)" fill="none"/></svg>
+      Untuk Masa Depan yang Lebih Aman
+    </div>
+  </footer>
+
+  <!-- MODAL SKEWS 1 -->
+  <div class="modal" id="modal-keji" role="dialog" aria-modal="true" aria-labelledby="modal-keji-title">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h4 id="modal-keji-title">SKEWS 1 — Dusun Keji</h4>
+          <div class="modal-subtitle">Dashboard pemantauan data sensor dan riwayat kondisi longsor.</div>
+        </div>
+        <button class="close" type="button" aria-label="Tutup">✕</button>
+      </div>
+      <p>Data terakhir akan tampil otomatis setelah backend mengirimkan data SKEWS Dusun Keji.</p>
+      <div class="latest-grid">
+        <div class="latest-box"><small>Curah Hujan</small><b class="pending-value" data-field="curahHujan">Menunggu data</b></div>
+        <div class="latest-box"><small>Kemiringan</small><b class="pending-value" data-field="kemiringan">Menunggu data</b></div>
+        <div class="latest-box"><small>Pergeseran</small><b class="pending-value" data-field="pergeseran">Menunggu data</b></div>
+        <div class="latest-box"><small>Kelembaban Tanah</small><b class="pending-value" data-field="kelembabanTanah">Menunggu data</b></div>
+        <div class="latest-box"><small>Suhu</small><b class="pending-value" data-field="suhu">Menunggu data</b></div>
+        <div class="latest-box status"><small>Status Terakhir</small><b class="pending-value pending" data-field="status">Menunggu data</b></div>
+      </div>
+      <div class="history-section">
+        <div class="history-title">Riwayat Data Sensor</div>
+        <div class="history-grid">
+          <div class="history-card"><h5>Curah Hujan</h5><canvas id="chart-keji-curahHujan" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Kemiringan</h5><canvas id="chart-keji-kemiringan" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Pergeseran</h5><canvas id="chart-keji-pergeseran" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Kelembaban Tanah</h5><canvas id="chart-keji-kelembabanTanah" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Suhu</h5><canvas id="chart-keji-suhu" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Tren Status Bahaya</h5><canvas id="trend-keji-status" class="status-trend"></canvas></div>
+          <div class="history-card wide"><h5>Riwayat Status Bahaya</h5><div class="status-chart-wrap"><canvas id="pie-keji" class="status-pie"></canvas><div id="legend-keji" class="status-legend"></div></div></div>
+        </div>
+      </div>
+      <div class="modal-footer-note">Status bahaya menggunakan 3 level: <b>Aman</b>, <b>Siaga</b>, dan <b>Bahaya</b>. Grafik dan pie chart akan berubah mengikuti data riwayat dari backend.</div>
+    </div>
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- MODAL SKEWS 2 -->
+  <div class="modal" id="modal-setoyo" role="dialog" aria-modal="true" aria-labelledby="modal-setoyo-title">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h4 id="modal-setoyo-title">SKEWS 2 — Dusun Setoyo</h4>
+          <div class="modal-subtitle">Dashboard pemantauan data sensor dan riwayat kondisi longsor.</div>
+        </div>
+        <button class="close" type="button" aria-label="Tutup">✕</button>
+      </div>
+      <p>Data terakhir akan tampil otomatis setelah backend mengirimkan data SKEWS Dusun Setoyo.</p>
+      <div class="latest-grid">
+        <div class="latest-box"><small>Curah Hujan</small><b class="pending-value" data-field="curahHujan">Menunggu data</b></div>
+        <div class="latest-box"><small>Kemiringan</small><b class="pending-value" data-field="kemiringan">Menunggu data</b></div>
+        <div class="latest-box"><small>Pergeseran</small><b class="pending-value" data-field="pergeseran">Menunggu data</b></div>
+        <div class="latest-box"><small>Kelembaban Tanah</small><b class="pending-value" data-field="kelembabanTanah">Menunggu data</b></div>
+        <div class="latest-box"><small>Suhu</small><b class="pending-value" data-field="suhu">Menunggu data</b></div>
+        <div class="latest-box status"><small>Status Terakhir</small><b class="pending-value pending" data-field="status">Menunggu data</b></div>
+      </div>
+      <div class="history-section">
+        <div class="history-title">Riwayat Data Sensor</div>
+        <div class="history-grid">
+          <div class="history-card"><h5>Curah Hujan</h5><canvas id="chart-setoyo-curahHujan" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Kemiringan</h5><canvas id="chart-setoyo-kemiringan" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Pergeseran</h5><canvas id="chart-setoyo-pergeseran" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Kelembaban Tanah</h5><canvas id="chart-setoyo-kelembabanTanah" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Suhu</h5><canvas id="chart-setoyo-suhu" class="history-chart"></canvas></div>
+          <div class="history-card"><h5>Tren Status Bahaya</h5><canvas id="trend-setoyo-status" class="status-trend"></canvas></div>
+          <div class="history-card wide"><h5>Riwayat Status Bahaya</h5><div class="status-chart-wrap"><canvas id="pie-setoyo" class="status-pie"></canvas><div id="legend-setoyo" class="status-legend"></div></div></div>
+        </div>
+      </div>
+      <div class="modal-footer-note">Status bahaya menggunakan 3 level: <b>Aman</b>, <b>Siaga</b>, dan <b>Bahaya</b>. Grafik dan pie chart akan berubah mengikuti data riwayat dari backend.</div>
+    </div>
+  </div>
+
   <script>
-    const keji = [-7.1164830, 110.3900140];
-    const setoyo = [-7.1294947, 110.3785400];
-    const center = [(keji[0] + setoyo[0]) / 2, (keji[1] + setoyo[1]) / 2];
+    // Waktu dan tanggal pojok kanan: realtime WIB (Asia/Jakarta)
+    function updateRealtimeDateTime() {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat("id-ID", {
+        timeZone: "Asia/Jakarta",
+        weekday: "long",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }).formatToParts(now);
+      const get = (type) => parts.find(part => part.type === type)?.value || "";
+      const dateText = `${get("weekday")}, ${get("day")} ${get("month")} ${get("year")}`;
+      const timeText = `${get("hour").padStart(2, "0")}:${get("minute").padStart(2, "0")} WIB`;
+      const dateEl = document.querySelector(".date");
+      if (dateEl) dateEl.innerHTML = `<b>${dateText}</b><br/>${timeText}`;
+    }
+    updateRealtimeDateTime();
+    setInterval(updateRealtimeDateTime, 1000);
 
-    const map = L.map('map', { zoomControl: true }).setView(center, 14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    /*
+      DATA SKEWS MENUNGGU DARI BACKEND.
+      Frontend tidak memakai data contoh/static.
+      Backend dapat mengisi data melalui:
 
-    const blueIcon = L.divIcon({
-      className: '',
-      html: '<div style="width:28px;height:28px;border-radius:50% 50% 50% 0;background:#2494ef;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3);position:relative"><span style="position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;background:#fff;border-radius:50%"></span></div>',
-      iconSize: [28,28], iconAnchor: [14,28], popupAnchor: [0,-25]
+      window.updateSKEWSData({
+        keji: {
+          curahHujan: "12 mm",
+          kemiringan: "18.4°",
+          pergeseran: "0.3 mm/hari",
+          kelembabanTanah: "68 %",
+          suhu: "24 °C",
+          status: "Aman"
+        },
+        setoyo: {
+          curahHujan: "8 mm",
+          kemiringan: "21.2°",
+          pergeseran: "0.8 mm/hari",
+          kelembabanTanah: "75 %",
+          suhu: "23 °C",
+          status: "Siaga"
+        }
+      });
+    */
+
+    function setPendingState(element, isPending) {
+      element.classList.toggle("pending-value", isPending);
+      const stat = element.closest(".stat");
+      if (stat) stat.classList.toggle("pending-status", isPending);
+    }
+
+    function applyStatusStyle(element, status) {
+      element.classList.remove("status-green", "status-yellow", "status-red");
+      const stat = element.closest(".stat");
+      if (stat) stat.classList.remove("stat-status", "red-status", "pending-status");
+      const value = String(status || "").toLowerCase().trim();
+      if (value.includes("aman")) {
+        element.classList.add("status-green");
+        if (stat) stat.classList.add("stat-status");
+      } else if (value.includes("siaga")) {
+        element.classList.add("status-yellow");
+        if (stat) stat.classList.add("red-status");
+      } else if (value.includes("bahaya")) {
+        element.classList.add("status-red");
+        if (stat) stat.classList.add("red-status");
+      }
+    }
+
+
+    const HISTORY_FIELDS = ["curahHujan", "kemiringan", "pergeseran", "kelembabanTanah", "suhu"];
+    const STATUS_NAMES = ["Aman", "Siaga", "Bahaya"];
+    const STATUS_COLORS = { Aman:"#42d96b", Siaga:"#f4c542", Bahaya:"#ed3d4c" };
+
+    function normalizeHistory(history) {
+      if (!Array.isArray(history)) return [];
+      return history.map((item, i) => ({
+        label: item?.time ?? item?.timestamp ?? item?.label ?? String(i + 1),
+        value: Number(item?.value ?? item?.val)
+      })).filter(item => Number.isFinite(item.value));
+    }
+
+    function drawLineChart(canvas, history) {
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const w = Math.max(300, Math.round(rect.width || 420));
+      const h = 170;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = "#fff"; ctx.fillRect(0,0,w,h);
+      const data = normalizeHistory(history);
+      const pad = {l:38,r:14,t:14,b:28};
+      ctx.strokeStyle="#e5eeeb"; ctx.lineWidth=1;
+      for(let i=0;i<5;i++){ const y=pad.t+(h-pad.t-pad.b)*i/4; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(w-pad.r,y); ctx.stroke(); }
+      if(!data.length){
+        ctx.fillStyle="#7b8985"; ctx.font="11px Poppins,Arial"; ctx.textAlign="center"; ctx.fillText("Menunggu data dari backend",w/2,h/2);
+        ctx.textAlign="left"; return;
+      }
+      const min = Math.min(...data.map(d=>d.value));
+      const max = Math.max(...data.map(d=>d.value));
+      const span = max===min ? 1 : max-min;
+      ctx.strokeStyle="#29c879"; ctx.lineWidth=2.5; ctx.lineJoin="round"; ctx.lineCap="round"; ctx.beginPath();
+      data.forEach((d,i)=>{
+        const x=pad.l+(w-pad.l-pad.r)*(data.length===1?.5:i/(data.length-1));
+        const y=pad.t+(h-pad.t-pad.b)*(1-(d.value-min)/span);
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      });
+      ctx.stroke();
+      ctx.fillStyle="#29c879";
+      data.forEach((d,i)=>{
+        const x=pad.l+(w-pad.l-pad.r)*(data.length===1?.5:i/(data.length-1));
+        const y=pad.t+(h-pad.t-pad.b)*(1-(d.value-min)/span);
+        ctx.beginPath();ctx.arc(x,y,3.2,0,Math.PI*2);ctx.fill();
+      });
+      ctx.fillStyle="#6d7c77";ctx.font="9px Poppins,Arial";ctx.textAlign="center";
+      const step=Math.max(1,Math.ceil(data.length/5));
+      data.forEach((d,i)=>{if(i%step===0||i===data.length-1){const x=pad.l+(w-pad.l-pad.r)*(data.length===1?.5:i/(data.length-1));ctx.fillText(String(d.label),x,h-8);}});
+      ctx.textAlign="left";
+    }
+
+    function normalizeStatusHistory(history) {
+      if (!Array.isArray(history)) return [];
+      return history.map((item,i)=>({
+        label:item?.time ?? item?.timestamp ?? item?.label ?? String(i+1),
+        status:String(item?.status ?? item?.value ?? item ?? "").trim()
+      })).filter(item=>STATUS_NAMES.includes(item.status));
+    }
+
+    function getStatusDistribution(station) {
+      const source=station?.statusDistribution;
+      if(source){
+        return STATUS_NAMES.reduce((acc,name)=>{ acc[name]=Number(source[name] ?? source[name.toLowerCase()] ?? 0); return acc; },{});
+      }
+      const result={Aman:0,Siaga:0,Bahaya:0};
+      normalizeStatusHistory(station?.statusHistory).forEach(item=>result[item.status]++);
+      return result;
+    }
+
+    function drawPieChart(canvas, distribution) {
+      if (!canvas) return;
+      const ctx=canvas.getContext("2d"); const dpr=window.devicePixelRatio||1; const size=190;
+      canvas.width=size*dpr; canvas.height=size*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,size,size);
+      const values=STATUS_NAMES.map(name=>Number(distribution?.[name]||0)); const total=values.reduce((a,b)=>a+b,0);
+      const cx=95,cy=95,r=72,inner=42;
+      if(!total){
+        ctx.fillStyle="#d7e1de";ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(cx,cy,inner,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle="#6c7b76";ctx.font="10px Poppins,Arial";ctx.textAlign="center";ctx.fillText("Menunggu",cx,cy-2);ctx.fillText("data...",cx,cy+12);return;
+      }
+      let start=-Math.PI/2;
+      values.forEach((v,i)=>{if(v<=0)return; const end=start+(v/total)*Math.PI*2; ctx.fillStyle=STATUS_COLORS[STATUS_NAMES[i]]; ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();ctx.fill();start=end;});
+      ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(cx,cy,inner,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle="#26453d";ctx.font="700 11px Poppins,Arial";ctx.textAlign="center";ctx.fillText("Status",cx,cy-1);ctx.font="10px Poppins,Arial";ctx.fillText(`${total} data`,cx,cy+14);
+    }
+
+    function drawStatusTrend(canvas, history) {
+      if(!canvas) return;
+      const ctx=canvas.getContext("2d"); const rect=canvas.getBoundingClientRect(); const dpr=window.devicePixelRatio||1; const w=Math.max(300,Math.round(rect.width||420)); const h=170;
+      canvas.width=w*dpr; canvas.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); ctx.fillStyle="#fff";ctx.fillRect(0,0,w,h);
+      const data=normalizeStatusHistory(history); const pad={l:46,r:16,t:16,b:30};
+      const levels={Bahaya:1,Siaga:2,Aman:3};
+      ["Bahaya","Siaga","Aman"].forEach((name,i)=>{const y=pad.t+(h-pad.t-pad.b)*i/2;ctx.strokeStyle="#e5eeeb";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillStyle=STATUS_COLORS[name];ctx.font="9px Poppins,Arial";ctx.textAlign="right";ctx.fillText(name,pad.l-7,y+3);});
+      if(!data.length){ctx.fillStyle="#7b8985";ctx.font="11px Poppins,Arial";ctx.textAlign="center";ctx.fillText("Menunggu riwayat status dari backend",w/2,h/2);return;}
+      ctx.strokeStyle="#35c978";ctx.lineWidth=3;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();
+      data.forEach((d,i)=>{const x=pad.l+(w-pad.l-pad.r)*(data.length===1?.5:i/(data.length-1));const y=pad.t+(h-pad.t-pad.b)*((levels[d.status]-1)/2);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.stroke();
+      data.forEach((d,i)=>{const x=pad.l+(w-pad.l-pad.r)*(data.length===1?.5:i/(data.length-1));const y=pad.t+(h-pad.t-pad.b)*((levels[d.status]-1)/2);ctx.fillStyle=STATUS_COLORS[d.status];ctx.beginPath();ctx.arc(x,y,4.2,0,Math.PI*2);ctx.fill();});
+      ctx.fillStyle="#6d7c77";ctx.font="9px Poppins,Arial";ctx.textAlign="center";const step=Math.max(1,Math.ceil(data.length/5));data.forEach((d,i)=>{if(i%step===0||i===data.length-1){const x=pad.l+(w-pad.l-pad.r)*(data.length===1?.5:i/(data.length-1));ctx.fillText(String(d.label),x,h-8);}});
+      ctx.textAlign="left";
+    }
+
+    function updateHistoryCharts(stationName, station) {
+      const history=station?.history||{};
+      HISTORY_FIELDS.forEach(field=>drawLineChart(document.getElementById(`chart-${stationName}-${field}`),history[field]));
+      const statusHistory=station?.statusHistory||[];
+      drawStatusTrend(document.getElementById(`trend-${stationName}-status`),statusHistory);
+      drawPieChart(document.getElementById(`pie-${stationName}`),getStatusDistribution(station));
+      const legend=document.getElementById(`legend-${stationName}`);
+      if(legend){
+        const distribution=getStatusDistribution(station);
+        legend.innerHTML=STATUS_NAMES.map(name=>`<div class="legend-item"><span class="legend-dot" style="background:${STATUS_COLORS[name]}"></span><span>${name}</span><strong style="margin-left:auto;color:#2c403a">${Number(distribution[name]||0)}</strong></div>`).join("");
+      }
+    }
+
+    // Gambar placeholder grafik sebelum backend mengirim data.
+    ["keji", "setoyo"].forEach(stationName => updateHistoryCharts(stationName, {}));
+
+    // Siap dipanggil oleh backend/API setelah data diterima.
+    window.updateSKEWSData = updateSKEWSData;
+
+    document.querySelectorAll(".open-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const modal = document.getElementById(btn.dataset.target);
+        if (modal) modal.classList.add("show");
+      });
     });
-    const redIcon = L.divIcon({
-      className: '',
-      html: '<div style="width:28px;height:28px;border-radius:50% 50% 50% 0;background:#f12f3d;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3);position:relative"><span style="position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;background:#fff;border-radius:50%"></span></div>',
-      iconSize: [28,28], iconAnchor: [14,28], popupAnchor: [0,-25]
+
+    document.querySelectorAll(".modal").forEach(modal => {
+      modal.addEventListener("click", event => {
+        if (event.target === modal || event.target.classList.contains("close")) modal.classList.remove("show");
+      });
     });
 
-    const m1 = L.marker(keji, {icon: blueIcon}).addTo(map);
-    m1.bindPopup('<b>SKEWS 1 — Dusun Keji</b><span>Koordinat: -7.1164830, 110.3900140</span>');
-    const m2 = L.marker(setoyo, {icon: redIcon}).addTo(map);
-    m2.bindPopup('<b>SKEWS 2 — Dusun Setoyo</b><span>Koordinat: -7.1294947, 110.3785400</span>');
-
-    const group = L.featureGroup([m1,m2]);
-    map.fitBounds(group.getBounds().pad(0.25));
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") document.querySelectorAll(".modal.show").forEach(m => m.classList.remove("show"));
+    });
   </script>
 </body>
 </html>
