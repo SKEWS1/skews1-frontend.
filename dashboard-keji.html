@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#075540">
+  <title>SKEWS Desa Keji | Dashboard Dusun Keji</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --green:#075540;--green2:#0b6a51;--lime:#51f0a2;
+      --bg:#f4f9f7;--card:#fff;--text:#10211d;--muted:#71807b;
+      --line:#dce9e4;--safe:#25bd72;--alert:#e9b51c;--danger:#e33d4f;
+      --shadow:0 10px 28px rgba(8,54,43,.08);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Poppins,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{text-decoration:none;color:inherit}
+    .topbar{
+      min-height:72px;background:#fff;border-bottom:1px solid var(--line);
+      display:flex;align-items:center;justify-content:space-between;padding:12px 5%;
+      position:sticky;top:0;z-index:20
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand-mark{width:45px;height:45px;object-fit:contain}
+    .brand-title{font-size:20px;font-weight:800;color:var(--green);line-height:1}
+    .brand-sub{font-size:10px;color:var(--muted);margin-top:4px}
+    .back-btn{
+      display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--green);
+      border-radius:999px;color:var(--green);font-size:12px;font-weight:700;background:#fff
+    }
+    .container{width:min(1200px,92%);margin:0 auto}
+    .hero{
+      margin:24px 0 18px;padding:28px 30px;border-radius:24px;
+      background:linear-gradient(135deg,#075540,#0b6a51);color:#fff;box-shadow:var(--shadow)
+    }
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;background:rgba(255,255,255,.12);padding:7px 12px;border-radius:999px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--lime)}
+    .hero h1{font-size:32px;line-height:1.1;margin:14px 0 6px}
+    .hero p{margin:0;color:rgba(255,255,255,.86);font-size:13px}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+    .meta{padding:9px 12px;border-radius:11px;background:rgba(255,255,255,.1);font-size:10px}
+    .section-title{margin:24px 0 12px;color:#164c3d;font-size:18px;font-weight:800}
+    .latest-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+    .latest{
+      background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;
+      min-height:105px;box-shadow:0 5px 18px rgba(8,54,43,.04);position:relative;overflow:hidden
+    }
+    .latest:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#2fce79,#82efae)}
+    .latest small{display:block;color:var(--muted);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+    .latest strong{display:block;margin-top:11px;font-size:17px}
+    .pending{color:#7b8884!important;font-style:italic;font-weight:600!important}
+    .status-pill{display:inline-flex;padding:7px 11px;border-radius:999px;font-size:12px;background:#edf1ef;color:#77847f}
+    .status-pill.aman{background:#e8f8ef;color:#0e9f66}
+    .status-pill.siaga{background:#fff6d8;color:#c28e08}
+    .status-pill.bahaya{background:#ffe8eb;color:#d93648}
+    .charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .chart-card{
+      background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;
+      box-shadow:0 5px 18px rgba(8,54,43,.04)
+    }
+    .chart-card.wide{grid-column:1/-1}
+    .chart-card h3{margin:0 0 8px;color:#26473e;font-size:12px}
+    canvas{display:block;width:100%;height:190px}
+    .analysis{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .analysis-card{
+      background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;
+      box-shadow:0 5px 18px rgba(8,54,43,.04)
+    }
+    .analysis-card h3{margin:0 0 12px;color:#26473e;font-size:13px}
+    .pie-layout{display:grid;grid-template-columns:210px 1fr;align-items:center;gap:14px}
+    #pie{width:200px;height:200px}
+    .legend{display:grid;gap:11px}
+    .legend-row{display:flex;align-items:center;gap:8px;font-size:11px;color:#536760}
+    .legend-dot{width:11px;height:11px;border-radius:50%}
+    .legend-value{margin-left:auto;font-weight:700;color:#263e37}
+    .note{margin:16px 0 28px;padding:12px 14px;background:#eaf6f1;border-radius:12px;color:#5e716a;font-size:10px;line-height:1.5}
+    footer{padding:18px 5%;background:#064738;color:#fff;font-size:10px;text-align:center}
+    @media(max-width:1000px){.latest-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:720px){
+      .topbar{padding:10px 4%}.brand-title{font-size:18px}.back-btn{padding:9px 12px;font-size:11px}
+      .hero{padding:22px 20px}.hero h1{font-size:26px}
+      .latest-grid,.charts,.analysis{grid-template-columns:1fr}
+      .chart-card.wide{grid-column:auto}
+      .pie-layout{grid-template-columns:1fr}.pie-layout #pie{margin:auto}
+      .latest{min-height:92px}
+    }
+    @media(max-width:430px){
+      .brand-sub{display:none}.hero-meta{display:grid;grid-template-columns:1fr 1fr}
+      .container{width:94%}.section-title{font-size:16px}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="Kembali ke halaman utama SKEWS">
+      <img class="brand-mark" src="logo-skews.png" alt="Logo SKEWS">
+      <div>
+        <div class="brand-title">SKEWS</div>
+        <div class="brand-sub">Desa Keji, Ungaran Barat</div>
+      </div>
+    </a>
+    <a class="back-btn" href="index.html">← Kembali ke SKEWS</a>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow"><span class="dot"></span> SISTEM PEMANTAUAN RISIKO LONGSOR</div>
+      <h1>Dashboard SKEWS — Dusun Keji</h1>
+      <p>Monitoring data sensor dan riwayat kondisi tanah secara berkala.</p>
+      <div class="hero-meta">
+        <div class="meta">Lokasi: Desa Keji, Ungaran Barat</div>
+        <div class="meta">Update: <span id="lastUpdate">Menunggu data</span></div>
+        <div class="meta">Status koneksi: <span id="connection">Menunggu backend</span></div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Data Terbaru</h2>
+    <section class="latest-grid">
+      <div class="latest"><small>Curah Hujan</small><strong id="curahHujan" class="pending">Menunggu data</strong></div>
+      <div class="latest"><small>Kemiringan</small><strong id="kemiringan" class="pending">Menunggu data</strong></div>
+      <div class="latest"><small>Pergeseran</small><strong id="pergeseran" class="pending">Menunggu data</strong></div>
+      <div class="latest"><small>Kelembaban Tanah</small><strong id="kelembabanTanah" class="pending">Menunggu data</strong></div>
+      <div class="latest"><small>Suhu</small><strong id="suhu" class="pending">Menunggu data</strong></div>
+      <div class="latest"><small>Status</small><strong><span id="status" class="status-pill">Menunggu data</span></strong></div>
+    </section>
+
+    <h2 class="section-title">Riwayat Data Sensor</h2>
+    <section class="charts">
+      <div class="chart-card"><h3>Curah Hujan</h3><canvas id="chart-curahHujan"></canvas></div>
+      <div class="chart-card"><h3>Kemiringan</h3><canvas id="chart-kemiringan"></canvas></div>
+      <div class="chart-card"><h3>Pergeseran</h3><canvas id="chart-pergeseran"></canvas></div>
+      <div class="chart-card"><h3>Kelembaban Tanah</h3><canvas id="chart-kelembabanTanah"></canvas></div>
+      <div class="chart-card"><h3>Suhu</h3><canvas id="chart-suhu"></canvas></div>
+      <div class="chart-card"><h3>Trend Status</h3><canvas id="chart-statusTrend"></canvas></div>
+    </section>
+
+    <h2 class="section-title">Analisis Status</h2>
+    <section class="analysis">
+      <div class="analysis-card">
+        <h3>Riwayat Status</h3>
+        <div class="pie-layout">
+          <canvas id="pie"></canvas>
+          <div id="legend" class="legend"></div>
+        </div>
+      </div>
+      <div class="analysis-card">
+        <h3>Makna Status</h3>
+        <div class="legend">
+          <div class="legend-row"><span class="legend-dot" style="background:#25bd72"></span><span>Aman</span><span class="legend-value">Kondisi normal</span></div>
+          <div class="legend-row"><span class="legend-dot" style="background:#e9b51c"></span><span>Siaga</span><span class="legend-value">Perlu waspada</span></div>
+          <div class="legend-row"><span class="legend-dot" style="background:#e33d4f"></span><span>Bahaya</span><span class="legend-value">Perlu tindakan</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="note">
+      Dashboard ini tidak menggunakan data sensor contoh. Sebelum backend terhubung, seluruh data akan tetap
+      <b>“Menunggu data”</b>. Setelah backend tersedia, fungsi <b>window.updateSKEWSData()</b> dapat digunakan
+      untuk mengirim data terbaru dan riwayat ke halaman ini.
+    </div>
+  </main>
+
+  <footer>SKEWS Desa Keji — Untuk Masa Depan yang Lebih Aman</footer>
+
+<script>
+const STATUS = ["Aman","Siaga","Bahaya"];
+const STATUS_COLOR = {Aman:"#25bd72",Siaga:"#e9b51c",Bahaya:"#e33d4f"};
+const FIELDS = ["curahHujan","kemiringan","pergeseran","kelembabanTanah","suhu"];
+
+function pendingElement(id,value){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.textContent=value ?? "Menunggu data";
+  el.classList.toggle("pending", value == null || value === "" || String(value).toLowerCase()==="menunggu data");
+}
+
+function setStatus(value){
+  const el=document.getElementById("status");
+  if(!el)return;
+  const s=String(value ?? "").trim();
+  el.textContent=s || "Menunggu data";
+  el.className="status-pill";
+  if(s==="Aman")el.classList.add("aman");
+  else if(s==="Siaga")el.classList.add("siaga");
+  else if(s==="Bahaya")el.classList.add("bahaya");
+}
+
+function updateLatest(data){
+  pendingElement("curahHujan",data?.curahHujan);
+  pendingElement("kemiringan",data?.kemiringan);
+  pendingElement("pergeseran",data?.pergeseran);
+  pendingElement("kelembabanTanah",data?.kelembabanTanah);
+  pendingElement("suhu",data?.suhu);
+  setStatus(data?.status);
+  if(data?.updatedAt){
+    document.getElementById("lastUpdate").textContent=data.updatedAt;
+  }else if(data){
+    document.getElementById("lastUpdate").textContent=new Date().toLocaleString("id-ID",{timeZone:"Asia/Jakarta"});
+  }
+  document.getElementById("connection").textContent="Terhubung";
+}
+
+function normalize(history){
+  if(!Array.isArray(history))return [];
+  return history.map((x,i)=>({
+    label:x?.time ?? x?.timestamp ?? x?.label ?? String(i+1),
+    value:Number(x?.value ?? x?.val)
+  })).filter(x=>Number.isFinite(x.value));
+}
+
+function drawLine(id,history){
+  const c=document.getElementById(id); if(!c)return;
+  const rect=c.getBoundingClientRect(), dpr=devicePixelRatio||1, w=Math.max(280,Math.round(rect.width||500)), h=190;
+  c.width=w*dpr;c.height=h*dpr;
+  const ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);ctx.fillStyle="#fff";ctx.fillRect(0,0,w,h);
+  const data=normalize(history), pad={l:40,r:12,t:14,b:30};
+  ctx.strokeStyle="#e5eeeb";ctx.lineWidth=1;
+  for(let i=0;i<5;i++){let y=pad.t+(h-pad.t-pad.b)*i/4;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();}
+  if(!data.length){ctx.fillStyle="#7b8985";ctx.font="11px Poppins,Arial";ctx.textAlign="center";ctx.fillText("Menunggu data dari backend",w/2,h/2);return;}
+  const min=Math.min(...data.map(x=>x.value)),max=Math.max(...data.map(x=>x.value)),span=max===min?1:max-min;
+  const point=(i)=>({x:pad.l+(w-pad.l-pad.r)*(data.length===1?.5:i/(data.length-1)),y:pad.t+(h-pad.t-pad.b)*(1-(data[i].value-min)/span)});
+  ctx.strokeStyle="#29c879";ctx.lineWidth=2.5;ctx.lineJoin="round";ctx.lineCap="round";ctx.beginPath();
+  data.forEach((x,i)=>{const p=point(i);i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.stroke();
+  ctx.fillStyle="#29c879";data.forEach((x,i)=>{const p=point(i);ctx.beginPath();ctx.arc(p.x,p.y,3.2,0,Math.PI*2);ctx.fill();});
+  ctx.fillStyle="#6d7c77";ctx.font="9px Poppins,Arial";ctx.textAlign="center";
+  const step=Math.max(1,Math.ceil(data.length/5));
+  data.forEach((x,i)=>{if(i%step===0||i===data.length-1){const p=point(i);ctx.fillText(String(x.label),p.x,h-8)}});
+  ctx.textAlign="left";
+}
+
+function normalizeStatus(history){
+  if(!Array.isArray(history))return [];
+  return history.map((x,i)=>({
+    label:x?.time ?? x?.timestamp ?? x?.label ?? String(i+1),
+    status:String(x?.status ?? x?.value ?? x ?? "").trim()
+  })).filter(x=>STATUS.includes(x.status));
+}
+
+function drawTrend(history){
+  const c=document.getElementById("chart-statusTrend");if(!c)return;
+  const rect=c.getBoundingClientRect(),dpr=devicePixelRatio||1,w=Math.max(280,Math.round(rect.width||500)),h=190;
+  c.width=w*dpr;c.height=h*dpr;const ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);ctx.fillStyle="#fff";ctx.fillRect(0,0,w,h);
+  const data=normalizeStatus(history),pad={l:52,r:14,t:15,b:30},level={Bahaya:1,Siaga:2,Aman:3};
+  ["Bahaya","Siaga","Aman"].forEach((s,i)=>{const y=pad.t+(h-pad.t-pad.b)*i/2;ctx.strokeStyle="#e5eeeb";ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillStyle=STATUS_COLOR[s];ctx.font="9px Poppins,Arial";ctx.textAlign="right";ctx.fillText(s,pad.l-8,y+3)});
+  if(!data.length){ctx.fillStyle="#7b8985";ctx.font="11px Poppins,Arial";ctx.textAlign="center";ctx.fillText("Menunggu riwayat status dari backend",w/2,h/2);return}
+  const point=i=>({x:pad.l+(w-pad.l-pad.r)*(data.length===1?.5:i/(data.length-1)),y:pad.t+(h-pad.t-pad.b)*(level[data[i].status]-1)/2});
+  ctx.strokeStyle="#35c978";ctx.lineWidth=3;ctx.lineJoin="round";ctx.beginPath();data.forEach((x,i)=>{const p=point(i);i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.stroke();
+  data.forEach((x,i)=>{const p=point(i);ctx.fillStyle=STATUS_COLOR[x.status];ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill()});
+  ctx.fillStyle="#6d7c77";ctx.font="9px Poppins,Arial";ctx.textAlign="center";const step=Math.max(1,Math.ceil(data.length/5));data.forEach((x,i)=>{if(i%step===0||i===data.length-1){const p=point(i);ctx.fillText(x.label,p.x,h-8)}})
+}
+
+function drawPie(station){
+  const c=document.getElementById("pie");if(!c)return;
+  const dpr=devicePixelRatio||1,size=200;c.width=size*dpr;c.height=size*dpr;const ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,size,size);
+  const counts={Aman:0,Siaga:0,Bahaya:0};
+  if(station?.statusDistribution){
+    STATUS.forEach(s=>counts[s]=Number(station.statusDistribution[s]||0));
+  }else{
+    normalizeStatus(station?.statusHistory).forEach(x=>counts[x.status]++);
+  }
+  const total=Object.values(counts).reduce((a,b)=>a+b,0),cx=100,cy=100,r=76,inner=43;
+  if(!total){ctx.fillStyle="#d7e1de";ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(cx,cy,inner,0,Math.PI*2);ctx.fill();ctx.fillStyle="#6c7b76";ctx.font="10px Poppins,Arial";ctx.textAlign="center";ctx.fillText("Menunggu",cx,cy);ctx.fillText("data...",cx,cy+14)}
+  else{
+    let start=-Math.PI/2;
+    STATUS.forEach(s=>{const v=counts[s];if(v<=0)return;const end=start+v/total*Math.PI*2;ctx.fillStyle=STATUS_COLOR[s];ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();ctx.fill();start=end});
+    ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(cx,cy,inner,0,Math.PI*2);ctx.fill();ctx.fillStyle="#26453d";ctx.font="700 11px Poppins,Arial";ctx.textAlign="center";ctx.fillText("Status",cx,cy-2);ctx.font="10px Poppins,Arial";ctx.fillText(total+" data",cx,cy+14);
+  }
+  const legend=document.getElementById("legend");
+  legend.innerHTML=STATUS.map(s=>`<div class="legend-row"><span class="legend-dot" style="background:${STATUS_COLOR[s]}"></span><span>${s}</span><span class="legend-value">${counts[s]}</span></div>`).join("");
+}
+
+function render(station){
+  updateLatest(station||{});
+  FIELDS.forEach(f=>drawLine("chart-"+f,station?.history?.[f]||[]));
+  drawTrend(station?.statusHistory||[]);
+  drawPie(station||{});
+}
+
+window.updateSKEWSData=function(payload){
+  /*
+    Payload yang diharapkan untuk halaman ini:
+    {
+      keji: {
+        curahHujan:"...",
+        kemiringan:"...",
+        pergeseran:"...",
+        kelembabanTanah:"...",
+        suhu:"...",
+        status:"Aman|Siaga|Bahaya",
+        updatedAt:"...",
+        history:{
+          curahHujan:[{time:"14:00",value:10}],
+          kemiringan:[{time:"14:00",value:3.2}],
+          pergeseran:[{time:"14:00",value:1.1}],
+          kelembabanTanah:[{time:"14:00",value:65}],
+          suhu:[{time:"14:00",value:27.5}]
+        },
+        statusHistory:[{time:"14:00",status:"Aman"}],
+        statusDistribution:{Aman:10,Siaga:2,Bahaya:1}
+      }
+    }
+  */
+  const station=payload?.keji ?? payload;
+  window.__SKEWS_LAST_DATA=station||{};
+  render(window.__SKEWS_LAST_DATA);
+};
+
+window.addEventListener("resize",()=>render(window.__SKEWS_LAST_DATA||{}));
+
+/* Kondisi awal: semua grafik menunggu backend. */
+window.__SKEWS_LAST_DATA={};
+render(window.__SKEWS_LAST_DATA);
+</script>
+</body>
+</html>
