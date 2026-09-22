@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#075540" />
+  <title>Peta SKEWS Desa Keji</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3Q7w3Q7e7x5H6Q2i6h9Z2w0gB1E0A=" crossorigin="" />
+  <style>
+    html,body{height:100%;margin:0;font-family:Poppins,Arial,sans-serif;background:#f4f9f7}
+    .top{position:fixed;z-index:1000;top:18px;left:18px;right:18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .title{background:rgba(255,255,255,.96);border:1px solid #dce9e4;border-radius:14px;padding:11px 15px;box-shadow:0 8px 25px rgba(8,54,43,.12);color:#075540}
+    .title strong{display:block;font-size:15px}.title span{display:block;margin-top:2px;font-size:10px;color:#71807b}
+    .back{display:inline-flex;align-items:center;gap:7px;background:#075540;color:#fff;border-radius:999px;padding:10px 15px;font-size:11px;font-weight:700;text-decoration:none;box-shadow:0 8px 25px rgba(8,54,43,.18)}
+    #map{height:100%;width:100%}
+    .leaflet-popup-content{font-family:Poppins,Arial,sans-serif}.leaflet-popup-content b{color:#075540;font-size:13px}.leaflet-popup-content span{display:block;color:#65736f;font-size:10px;margin-top:4px;line-height:1.5}
+    .legend{position:fixed;z-index:1000;left:18px;bottom:18px;background:rgba(255,255,255,.96);border:1px solid #dce9e4;border-radius:14px;padding:11px 14px;box-shadow:0 8px 25px rgba(8,54,43,.12);font-size:10px;color:#43534e}
+    .legend div{display:flex;align-items:center;gap:8px;margin:4px 0}.dot{width:10px;height:10px;border-radius:50%;display:inline-block}.blue{background:#2494ef}.red{background:#f12f3d}
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div class="title"><strong>Peta Lokasi SKEWS</strong><span>Desa Keji, Ungaran Barat</span></div>
+    <a class="back" href="index.html">← Kembali</a>
+  </div>
+  <div id="map" aria-label="Peta lokasi dua alat SKEWS"></div>
+  <div class="legend">
+    <div><span class="dot blue"></span>SKEWS 1 — Dusun Keji</div>
+    <div><span class="dot red"></span>SKEWS 2 — Dusun Setoyo</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const keji = [-7.1164830, 110.3900140];
+    const setoyo = [-7.1294947, 110.3785400];
+    const center = [(keji[0] + setoyo[0]) / 2, (keji[1] + setoyo[1]) / 2];
+
+    const map = L.map('map', { zoomControl: true }).setView(center, 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const blueIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:28px;height:28px;border-radius:50% 50% 50% 0;background:#2494ef;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3);position:relative"><span style="position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;background:#fff;border-radius:50%"></span></div>',
+      iconSize: [28,28], iconAnchor: [14,28], popupAnchor: [0,-25]
+    });
+    const redIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:28px;height:28px;border-radius:50% 50% 50% 0;background:#f12f3d;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3);position:relative"><span style="position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;background:#fff;border-radius:50%"></span></div>',
+      iconSize: [28,28], iconAnchor: [14,28], popupAnchor: [0,-25]
+    });
+
+    const m1 = L.marker(keji, {icon: blueIcon}).addTo(map);
+    m1.bindPopup('<b>SKEWS 1 — Dusun Keji</b><span>Koordinat: -7.1164830, 110.3900140</span>');
+    const m2 = L.marker(setoyo, {icon: redIcon}).addTo(map);
+    m2.bindPopup('<b>SKEWS 2 — Dusun Setoyo</b><span>Koordinat: -7.1294947, 110.3785400</span>');
+
+    const group = L.featureGroup([m1,m2]);
+    map.fitBounds(group.getBounds().pad(0.25));
+  </script>
+</body>
+</html>
