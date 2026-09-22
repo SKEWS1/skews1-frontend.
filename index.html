@@ -955,6 +955,43 @@
       }
     }
 
+    // Fungsi update data dari backend.
+    // Menjaga tampilan tetap "Menunggu data" sampai backend mengirim nilai.
+    function updateSKEWSData(payload = {}) {
+      ["keji", "setoyo"].forEach(stationName => {
+        const station = payload?.[stationName];
+        if (!station) return;
+
+        const latest = station.latest || station.data || station;
+        const containers = [
+          document.querySelector(`.ews-card[data-station="${stationName}"]`),
+          document.getElementById(`modal-${stationName}`)
+        ].filter(Boolean);
+
+        [
+          "curahHujan",
+          "kemiringan",
+          "pergeseran",
+          "kelembabanTanah",
+          "suhu",
+          "status"
+        ].forEach(field => {
+          const value = latest?.[field];
+          if (value === undefined || value === null || value === "") return;
+
+          containers.forEach(container => {
+            container.querySelectorAll(`[data-field="${field}"]`).forEach(element => {
+              element.textContent = value;
+              setPendingState(element, false);
+              if (field === "status") applyStatusStyle(element, value);
+            });
+          });
+        });
+
+        updateHistoryCharts(stationName, station);
+      });
+    }
+
     // Gambar placeholder grafik sebelum backend mengirim data.
     ["keji", "setoyo"].forEach(stationName => updateHistoryCharts(stationName, {}));
 
