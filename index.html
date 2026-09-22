@@ -617,7 +617,7 @@
               </div>
               <div class="ews-name"><strong>SKEWS 1</strong><span>Dusun Keji</span></div>
               <div class="ews-description">Pemantauan risiko tanah longsor di wilayah<br/>Dusun Keji, Desa Keji.</div>
-              <button class="open-btn" data-target="modal-keji">Buka SKEWS Dusun Keji <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
+              <a class="open-btn" href="dashboard-keji.html">Buka SKEWS Dusun Keji <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></a>
             </div>
           </div>
           <div class="stats">
@@ -643,7 +643,7 @@
               </div>
               <div class="ews-name"><strong>SKEWS 2</strong><span>Dusun Setoyo</span></div>
               <div class="ews-description">Pemantauan risiko tanah longsor di wilayah<br/>Dusun Setoyo, Desa Keji.</div>
-              <button class="open-btn" data-target="modal-setoyo">Buka SKEWS Dusun Setoyo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
+              <a class="open-btn" href="dashboard-setoyo.html">Buka SKEWS Dusun Setoyo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></a>
             </div>
           </div>
           <div class="stats">
@@ -955,55 +955,11 @@
       }
     }
 
-    // Fungsi update data dari backend.
-    // Menjaga tampilan tetap "Menunggu data" sampai backend mengirim nilai.
-    function updateSKEWSData(payload = {}) {
-      ["keji", "setoyo"].forEach(stationName => {
-        const station = payload?.[stationName];
-        if (!station) return;
-
-        const latest = station.latest || station.data || station;
-        const containers = [
-          document.querySelector(`.ews-card[data-station="${stationName}"]`),
-          document.getElementById(`modal-${stationName}`)
-        ].filter(Boolean);
-
-        [
-          "curahHujan",
-          "kemiringan",
-          "pergeseran",
-          "kelembabanTanah",
-          "suhu",
-          "status"
-        ].forEach(field => {
-          const value = latest?.[field];
-          if (value === undefined || value === null || value === "") return;
-
-          containers.forEach(container => {
-            container.querySelectorAll(`[data-field="${field}"]`).forEach(element => {
-              element.textContent = value;
-              setPendingState(element, false);
-              if (field === "status") applyStatusStyle(element, value);
-            });
-          });
-        });
-
-        updateHistoryCharts(stationName, station);
-      });
-    }
-
     // Gambar placeholder grafik sebelum backend mengirim data.
     ["keji", "setoyo"].forEach(stationName => updateHistoryCharts(stationName, {}));
 
     // Siap dipanggil oleh backend/API setelah data diterima.
     window.updateSKEWSData = updateSKEWSData;
-
-    document.querySelectorAll(".open-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const modal = document.getElementById(btn.dataset.target);
-        if (modal) modal.classList.add("show");
-      });
-    });
 
     document.querySelectorAll(".modal").forEach(modal => {
       modal.addEventListener("click", event => {
