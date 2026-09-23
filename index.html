@@ -37,6 +37,92 @@
       background:#f7fbf9;
       -webkit-font-smoothing:antialiased;
     }
+
+    /* ===================== LOADING SCREEN ===================== */
+    .page-loader{
+      position:fixed;
+      inset:0;
+      z-index:10000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:radial-gradient(circle at 50% 30%,#0b6a51 0%,#075540 46%,#032d23 100%);
+      color:#fff;
+      opacity:1;
+      visibility:visible;
+      transition:opacity .55s ease,visibility .55s ease;
+    }
+    .page-loader.hide{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .loader-inner{
+      width:min(430px,92vw);
+      text-align:center;
+      transform:translateY(0);
+      animation:loaderFloat 1.8s ease-in-out infinite;
+    }
+    .loader-logo{
+      width:92px;
+      height:92px;
+      object-fit:contain;
+      display:block;
+      margin:0 auto 18px;
+      filter:drop-shadow(0 10px 18px rgba(0,0,0,.22));
+    }
+    .loader-brand{
+      font-size:34px;
+      line-height:1;
+      font-weight:800;
+      letter-spacing:-1px;
+    }
+    .loader-fullname{
+      margin-top:10px;
+      font-size:13px;
+      font-weight:600;
+      color:#bff8db;
+      letter-spacing:.2px;
+    }
+    .loader-tagline{
+      margin-top:12px;
+      font-size:11px;
+      color:rgba(255,255,255,.82);
+    }
+    .loader-line{
+      width:145px;
+      height:4px;
+      margin:20px auto 0;
+      overflow:hidden;
+      border-radius:999px;
+      background:rgba(255,255,255,.16);
+    }
+    .loader-line:after{
+      content:"";
+      display:block;
+      width:45%;
+      height:100%;
+      border-radius:999px;
+      background:#55f0a5;
+      animation:loaderProgress 1.25s ease-in-out infinite;
+    }
+    @keyframes loaderFloat{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-5px)}
+    }
+    @keyframes loaderProgress{
+      0%{transform:translateX(-120%)}
+      100%{transform:translateX(340%)}
+    }
+    @media(max-width:650px){
+      .loader-inner{padding:8px 4px}
+      .loader-logo{width:82px;height:82px;margin-bottom:20px}
+      .loader-brand{font-size:30px}
+      .loader-fullname{margin-top:13px;line-height:1.45;padding:0 18px}
+      .loader-tagline{margin-top:15px;line-height:1.5;padding:0 25px}
+      .loader-line{margin-top:22px}
+    }
     button{font:inherit}
     a{text-decoration:none;color:inherit}
 
@@ -424,9 +510,11 @@
     .footer-mark{width:36px;height:36px;object-fit:contain}
     .footer-title{font-size:12px;font-weight:700;line-height:1.2}
     .footer-title span{display:block;font-size:9px;font-weight:500;margin-top:3px}
-    .footer-nav{display:flex;gap:37px;font-size:10.5px}
-    .footer-social{display:flex;align-items:center;gap:19px}
-    .footer-social svg{width:19px;height:19px}
+    .footer-contact{display:flex;align-items:center;gap:14px;font-size:9.5px;line-height:1.35}
+    .footer-contact-title{display:block;font-size:10px;font-weight:800;color:#53efaa;letter-spacing:.7px;margin-bottom:4px;text-transform:uppercase}
+    .footer-contact-row{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.92);margin-top:3px}
+    .footer-contact-row svg{width:14px;height:14px;flex:none;color:#53efaa}
+    .footer-contact-row a{color:rgba(255,255,255,.92)}
     .footer-end{display:flex;align-items:center;gap:10px;font-size:9.5px}
     .footer-end svg{width:18px;height:18px}
 
@@ -475,20 +563,30 @@
     @media(max-width:920px){
       .header{height:auto;min-height:72px;padding:12px 22px;flex-wrap:wrap;gap:10px}.brand{min-width:auto}.nav{order:3;width:100%;justify-content:flex-start;overflow-x:auto;padding-bottom:2px}.header-cta{display:none}
       .hero{height:500px}.hero-inner{padding:30px 28px}.hero-left{width:65%}.hero h1{font-size:43px}.weather{right:20px;top:18px;bottom:auto}
-      .ews-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.footer{flex-wrap:wrap;padding:18px 28px;gap:16px}.footer-nav{order:3;width:100%;justify-content:center}
+      .ews-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.footer{flex-wrap:wrap;padding:18px 28px;gap:16px}.footer-contact{width:100%;justify-content:center}
     }
     @media(max-width:650px){
       .header{padding:10px 16px}.brand-title{font-size:22px}.brand-sub{font-size:10px}.brand-mark{width:44px;height:44px}.nav a{padding:9px 13px;font-size:12px}
       .hero{height:615px;background-position:58% center;background-attachment:fixed;background-size:cover}.hero-inner{padding:24px 18px}.hero-left{width:100%;max-width:none}.eyebrow{font-size:11px}.hero h1{font-size:38px;letter-spacing:-1.1px}.hero h2{font-size:20px}.hero-copy{font-size:13px;max-width:345px}.benefits{gap:12px;flex-wrap:wrap}.benefit{min-width:120px}.benefit + .benefit{padding-left:12px}
       .weather{top:18px;right:18px;bottom:auto;width:calc(100% - 36px)}
       .content-wrap{width:calc(100% - 18px);padding:13px 11px}.section-head{align-items:flex-start}.section-title h3{font-size:18px}.section-title p{font-size:10px}.map-full{font-size:10px;padding:8px 12px}
-      .ews-card{grid-template-columns:1fr;min-height:auto}.ews-image{min-height:255px}.stats{min-height:245px}.quick-grid{grid-template-columns:1fr}.quick{padding:12px 20px}.footer{padding:20px 18px;justify-content:center}.footer-nav,.footer-social{display:none}.footer-end{width:100%;justify-content:center}
+      .ews-card{grid-template-columns:1fr;min-height:auto}.ews-image{min-height:255px}.stats{min-height:245px}.quick-grid{grid-template-columns:1fr}.quick{padding:12px 20px}.footer{padding:20px 18px;justify-content:center}.footer-contact{width:100%;justify-content:center}.footer-end{width:100%;justify-content:center}
       .modal-data{grid-template-columns:1fr}
     }
   </style>
 </head>
 
 <body>
+  <div class="page-loader" id="pageLoader" aria-label="Memuat SKEWS">
+    <div class="loader-inner">
+      <img class="loader-logo" src="logo-skews.png" alt="Logo SKEWS" />
+      <div class="loader-brand">SKEWS</div>
+      <div class="loader-fullname">Smart Keji Early Warning System</div>
+      <div class="loader-tagline">Pantau Risiko Tanah Longsor</div>
+      <div class="loader-line"></div>
+    </div>
+  </div>
+
   <header class="header">
     <div class="brand">
       <img class="brand-mark" src="logo-skews.png" alt="Logo SKEWS" />
@@ -673,19 +771,22 @@
       <div class="footer-title">SKEWS Desa Keji<span>Ungaran Barat</span></div>
     </div>
 
-    <div class="footer-nav">
-      <a href="#beranda">Beranda</a>
-      <a href="#tentang">Tentang</a>
-      <a href="#ews">SKEWS</a>
-      <a href="#berita">Berita</a>
-      <a href="#kontak">Kontak</a>
-    </div>
-
-    <div class="footer-social" aria-label="Media sosial">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-2.8 0-5 2.2-5 5v3H6v4h3v5h4v-5h3.1l.9-4H13V9c0-.6.4-1 1-1Z"/></svg>
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.3 7.2c-.3-1-1.1-1.8-2.1-2.1C17.4 4.5 12 4.5 12 4.5s-5.4 0-7.2.6c-1 .3-1.8 1.1-2.1 2.1C2.1 9 2.1 12 2.1 12s0 3 .6 4.8c.3 1 1.1 1.8 2.1 2.1 1.8.6 7.2.6 7.2.6s5.4 0 7.2-.6c1-.3 1.8-1.1 2.1-2.1.6-1.8.6-4.8.6-4.8s0-3-.6-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.4 3.8 5.4 3.8 9S14.5 18.6 12 21M12 3C9.5 5.4 8.2 8.4 8.2 12S9.5 18.6 12 21"/></svg>
+    <div class="footer-contact" aria-label="Hubungi Kami">
+      <div>
+        <span class="footer-contact-title">Hubungi Kami</span>
+        <div class="footer-contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-5.8 7-12a7 7 0 1 0-14 0c0 6.2 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>
+          <span>Kantor Kepala Desa Keji, Kecamatan Ungaran Barat, Kabupaten Semarang</span>
+        </div>
+        <div class="footer-contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.7 3.5 9 8 6.3 10.2c1.2 2.6 3 4.5 5.7 5.7l2.2-2.7 4.5 2.3c.4.2.6.7.5 1.1l-.7 3.1c-.1.5-.6.8-1.1.8C9.8 20.5 3.5 14.2 3.5 6.6c0-.5.3-.9.8-1.1l3.1-.7c.4-.1.9.1 1.1.5Z"/></svg>
+          <a href="tel:+6281329442688">+62 813-2944-2688</a>
+        </div>
+        <div class="footer-contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+          <a href="mailto:desakeji01@gmail.com">desakeji01@gmail.com</a>
+        </div>
+      </div>
     </div>
 
     <div class="footer-end">
@@ -765,6 +866,45 @@
   </div>
 
   <script>
+    // Loading screen saat masuk dan berpindah halaman internal.
+    const pageLoader = document.getElementById("pageLoader");
+
+    function hidePageLoader() {
+      if (pageLoader) {
+        setTimeout(() => pageLoader.classList.add("hide"), 450);
+      }
+    }
+
+    window.addEventListener("load", hidePageLoader);
+
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest("a[href]");
+      if (!link) return;
+
+      const rawHref = link.getAttribute("href");
+      if (!rawHref || rawHref.startsWith("#") || rawHref.startsWith("mailto:") || rawHref.startsWith("tel:")) return;
+
+      let url;
+      try {
+        url = new URL(link.href, window.location.href);
+      } catch (_) {
+        return;
+      }
+
+      const isInternalHtml =
+        url.origin === window.location.origin &&
+        (url.pathname.endsWith(".html") || url.pathname.endsWith("/"));
+
+      if (!isInternalHtml) return;
+
+      event.preventDefault();
+      if (pageLoader) pageLoader.classList.remove("hide");
+
+      setTimeout(() => {
+        window.location.href = url.href;
+      }, 300);
+    });
+
     // Waktu dan tanggal pojok kanan: realtime WIB (Asia/Jakarta)
     function updateRealtimeDateTime() {
       const now = new Date();
