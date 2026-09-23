@@ -510,10 +510,10 @@
     .footer-mark{width:36px;height:36px;object-fit:contain}
     .footer-title{font-size:12px;font-weight:700;line-height:1.2}
     .footer-title span{display:block;font-size:9px;font-weight:500;margin-top:3px}
-    .footer-contact{display:flex;align-items:center;gap:14px;font-size:9.5px;line-height:1.35}
-    .footer-contact-title{display:block;font-size:13px;font-weight:800;color:#53efaa;letter-spacing:.7px;margin-bottom:5px;text-transform:uppercase}
-    .footer-contact-row{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.92);margin-top:3px}
-    .footer-contact-row svg{width:14px;height:14px;flex:none;color:#53efaa}
+    .footer-contact{display:flex;align-items:center;gap:16px;width:min(560px,52%);font-size:11px;line-height:1.45}
+    .footer-contact-title{display:block;font-size:16px;font-weight:800;color:#53efaa;letter-spacing:.7px;margin-bottom:7px;text-transform:uppercase}
+    .footer-contact-row{display:flex;align-items:flex-start;gap:8px;color:rgba(255,255,255,.92);margin-top:5px}
+    .footer-contact-row svg{width:16px;height:16px;flex:none;color:#53efaa;margin-top:1px}
     .footer-contact-row a{color:rgba(255,255,255,.92)}
     .footer-end{display:flex;align-items:center;gap:10px;font-size:9.5px}
     .footer-end svg{width:18px;height:18px}
@@ -566,6 +566,7 @@
       .ews-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.footer{flex-wrap:wrap;padding:18px 28px;gap:16px}.footer-contact{width:100%;justify-content:center}
     }
     @media(max-width:650px){
+      .footer-contact{width:100%;max-width:none}
       .header{padding:10px 16px}.brand-title{font-size:22px}.brand-sub{font-size:10px}.brand-mark{width:44px;height:44px}.nav a{padding:9px 13px;font-size:12px}
       .hero{height:690px;background-position:58% center;background-attachment:fixed;background-size:cover}.hero-inner{padding:155px 18px 24px}.hero-left{width:100%;max-width:none}.eyebrow{font-size:11px}.hero h1{font-size:38px;letter-spacing:-1.1px}.hero h2{font-size:20px}.hero-copy{font-size:13px;max-width:345px}.benefits{gap:12px;flex-wrap:wrap}.benefit{min-width:120px}.benefit + .benefit{padding-left:12px}
       .weather{top:18px;right:18px;bottom:auto;width:calc(100% - 36px)}
@@ -871,7 +872,7 @@
 
     function hidePageLoader() {
       if (pageLoader) {
-        setTimeout(() => pageLoader.classList.add("hide"), 5000);
+        setTimeout(() => pageLoader.classList.add("hide"), 3000);
       }
     }
 
@@ -902,7 +903,7 @@
 
       setTimeout(() => {
         window.location.href = url.href;
-      }, 300);
+      }, 3000);
     });
 
     // Waktu dan tanggal pojok kanan: realtime WIB (Asia/Jakarta)
