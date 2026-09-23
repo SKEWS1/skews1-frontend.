@@ -818,6 +818,14 @@
     .contact-head-mark{display:flex;align-items:center;gap:9px;align-self:flex-start;margin-top:7px;padding:10px 13px;border:1px solid #cde7db;border-radius:12px;background:rgba(255,255,255,.8);color:#45685d;font-size:10px;font-weight:700;white-space:nowrap}
     .contact-live-dot{width:7px;height:7px;border-radius:50%;background:#17b978;box-shadow:0 0 0 5px rgba(23,185,120,.12)}
     .contact-feature{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;padding:24px 26px;border-radius:24px;background:#0b4d3d;color:#fff;box-shadow:0 18px 34px rgba(4,67,50,.14);position:relative;overflow:hidden}
+
+    .contact-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:20px}
+    .contact-feature-grid .contact-feature{min-width:0;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;align-items:center;gap:15px 16px;padding:20px}
+    .contact-feature-grid .contact-feature .contact-feature-icon{grid-column:1;grid-row:1 / span 2}
+    .contact-feature-grid .contact-feature .contact-feature-copy{grid-column:2;grid-row:1}
+    .contact-feature-grid .contact-feature .contact-feature-call{grid-column:2;grid-row:2;min-width:0;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
+    .contact-feature-grid .contact-feature-copy p{max-width:none}
+    @media(max-width:900px){.contact-feature-grid{grid-template-columns:1fr}}
     .contact-feature:after{content:"";position:absolute;right:-70px;top:-90px;width:260px;height:260px;border:1px solid rgba(126,246,192,.18);border-radius:50%;box-shadow:0 0 0 24px rgba(126,246,192,.035),0 0 0 48px rgba(126,246,192,.025)}
     .contact-feature-icon{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:rgba(123,241,189,.13);color:#76e9b8}
     .contact-feature-icon svg{width:27px;height:27px}
@@ -1206,56 +1214,110 @@
         </div>
       </div>
 
-      <div class="contact-feature">
-        <div class="contact-feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 21 7v5c0 4.7-3.5 7.5-9 9-5.5-1.5-9-4.3-9-9V7l9-4Z"/><path d="M12 7v5M9.5 14.5h5"/></svg>
-        </div>
-        <div class="contact-feature-copy">
-          <span class="contact-feature-label">KONTAK DARURAT</span>
-          <h3>BPBD Kabupaten Semarang</h3>
-          <p>Koordinasi penanganan bencana dan keadaan darurat di wilayah Kabupaten Semarang.</p>
-        </div>
-        <a class="contact-feature-call" href="tel:+62246922400">
-          <span class="contact-call-number">024-6922400</span>
-          <span class="contact-call-action">Hubungi BPBD <span aria-hidden="true">→</span></span>
-        </a>
-      </div>
+      <div class="contact-feature-grid">
+        <article class="contact-feature">
+          <div class="contact-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 18V9h14v9M7 9V6h10v3M9 6V3h6v3M8 12h8M8 15h8"/></svg>
+          </div>
+          <div class="contact-feature-copy">
+            <span class="contact-feature-label">PEMERINTAH DESA</span>
+            <h3>Kepala Desa</h3>
+            <p>Kepala Desa Keji dan koordinasi pemerintahan desa.</p>
+          </div>
+          <a class="contact-feature-call" href="tel:+6281329442688">
+            <span class="contact-call-number">0813-2944-2688</span>
+            <span class="contact-call-action">Hubungi Kepala Desa <span aria-hidden="true">→</span></span>
+          </a>
+        </article>
 
-      <div class="contact-tiles">
-        <article class="contact-tile">
-          <div class="contact-tile-top"><span class="contact-tile-index">01</span><span class="contact-tile-tag">Pemerintah Desa</span></div>
-          <h4>Kepala Desa</h4><p>Kepala Desa Keji</p>
-          <a href="tel:+6281329442688"><span>0813-2944-2688</span><span class="contact-arrow">↗</span></a>
+        <article class="contact-feature">
+          <div class="contact-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21v-9l8-6 8 6v9M8 21v-6h8v6M7 10h10"/></svg>
+          </div>
+          <div class="contact-feature-copy">
+            <span class="contact-feature-label">KEAMANAN & KETERTIBAN</span>
+            <h3>Bhabinkamtibmas</h3>
+            <p>Petugas keamanan dan ketertiban masyarakat Desa Keji.</p>
+          </div>
+          <a class="contact-feature-call" href="tel:+6289530000040">
+            <span class="contact-call-number">0895-3000-0040</span>
+            <span class="contact-call-action">Hubungi Bhabinkamtibmas <span aria-hidden="true">→</span></span>
+          </a>
         </article>
-        <article class="contact-tile">
-          <div class="contact-tile-top"><span class="contact-tile-index">02</span><span class="contact-tile-tag">Administrasi</span></div>
-          <h4>Sekretaris Desa</h4><p>Administrasi Pemerintah Desa</p>
-          <a href="tel:+6282220225538"><span>0822-2022-5538</span><span class="contact-arrow">↗</span></a>
+
+        <article class="contact-feature">
+          <div class="contact-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 21 7v5c0 4.7-3.5 7.5-9 9-5.5-1.5-9-4.3-9-9V7l9-4Z"/><path d="M8 12h8M12 8v8"/></svg>
+          </div>
+          <div class="contact-feature-copy">
+            <span class="contact-feature-label">PEMBINAAN WILAYAH</span>
+            <h3>Babinsa</h3>
+            <p>Koordinasi keamanan wilayah dan pembinaan masyarakat.</p>
+          </div>
+          <a class="contact-feature-call" href="tel:+6285326268087">
+            <span class="contact-call-number">0853-2626-8087</span>
+            <span class="contact-call-action">Hubungi Babinsa <span aria-hidden="true">→</span></span>
+          </a>
         </article>
-        <article class="contact-tile">
-          <div class="contact-tile-top"><span class="contact-tile-index">03</span><span class="contact-tile-tag">Keamanan</span></div>
-          <h4>Bhabinkamtibmas</h4><p>Petugas keamanan dan ketertiban masyarakat</p>
-          <a href="tel:+6289530000040"><span>0895-3000-0040</span><span class="contact-arrow">↗</span></a>
+
+        <article class="contact-feature">
+          <div class="contact-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 21 7v5c0 4.7-3.5 7.5-9 9-5.5-1.5-9-4.3-9-9V7l9-4Z"/><path d="M12 7v5M9.5 14.5h5"/></svg>
+          </div>
+          <div class="contact-feature-copy">
+            <span class="contact-feature-label">KONTAK DARURAT</span>
+            <h3>BPBD Kabupaten Semarang</h3>
+            <p>Koordinasi penanganan bencana dan keadaan darurat di wilayah Kabupaten Semarang.</p>
+          </div>
+          <a class="contact-feature-call" href="tel:+62246922400">
+            <span class="contact-call-number">024-6922400</span>
+            <span class="contact-call-action">Hubungi BPBD <span aria-hidden="true">→</span></span>
+          </a>
         </article>
-        <article class="contact-tile">
-          <div class="contact-tile-top"><span class="contact-tile-index">04</span><span class="contact-tile-tag">Pembinaan Wilayah</span></div>
-          <h4>Babinsa</h4><p>Koordinasi keamanan dan pembinaan wilayah</p>
-          <a href="tel:+6285326268087"><span>0853-2626-8087</span><span class="contact-arrow">↗</span></a>
+
+        <article class="contact-feature">
+          <div class="contact-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"/><path d="M8 6v12M16 6v12M4 10h16"/></svg>
+          </div>
+          <div class="contact-feature-copy">
+            <span class="contact-feature-label">DUSUN</span>
+            <h3>Kadus Suruhan</h3>
+            <p>Pelayanan dan koordinasi masyarakat di wilayah Dusun Suruhan.</p>
+          </div>
+          <a class="contact-feature-call" href="tel:+6285712995229">
+            <span class="contact-call-number">0857-1299-5229</span>
+            <span class="contact-call-action">Hubungi Kadus Suruhan <span aria-hidden="true">→</span></span>
+          </a>
         </article>
-        <article class="contact-tile">
-          <div class="contact-tile-top"><span class="contact-tile-index">05</span><span class="contact-tile-tag">Dusun</span></div>
-          <h4>Kadus Suruhan</h4><p>Pelayanan dan koordinasi masyarakat Dusun Suruhan</p>
-          <a href="tel:+6285712995229"><span>0857-1299-5229</span><span class="contact-arrow">↗</span></a>
+
+        <article class="contact-feature">
+          <div class="contact-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"/><path d="M8 6v12M16 6v12M4 10h16"/></svg>
+          </div>
+          <div class="contact-feature-copy">
+            <span class="contact-feature-label">DUSUN</span>
+            <h3>Kadus Setoyo</h3>
+            <p>Pelayanan dan koordinasi masyarakat di wilayah Dusun Setoyo.</p>
+          </div>
+          <a class="contact-feature-call" href="tel:+6283838579933">
+            <span class="contact-call-number">0838-3857-9933</span>
+            <span class="contact-call-action">Hubungi Kadus Setoyo <span aria-hidden="true">→</span></span>
+          </a>
         </article>
-        <article class="contact-tile">
-          <div class="contact-tile-top"><span class="contact-tile-index">06</span><span class="contact-tile-tag">Dusun</span></div>
-          <h4>Kadus Setoyo</h4><p>Pelayanan dan koordinasi masyarakat Dusun Setoyo</p>
-          <a href="tel:+6283838579933"><span>0838-3857-9933</span><span class="contact-arrow">↗</span></a>
-        </article>
-        <article class="contact-tile contact-tile-wide">
-          <div class="contact-tile-top"><span class="contact-tile-index">07</span><span class="contact-tile-tag">Dusun</span></div>
-          <h4>Kadus Keji</h4><p>Pelayanan dan koordinasi masyarakat Dusun Keji</p>
-          <a href="tel:+6281901106777"><span>0819-0110-6777</span><span class="contact-arrow">↗</span></a>
+
+        <article class="contact-feature">
+          <div class="contact-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"/><path d="M8 6v12M16 6v12M4 10h16"/></svg>
+          </div>
+          <div class="contact-feature-copy">
+            <span class="contact-feature-label">DUSUN</span>
+            <h3>Kadus Keji</h3>
+            <p>Pelayanan dan koordinasi masyarakat di wilayah Dusun Keji.</p>
+          </div>
+          <a class="contact-feature-call" href="tel:+6281901106777">
+            <span class="contact-call-number">0819-0110-6777</span>
+            <span class="contact-call-action">Hubungi Kadus Keji <span aria-hidden="true">→</span></span>
+          </a>
         </article>
       </div>
     </div>
