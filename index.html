@@ -396,6 +396,127 @@
     .quote-mark{font-family:Arial,sans-serif;font-size:36px;line-height:.6;color:#52efaa;vertical-align:-8px;margin-right:5px;font-weight:800}
     .quote-line{display:block;width:100px;height:5px;border-radius:50px;background:#49ef9e;margin:10px 0 0 auto;transform:rotate(-8deg)}
 
+    /* ===================== TENTANG SKEWS ===================== */
+    .about-section{
+      position:relative;
+      z-index:8;
+      width:calc(100% - 82px);
+      margin:18px auto 0;
+      padding:28px 30px;
+      background:rgba(250,253,252,.97);
+      border:1px solid rgba(5,77,60,.08);
+      border-radius:21px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .about-grid{
+      display:grid;
+      grid-template-columns:42% 58%;
+      align-items:center;
+      gap:34px;
+    }
+    .about-visual{
+      position:relative;
+      min-height:300px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+      border-radius:20px;
+      background:linear-gradient(145deg,#e8f7f0,#f8fcfa);
+      border:1px solid #d7e8e1;
+      overflow:hidden;
+    }
+    .about-visual:before{
+      content:"";
+      position:absolute;
+      width:230px;
+      height:230px;
+      border-radius:50%;
+      background:rgba(80,239,160,.14);
+      filter:blur(2px);
+      top:-80px;
+      left:-70px;
+    }
+    .about-device{
+      position:relative;
+      width:min(100%,430px);
+      max-height:310px;
+      object-fit:contain;
+      border-radius:16px;
+      box-shadow:18px 20px 35px rgba(7,55,42,.20);
+      transform:perspective(1000px) rotateY(-7deg) rotateX(2deg);
+      transition:transform .35s ease,box-shadow .35s ease;
+    }
+    .about-visual:hover .about-device{
+      transform:perspective(1000px) rotateY(-3deg) rotateX(1deg) translateY(-3px);
+      box-shadow:20px 24px 40px rgba(7,55,42,.24);
+    }
+    .about-badge{
+      position:absolute;
+      left:18px;
+      bottom:16px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(7,85,64,.94);
+      color:#fff;
+      font-size:10px;
+      font-weight:700;
+      box-shadow:0 7px 18px rgba(7,55,42,.18);
+    }
+    .about-copy .eyebrow{
+      color:#075540;
+      background:#e5f7ee;
+      border-color:#c9ebdc;
+      text-shadow:none;
+      box-shadow:none;
+    }
+    .about-copy h3{
+      margin:13px 0 8px;
+      color:#123f33;
+      font-size:28px;
+      line-height:1.1;
+      letter-spacing:-.6px;
+    }
+    .about-copy h3 span{color:#12a96d}
+    .about-copy p{
+      margin:0;
+      max-width:680px;
+      color:#5f706a;
+      font-size:13px;
+      line-height:1.75;
+    }
+    .about-points{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:11px;
+      margin-top:18px;
+    }
+    .about-point{
+      padding:13px 12px;
+      border:1px solid #dceae5;
+      border-radius:14px;
+      background:#fff;
+    }
+    .about-point svg{
+      width:23px;
+      height:23px;
+      color:#0bb276;
+      margin-bottom:8px;
+    }
+    .about-point b{
+      display:block;
+      color:#173f34;
+      font-size:11px;
+    }
+    .about-point small{
+      display:block;
+      margin-top:3px;
+      color:#71807b;
+      font-size:9.5px;
+      line-height:1.45;
+    }
+
     /* ===================== SKEWS CONTENT ===================== */
     .content-wrap{
       position:relative;
@@ -567,6 +688,17 @@
       .ews-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.footer{flex-wrap:wrap;padding:18px 28px;gap:16px}.footer-contact{width:100%;justify-content:center}
     }
     @media(max-width:650px){
+      .about-section{width:calc(100% - 18px);padding:18px 14px}
+      .about-grid{grid-template-columns:1fr;gap:20px}
+      .about-visual{min-height:235px;padding:16px}
+      .about-device{max-height:235px;transform:perspective(850px) rotateY(-4deg) rotateX(1deg)}
+      .about-copy h3{font-size:24px}
+      .about-copy p{font-size:12px;line-height:1.7}
+      .about-points{grid-template-columns:1fr}
+      .about-point{display:grid;grid-template-columns:28px 1fr;column-gap:8px;align-items:start}
+      .about-point svg{grid-row:1 / span 2;margin:0}
+      .about-point b{align-self:end}
+      .about-point small{margin-top:2px}
       .footer-contact{width:100%;max-width:none}
       .header{padding:10px 16px}.brand-title{font-size:22px}.brand-sub{font-size:10px}.brand-mark{width:44px;height:44px}.nav a{padding:9px 13px;font-size:12px}
       .hero{height:690px;background-position:center top;background-attachment:fixed;background-size:auto 100%;background-repeat:no-repeat}.hero-inner{padding:155px 18px 24px}.hero-left{width:100%;max-width:none}.eyebrow{font-size:11px}.hero h1{font-size:38px;letter-spacing:-1.1px}.hero h2{font-size:20px}.hero-copy{font-size:13px;max-width:345px}.benefits{gap:12px;flex-wrap:wrap}.benefit{min-width:120px}.benefit + .benefit{padding-left:12px}
@@ -691,6 +823,57 @@
         <div class="scale">
           <div class="ticks"><span>0</span><span>1</span><span>2 km</span></div>
           <span class="line"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="tentang">
+      <div class="about-grid">
+        <div class="about-visual">
+          <img class="about-device" src="skews_1.jpg" alt="Perangkat SKEWS Desa Keji">
+          <div class="about-badge">Perangkat SKEWS Desa Keji</div>
+        </div>
+
+        <div class="about-copy">
+          <div class="eyebrow">TENTANG SKEWS</div>
+          <h3>Smart Keji <span>Early Warning System</span></h3>
+          <p>
+            SKEWS merupakan sistem peringatan dini yang dirancang untuk membantu masyarakat
+            Desa Keji memantau kondisi lingkungan dan mengenali perubahan yang berpotensi
+            meningkatkan risiko tanah longsor. Sistem memanfaatkan data sensor untuk mendukung
+            pemantauan kondisi secara berkala dan memberikan informasi yang lebih cepat,
+            jelas, dan mudah dipahami.
+          </p>
+
+          <div class="about-points">
+            <div class="about-point">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 7v5l3 2"/>
+              </svg>
+              <b>Pemantauan Berkala</b>
+              <small>Data kondisi lingkungan dipantau secara teratur.</small>
+            </div>
+
+            <div class="about-point">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                <path d="M12 3 4 7v5c0 4.8 3.4 8 8 9 4.6-1 8-4.2 8-9V7l-8-4Z"/>
+                <path d="m8.5 12 2.2 2.2 4.8-5"/>
+              </svg>
+              <b>Peringatan Dini</b>
+              <small>Mendukung kesiapsiagaan terhadap potensi longsor.</small>
+            </div>
+
+            <div class="about-point">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                <path d="M3 20c3-5 6-8 9-9 3 1 6 4 9 9"/>
+                <path d="M12 11V4"/>
+                <path d="m8.5 7.5 3.5 3.5 3.5-3.5"/>
+              </svg>
+              <b>Untuk Masyarakat</b>
+              <small>Informasi dibuat agar mudah dipantau dan dipahami.</small>
+            </div>
+          </div>
         </div>
       </div>
     </section>
