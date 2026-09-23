@@ -438,19 +438,48 @@
       top:-80px;
       left:-70px;
     }
-    .about-device{
+    .about-3d-stage{
       position:relative;
       width:min(100%,430px);
-      max-height:310px;
-      object-fit:contain;
-      border-radius:16px;
-      box-shadow:18px 20px 35px rgba(7,55,42,.20);
-      transform:perspective(1000px) rotateY(-7deg) rotateX(2deg);
-      transition:transform .35s ease,box-shadow .35s ease;
+      height:330px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      perspective:1100px;
+      perspective-origin:center center;
+      transform-style:preserve-3d;
+      cursor:grab;
+      touch-action:none;
+      user-select:none;
     }
-    .about-visual:hover .about-device{
-      transform:perspective(1000px) rotateY(-3deg) rotateX(1deg) translateY(-3px);
-      box-shadow:20px 24px 40px rgba(7,55,42,.24);
+    .about-3d-stage:active{cursor:grabbing}
+    .about-3d-stage:before{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:28px;
+      bottom:18px;
+      left:50%;
+      transform:translateX(-50%);
+      border-radius:50%;
+      background:rgba(4,53,40,.18);
+      filter:blur(10px);
+    }
+    .about-device-3d{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:auto;
+      height:310px;
+      max-width:none;
+      object-fit:contain;
+      transform:translate(-50%,-50%) rotateX(-4deg) rotateY(-12deg);
+      transform-style:preserve-3d;
+      transform-origin:center center;
+      filter:drop-shadow(14px 18px 18px rgba(7,55,42,.25));
+      pointer-events:none;
+      user-select:none;
+      -webkit-user-drag:none;
     }
     .about-badge{
       position:absolute;
@@ -691,7 +720,8 @@
       .about-section{width:calc(100% - 18px);padding:18px 14px}
       .about-grid{grid-template-columns:1fr;gap:20px}
       .about-visual{min-height:235px;padding:16px}
-      .about-device{max-height:235px;transform:perspective(850px) rotateY(-4deg) rotateX(1deg)}
+      .about-3d-stage{height:250px}
+      .about-device-3d{height:235px}
       .about-copy h3{font-size:24px}
       .about-copy p{font-size:12px;line-height:1.7}
       .about-points{grid-template-columns:1fr}
@@ -830,7 +860,9 @@
     <section class="about-section" id="tentang">
       <div class="about-grid">
         <div class="about-visual">
-          <img class="about-device" src="skews_1.jpg" alt="Perangkat SKEWS Desa Keji">
+          <div class="about-3d-stage" id="skews3dViewer" aria-label="Model 3D interaktif perangkat SKEWS">
+            <img class="about-device-3d" id="skews3dModel" src="skews-device-3d-clean.png" alt="Perangkat SKEWS Desa Keji">
+          </div>
           <div class="about-badge">Perangkat SKEWS Desa Keji</div>
         </div>
 
@@ -1301,5 +1333,61 @@
       if (event.key === "Escape") document.querySelectorAll(".modal.show").forEach(m => m.classList.remove("show"));
     });
   </script>
+
+<script>
+  // Interaksi 3D hanya untuk gambar perangkat pada bagian Tentang.
+  (() => {
+    const viewer = document.getElementById("skews3dViewer");
+    const model = document.getElementById("skews3dModel");
+    if (!viewer || !model) return;
+
+    let rotateX = -4;
+    let rotateY = -12;
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    const render = () => {
+      model.style.transform =
+        `translate(-50%,-50%) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    };
+
+    viewer.addEventListener("pointerdown", (event) => {
+      dragging = true;
+      lastX = event.clientX;
+      lastY = event.clientY;
+      viewer.setPointerCapture?.(event.pointerId);
+    });
+
+    viewer.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+
+      const dx = event.clientX - lastX;
+      const dy = event.clientY - lastY;
+
+      rotateY += dx * 0.65;
+      rotateX -= dy * 0.45;
+      rotateX = Math.max(-75, Math.min(75, rotateX));
+
+      lastX = event.clientX;
+      lastY = event.clientY;
+      render();
+    });
+
+    const stopDrag = (event) => {
+      dragging = false;
+      try { viewer.releasePointerCapture?.(event.pointerId); } catch (_) {}
+    };
+
+    viewer.addEventListener("pointerup", stopDrag);
+    viewer.addEventListener("pointercancel", stopDrag);
+    viewer.addEventListener("pointerleave", (event) => {
+      if (dragging) stopDrag(event);
+    });
+
+    render();
+  })();
+</script>
+
 </body>
 </html>
