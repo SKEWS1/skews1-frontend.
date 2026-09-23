@@ -36,7 +36,14 @@
     .container{width:min(1200px,92%);margin:0 auto}
     .hero{
       margin:24px 0 18px;padding:28px 30px;border-radius:24px;
-      background:linear-gradient(135deg,#075540,#0b6a51);color:#fff;box-shadow:var(--shadow)
+      background-image:
+        linear-gradient(rgba(0,24,20,.48), rgba(0,24,20,.48)),
+        url('skews_1.jpg');
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      background-repeat:no-repeat;
+      color:#fff;box-shadow:var(--shadow)
     }
     .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;background:rgba(255,255,255,.12);padding:7px 12px;border-radius:999px}
     .dot{width:8px;height:8px;border-radius:50%;background:var(--lime)}
