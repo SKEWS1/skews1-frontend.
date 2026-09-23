@@ -18,7 +18,18 @@
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{margin:0;font-family:Poppins,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    body{
+      margin:0;
+      font-family:Poppins,Arial,sans-serif;
+      background-image:
+        linear-gradient(rgba(0,24,20,.48), rgba(0,24,20,.48)),
+        url("skews_1.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      background-repeat:no-repeat;
+      color:var(--text);
+    }
     a{text-decoration:none;color:inherit}
     .topbar{
       min-height:72px;background:#fff;border-bottom:1px solid var(--line);
