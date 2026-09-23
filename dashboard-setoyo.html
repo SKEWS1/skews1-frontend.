@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#075540">
-  <title>SKEWS Desa Keji | Dashboard Dusun Keji</title>
+  <title>SKEWS Desa Keji | Dashboard Dusun Setoyo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -111,7 +111,7 @@
   <main class="container">
     <section class="hero">
       <div class="eyebrow"><span class="dot"></span> SISTEM PEMANTAUAN RISIKO LONGSOR</div>
-      <h1>Dashboard SKEWS — Dusun Keji</h1>
+      <h1>Dashboard SKEWS — Dusun Setoyo</h1>
       <p>Monitoring data sensor dan riwayat kondisi tanah secara berkala.</p>
       <div class="hero-meta">
         <div class="meta">Lokasi: Desa Keji, Ungaran Barat</div>
@@ -286,7 +286,7 @@ window.updateSKEWSData=function(payload){
   /*
     Payload yang diharapkan untuk halaman ini:
     {
-      keji: {
+      setoyo: {
         curahHujan:"...",
         kemiringan:"...",
         pergeseran:"...",
@@ -302,19 +302,47 @@ window.updateSKEWSData=function(payload){
           suhu:[{time:"14:00",value:27.5}]
         },
         statusHistory:[{time:"14:00",status:"Aman"}],
-        statusDistribution:{Aman:10,Siaga:2,Bahaya:1}
+        statusDistribution: {Aman: 6, Siaga: 0, Bahaya: 0}
       }
     }
   */
-  const station=payload?.keji ?? payload;
+  const station=payload?.setoyo ?? payload;
   window.__SKEWS_LAST_DATA=station||{};
   render(window.__SKEWS_LAST_DATA);
 };
 
 window.addEventListener("resize",()=>render(window.__SKEWS_LAST_DATA||{}));
 
-/* Kondisi awal: semua grafik menunggu backend. */
-window.__SKEWS_LAST_DATA={};
+/* Data demo untuk presentasi: kondisi AMAN. */
+const DEMO_DATA = {
+  curahHujan: "50 mm",
+  kemiringan: "1°",
+  pergeseran: "0 cm",
+  kelembabanTanah: "30 %",
+  suhu: "27 °C",
+  status: "Aman",
+  updatedAt: new Intl.DateTimeFormat("id-ID", {
+    timeZone: "Asia/Jakarta",
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).format(new Date()) + " WIB",
+  history: {'curahHujan': [{'time': '06:00', 'value': 0}, {'time': '07:00', 'value': 0}, {'time': '08:00', 'value': 0}, {'time': '09:00', 'value': 0}, {'time': '10:00', 'value': 0}, {'time': '11:00', 'value': 0}], 'kemiringan': [{'time': '06:00', 'value': 0}, {'time': '07:00', 'value': 0}, {'time': '08:00', 'value': 0}, {'time': '09:00', 'value': 0}, {'time': '10:00', 'value': 0}, {'time': '11:00', 'value': 0}], 'pergeseran': [{'time': '06:00', 'value': 0}, {'time': '07:00', 'value': 0}, {'time': '08:00', 'value': 0}, {'time': '09:00', 'value': 0}, {'time': '10:00', 'value': 0}, {'time': '11:00', 'value': 0}], 'kelembabanTanah': [{'time': '06:00', 'value': 30}, {'time': '07:00', 'value': 30}, {'time': '08:00', 'value': 30}, {'time': '09:00', 'value': 30}, {'time': '10:00', 'value': 30}, {'time': '11:00', 'value': 30}], 'suhu': [{'time': '06:00', 'value': 28}, {'time': '07:00', 'value': 28}, {'time': '08:00', 'value': 28}, {'time': '09:00', 'value': 28}, {'time': '10:00', 'value': 28}, {'time': '11:00', 'value': 28}]},
+  statusHistory: [{'time': '06:00', 'status': 'Aman'}, {'time': '07:00', 'status': 'Aman'}, {'time': '08:00', 'status': 'Aman'}, {'time': '09:00', 'status': 'Aman'}, {'time': '10:00', 'status': 'Aman'}, {'time': '11:00', 'status': 'Aman'}],
+  statusDistribution: {Aman: 6, Siaga: 0, Bahaya: 0}
+};
+
+/* Hubungkan ke backend/API nanti melalui fungsi ini. */
+window.updateSKEWSData = function(payload) {
+  const station = payload?.setoyo ?? payload;
+  window.__SKEWS_LAST_DATA = station || {};
+  render(window.__SKEWS_LAST_DATA);
+};
+
+window.__SKEWS_LAST_DATA = DEMO_DATA;
 render(window.__SKEWS_LAST_DATA);
 </script>
 </body>
