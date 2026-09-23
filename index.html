@@ -65,29 +65,29 @@
       animation:loaderFloat 1.8s ease-in-out infinite;
     }
     .loader-logo{
-      width:200px;
-      height:200px;
+      width:112px;
+      height:112px;
       object-fit:contain;
       display:block;
       margin:0 auto 18px;
       filter:drop-shadow(0 10px 18px rgba(0,0,0,.22));
     }
     .loader-brand{
-      font-size:100px;
+      font-size:40px;
       line-height:1;
       font-weight:800;
       letter-spacing:-1px;
     }
     .loader-fullname{
       margin-top:12px;
-      font-size:40px;
+      font-size:16px;
       font-weight:600;
       color:#bff8db;
       letter-spacing:.2px;
     }
     .loader-tagline{
       margin-top:14px;
-      font-size:40px;
+      font-size:14px;
       color:rgba(255,255,255,.82);
     }
     .loader-line{
@@ -642,236 +642,29 @@
     .quick .q-value{font-size:11.7px;font-weight:700;line-height:1.35;color:#21312e;margin-top:2px}
     .quick.report .q-value{display:flex;align-items:center;gap:10px}
 
-    /* ===================== KONTAK ===================== */
+    /* ===================== FOOTER ===================== */
     .footer{
-      margin-top:22px;
-      background:linear-gradient(180deg,#f3faf7 0%,#edf7f2 100%);
-      color:var(--text);
-      padding:54px 62px 30px;
-      border-top:1px solid #d7e9e1;
-    }
-    .contact-head{
-      max-width:760px;
-      margin:0 auto 28px;
-      text-align:center;
-    }
-    .contact-kicker{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:7px 13px;
-      border-radius:999px;
-      background:#dff7eb;
-      color:#0a7b59;
-      font-size:10px;
-      font-weight:800;
-      letter-spacing:.9px;
-      text-transform:uppercase;
-    }
-    .contact-kicker:before{
-      content:'';
-      width:7px;
-      height:7px;
-      border-radius:50%;
-      background:#16b878;
-      box-shadow:0 0 0 4px rgba(22,184,120,.1);
-    }
-    .contact-title{
-      margin:12px 0 7px;
-      font-size:30px;
-      line-height:1.1;
-      color:#123d31;
-      letter-spacing:-.8px;
-    }
-    .contact-subtitle{
-      margin:0;
-      color:#6b7b75;
-      font-size:12px;
-      line-height:1.65;
-    }
-    .contact-grid{
-      max-width:1180px;
-      margin:0 auto;
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:16px;
-    }
-    .contact-card{
-      position:relative;
-      min-height:212px;
-      padding:19px;
-      border:1px solid #d7e9e1;
-      border-radius:20px;
-      background:#fff;
-      box-shadow:0 10px 26px rgba(8,67,51,.07);
-      overflow:hidden;
-      transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
-    }
-    .contact-card:before{
-      content:'';
-      position:absolute;
-      left:0;
-      top:0;
-      width:100%;
-      height:4px;
-      background:linear-gradient(90deg,#0b7657,#4ee9a1);
-    }
-    .contact-card:hover{
-      transform:translateY(-3px);
-      box-shadow:0 15px 34px rgba(8,67,51,.11);
-      border-color:#bde4d2;
-    }
-    .contact-top{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .contact-icon{
-      width:42px;
-      height:42px;
-      display:grid;
-      place-items:center;
-      border-radius:13px;
-      background:#e6f8ef;
-      color:#087b59;
-    }
-    .contact-icon svg{width:22px;height:22px}
-    .contact-type{
-      display:inline-flex;
-      padding:5px 8px;
-      border-radius:999px;
-      background:#f1f7f4;
-      color:#6d7c77;
-      font-size:8px;
-      font-weight:700;
-      letter-spacing:.55px;
-      text-transform:uppercase;
-    }
-    .contact-card h4{
-      margin:14px 0 5px;
-      color:#123d31;
-      font-size:16px;
-      line-height:1.2;
-    }
-    .contact-card p{
-      margin:0;
-      color:#6d7e77;
-      font-size:10.5px;
-      line-height:1.55;
-      min-height:33px;
-    }
-    .contact-phone{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      margin-top:15px;
-      padding:10px 11px;
-      border-radius:12px;
-      background:#f1faf6;
-      color:#12362d;
-      font-size:12px;
-      font-weight:800;
-    }
-    .contact-phone svg{width:15px;height:15px;color:#0a9a68;flex:none}
-    .contact-action{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      width:100%;
-      margin-top:9px;
-      padding:10px 12px;
-      border-radius:11px;
-      background:#087d5b;
+      margin-top:14px;
+      min-height:78px;
+      background:#064738;
       color:#fff;
-      font-size:10px;
-      font-weight:700;
-    }
-    .contact-action svg{width:15px;height:15px}
-    .contact-note{
-      max-width:1180px;
-      margin:25px auto 0;
-      padding-top:18px;
-      border-top:1px solid #d7e9e1;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:20px;
+      padding:0 62px;
     }
-    .contact-brand{display:flex;align-items:center;gap:10px}
-    .footer-mark{width:34px;height:34px;object-fit:contain}
-    .footer-title{font-size:13px;font-weight:800;color:#154438;line-height:1.25}
-    .footer-title span{display:block;font-size:10px;font-weight:500;color:#6f7e78;margin-top:3px}
-    .footer-end{display:flex;align-items:center;gap:8px;font-size:10px;color:#688078}
-    .footer-end svg{width:18px;height:18px;color:#0c9868}
-
-
-    /* ===================== KONTAK BARU (SCOPED) ===================== */
-    .contact-section{margin-top:30px;padding:76px 62px 72px;background:linear-gradient(145deg,#f4fbf8 0%,#ffffff 48%,#eef8f3 100%);border-top:1px solid #dcece5}
-    .contact-shell{max-width:1180px;margin:0 auto}
-    .contact-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:30px}
-    .contact-section-kicker{display:inline-flex;align-items:center;padding:7px 11px;border-radius:8px;background:#0b7d5b;color:#fff;font-size:9px;font-weight:800;letter-spacing:1.1px}
-    .contact-section-head h2{margin:12px 0 8px;font-size:33px;line-height:1.08;letter-spacing:-1px;color:#103f32}
-    .contact-section-head p{max-width:690px;margin:0;color:#70817a;font-size:12px;line-height:1.7}
-    .contact-head-mark{display:flex;align-items:center;gap:9px;align-self:flex-start;margin-top:7px;padding:10px 13px;border:1px solid #cde7db;border-radius:12px;background:rgba(255,255,255,.8);color:#45685d;font-size:10px;font-weight:700;white-space:nowrap}
-    .contact-live-dot{width:7px;height:7px;border-radius:50%;background:#17b978;box-shadow:0 0 0 5px rgba(23,185,120,.12)}
-    .contact-feature{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;padding:24px 26px;border-radius:24px;background:#0b4d3d;color:#fff;box-shadow:0 18px 34px rgba(4,67,50,.14);position:relative;overflow:hidden}
-
-    .contact-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:20px}
-    .contact-feature-grid .contact-feature{min-width:0;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;align-items:center;gap:15px 16px;padding:20px}
-    .contact-feature-grid .contact-feature .contact-feature-icon{grid-column:1;grid-row:1 / span 2}
-    .contact-feature-grid .contact-feature .contact-feature-copy{grid-column:2;grid-row:1}
-    .contact-feature-grid .contact-feature .contact-feature-call{grid-column:2;grid-row:2;min-width:0;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
-    .contact-feature-grid .contact-feature-copy p{max-width:none}
-    @media(max-width:900px){.contact-feature-grid{grid-template-columns:1fr}}
-    .contact-feature:after{content:"";position:absolute;right:-70px;top:-90px;width:260px;height:260px;border:1px solid rgba(126,246,192,.18);border-radius:50%;box-shadow:0 0 0 24px rgba(126,246,192,.035),0 0 0 48px rgba(126,246,192,.025)}
-    .contact-feature-icon{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:rgba(123,241,189,.13);color:#76e9b8}
-    .contact-feature-icon svg{width:27px;height:27px}
-    .contact-feature-label{display:block;color:#78e8b7;font-size:8px;font-weight:800;letter-spacing:1.1px}
-    .contact-feature-copy h3{margin:6px 0 4px;font-size:19px;line-height:1.2}
-    .contact-feature-copy p{margin:0;max-width:650px;color:rgba(255,255,255,.74);font-size:10.5px;line-height:1.6}
-    .contact-feature-call{position:relative;z-index:1;min-width:196px;padding:13px 16px;border-radius:16px;background:#fff;color:#103f32;display:flex;flex-direction:column;align-items:flex-start;gap:7px}
-    .contact-call-number{font-size:18px;font-weight:900;letter-spacing:.2px}
-    .contact-call-action{font-size:10px;font-weight:800;color:#0b7d5b}
-    .contact-call-action span{margin-left:5px}
-    .contact-tiles{margin-top:20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
-    .contact-tile{padding:19px 19px 17px;border:1px solid #d7e8e1;border-radius:18px;background:#fff;box-shadow:0 10px 24px rgba(8,67,51,.06);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;position:relative;overflow:hidden}
-    .contact-tile:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#15ae77,#8be9be)}
-    .contact-tile:hover{transform:translateY(-3px);border-color:#bfe3d2;box-shadow:0 16px 30px rgba(8,67,51,.09)}
-    .contact-tile-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .contact-tile-index{font-size:9px;font-weight:900;color:#0b8a62;letter-spacing:.7px}
-    .contact-tile-tag{font-size:8px;font-weight:800;letter-spacing:.45px;text-transform:uppercase;color:#75867f;background:#f2f7f5;padding:5px 8px;border-radius:999px}
-    .contact-tile h4{margin:14px 0 5px;font-size:16px;color:#173c32;line-height:1.2}
-    .contact-tile p{margin:0;min-height:34px;color:#72827c;font-size:10px;line-height:1.55}
-    .contact-tile a{margin-top:14px;padding-top:11px;border-top:1px solid #e4efea;display:flex;align-items:center;justify-content:space-between;color:#0b7657;font-size:11.5px;font-weight:900}
-    .contact-arrow{font-size:15px}
-    .contact-tile-wide{grid-column:1 / -1}
-
-    /* ===================== FOOTER DIKEMBALIKAN ===================== */
-    footer.footer#site-footer{margin-top:0;min-height:78px;background:#064738;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:18px 62px;border-top:0}
-    footer.footer#site-footer .footer-brand{display:flex;align-items:center;gap:10px}
-    footer.footer#site-footer .footer-mark{width:36px;height:36px;object-fit:contain}
-    footer.footer#site-footer .footer-title{font-size:15px;font-weight:700;line-height:1.25;color:#fff}
-    footer.footer#site-footer .footer-title span{display:block;font-size:12px;font-weight:500;margin-top:4px;color:rgba(255,255,255,.82)}
-    footer.footer#site-footer .footer-contact{display:flex;align-items:center;gap:16px;width:min(620px,56%);font-size:15px;line-height:1.6}
-    footer.footer#site-footer .footer-contact-title{display:block;font-size:21px;font-weight:800;color:#53efaa;letter-spacing:.7px;margin-bottom:8px;text-transform:uppercase}
-    footer.footer#site-footer .footer-contact-row{display:flex;align-items:flex-start;gap:10px;color:rgba(255,255,255,.92);margin-top:8px}
-    footer.footer#site-footer .footer-contact-row svg{width:21px;height:21px;flex:none;color:#53efaa;margin-top:2px}
-    footer.footer#site-footer .footer-contact-row a{font-size:15px;color:rgba(255,255,255,.92)}
-    footer.footer#site-footer .footer-end{display:flex;align-items:center;gap:10px;font-size:12px;color:#fff}
-    footer.footer#site-footer .footer-end svg{width:21px;height:21px}
-
-    @media(max-width:920px){
-      .contact-section{padding:56px 28px 54px}.contact-section-head{align-items:flex-start;flex-direction:column}.contact-head-mark{align-self:auto;margin-top:0}.contact-feature{grid-template-columns:auto 1fr}.contact-feature-call{grid-column:1/-1;width:100%}.contact-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
-      footer.footer#site-footer{flex-wrap:wrap;gap:16px;padding:20px 28px}.contact-tile-wide{grid-column:auto}
-    }
-    @media(max-width:650px){
-      .contact-section{padding:48px 18px 45px}.contact-section-head h2{font-size:27px}.contact-head-mark{font-size:9px}.contact-feature{grid-template-columns:1fr;gap:12px;padding:21px}.contact-feature-call{grid-column:auto}.contact-tiles{grid-template-columns:1fr}.contact-tile-wide{grid-column:auto}
-      footer.footer#site-footer{padding:20px 18px;justify-content:center;text-align:left}.contact-head-mark{white-space:normal}
-      footer.footer#site-footer .footer-contact{width:100%;max-width:none}.footer-end{width:100%;justify-content:center}
-    }
+    .footer-brand{display:flex;align-items:center;gap:10px}
+    .footer-mark{width:36px;height:36px;object-fit:contain}
+    .footer-title{font-size:15px;font-weight:700;line-height:1.25}
+    .footer-title span{display:block;font-size:12px;font-weight:500;margin-top:4px}
+    .footer-contact{display:flex;align-items:center;gap:16px;width:min(620px,56%);font-size:15px;line-height:1.6}
+    .footer-contact-title{display:block;font-size:21px;font-weight:800;color:#53efaa;letter-spacing:.7px;margin-bottom:8px;text-transform:uppercase}
+    .footer-contact-row{display:flex;align-items:flex-start;gap:10px;color:rgba(255,255,255,.92);margin-top:8px}
+    .footer-contact-row svg{width:21px;height:21px;flex:none;color:#53efaa;margin-top:2px}
+    .footer-contact-row a{font-size:15px}
+    .footer-contact-row a{color:rgba(255,255,255,.92)}
+    .footer-end{display:flex;align-items:center;gap:10px;font-size:12px}
+    .footer-end svg{width:21px;height:21px}
 
     /* ===================== MODAL ===================== */
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.54);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}
@@ -913,12 +706,12 @@
       .header{padding:0 28px}.brand{min-width:225px}.header-cta{min-width:230px}.cta{padding:10px 15px}.nav{gap:6px}
       .hero-inner{padding-left:42px}.hero h1{font-size:49px}.hero-script{left:52%}.label-keji{right:35%;top:68%}
       .content-wrap{width:calc(100% - 42px)}
-      .footer{padding-left:35px;padding-right:35px}.contact-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .footer{padding:0 35px}.footer-nav{gap:20px}
     }
     @media(max-width:920px){
       .header{height:auto;min-height:72px;padding:12px 22px;flex-wrap:wrap;gap:10px}.brand{min-width:auto}.nav{order:3;width:100%;justify-content:flex-start;overflow-x:auto;padding-bottom:2px}.header-cta{display:none}
       .hero{height:500px}.hero-inner{padding:30px 28px}.hero-left{width:65%}.hero h1{font-size:43px}.weather{right:20px;top:18px;bottom:auto}
-      .ews-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.footer{padding:36px 28px 24px}.contact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.contact-note{flex-wrap:wrap}.footer-end{width:auto}
+      .ews-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}.footer{flex-wrap:wrap;padding:18px 28px;gap:16px}.footer-contact{width:100%;justify-content:center}
     }
     @media(max-width:650px){
       .about-section{width:calc(100% - 18px);padding:18px 14px}
@@ -933,12 +726,12 @@
       .about-point svg{grid-row:1 / span 2;margin:0}
       .about-point b{align-self:end}
       .about-point small{margin-top:2px}
-      .contact-grid{grid-template-columns:1fr}
+      .footer-contact{width:100%;max-width:none}
       .header{padding:10px 16px}.brand-title{font-size:22px}.brand-sub{font-size:10px}.brand-mark{width:44px;height:44px}.nav a{padding:9px 13px;font-size:12px}
       .hero{height:690px;background-position:center top;background-attachment:fixed;background-size:auto 100%;background-repeat:no-repeat}.hero-inner{padding:155px 18px 24px}.hero-left{width:100%;max-width:none}.eyebrow{font-size:11px}.hero h1{font-size:38px;letter-spacing:-1.1px}.hero h2{font-size:20px}.hero-copy{font-size:13px;max-width:345px}.benefits{gap:12px;flex-wrap:wrap}.benefit{min-width:120px}.benefit + .benefit{padding-left:12px}
       .weather{top:18px;right:18px;bottom:auto;width:calc(100% - 36px)}
       .content-wrap{width:calc(100% - 18px);padding:13px 11px}.section-head{align-items:flex-start}.section-title h3{font-size:18px}.section-title p{font-size:10px}.map-full{font-size:10px;padding:8px 12px}
-      .ews-card{grid-template-columns:1fr;min-height:auto}.ews-image{min-height:255px}.stats{min-height:245px}.quick-grid{grid-template-columns:1fr}.quick{padding:12px 20px}.footer{padding:34px 18px 22px}.contact-title{font-size:25px}.contact-subtitle{font-size:11px}.contact-note{margin-top:20px;align-items:flex-start}.footer-end{width:100%;justify-content:flex-start}
+      .ews-card{grid-template-columns:1fr;min-height:auto}.ews-image{min-height:255px}.stats{min-height:245px}.quick-grid{grid-template-columns:1fr}.quick{padding:12px 20px}.footer{padding:20px 18px;justify-content:center}.footer-contact{width:100%;justify-content:center}.footer-end{width:100%;justify-content:center}
       .modal-data{grid-template-columns:1fr}
     }
   </style>
@@ -1200,130 +993,7 @@
     </section>
   </main>
 
-  <section class="contact-section" id="kontak">
-    <div class="contact-shell">
-      <div class="contact-section-head">
-        <div>
-          <span class="contact-section-kicker">PUSAT KONTAK SKEWS</span>
-          <h2>Terhubung dengan Layanan Desa</h2>
-          <p>Gunakan kontak berikut untuk koordinasi SKEWS, informasi wilayah, keamanan, dan penanganan keadaan darurat.</p>
-        </div>
-        <div class="contact-head-mark" aria-hidden="true">
-          <span class="contact-live-dot"></span>
-          <span>Desa Keji • Ungaran Barat</span>
-        </div>
-      </div>
-
-      <div class="contact-feature-grid">
-        <article class="contact-feature">
-          <div class="contact-feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 18V9h14v9M7 9V6h10v3M9 6V3h6v3M8 12h8M8 15h8"/></svg>
-          </div>
-          <div class="contact-feature-copy">
-            <span class="contact-feature-label">PEMERINTAH DESA</span>
-            <h3>Kepala Desa</h3>
-            <p>Kepala Desa Keji dan koordinasi pemerintahan desa.</p>
-          </div>
-          <a class="contact-feature-call" href="tel:+6281329442688">
-            <span class="contact-call-number">0813-2944-2688</span>
-            <span class="contact-call-action">Hubungi Kepala Desa <span aria-hidden="true">→</span></span>
-          </a>
-        </article>
-
-        <article class="contact-feature">
-          <div class="contact-feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21v-9l8-6 8 6v9M8 21v-6h8v6M7 10h10"/></svg>
-          </div>
-          <div class="contact-feature-copy">
-            <span class="contact-feature-label">KEAMANAN & KETERTIBAN</span>
-            <h3>Bhabinkamtibmas</h3>
-            <p>Petugas keamanan dan ketertiban masyarakat Desa Keji.</p>
-          </div>
-          <a class="contact-feature-call" href="tel:+6289530000040">
-            <span class="contact-call-number">0895-3000-0040</span>
-            <span class="contact-call-action">Hubungi Bhabinkamtibmas <span aria-hidden="true">→</span></span>
-          </a>
-        </article>
-
-        <article class="contact-feature">
-          <div class="contact-feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 21 7v5c0 4.7-3.5 7.5-9 9-5.5-1.5-9-4.3-9-9V7l9-4Z"/><path d="M8 12h8M12 8v8"/></svg>
-          </div>
-          <div class="contact-feature-copy">
-            <span class="contact-feature-label">PEMBINAAN WILAYAH</span>
-            <h3>Babinsa</h3>
-            <p>Koordinasi keamanan wilayah dan pembinaan masyarakat.</p>
-          </div>
-          <a class="contact-feature-call" href="tel:+6285326268087">
-            <span class="contact-call-number">0853-2626-8087</span>
-            <span class="contact-call-action">Hubungi Babinsa <span aria-hidden="true">→</span></span>
-          </a>
-        </article>
-
-        <article class="contact-feature">
-          <div class="contact-feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 21 7v5c0 4.7-3.5 7.5-9 9-5.5-1.5-9-4.3-9-9V7l9-4Z"/><path d="M12 7v5M9.5 14.5h5"/></svg>
-          </div>
-          <div class="contact-feature-copy">
-            <span class="contact-feature-label">KONTAK DARURAT</span>
-            <h3>BPBD Kabupaten Semarang</h3>
-            <p>Koordinasi penanganan bencana dan keadaan darurat di wilayah Kabupaten Semarang.</p>
-          </div>
-          <a class="contact-feature-call" href="tel:+62246922400">
-            <span class="contact-call-number">024-6922400</span>
-            <span class="contact-call-action">Hubungi BPBD <span aria-hidden="true">→</span></span>
-          </a>
-        </article>
-
-        <article class="contact-feature">
-          <div class="contact-feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"/><path d="M8 6v12M16 6v12M4 10h16"/></svg>
-          </div>
-          <div class="contact-feature-copy">
-            <span class="contact-feature-label">DUSUN</span>
-            <h3>Kadus Suruhan</h3>
-            <p>Pelayanan dan koordinasi masyarakat di wilayah Dusun Suruhan.</p>
-          </div>
-          <a class="contact-feature-call" href="tel:+6285712995229">
-            <span class="contact-call-number">0857-1299-5229</span>
-            <span class="contact-call-action">Hubungi Kadus Suruhan <span aria-hidden="true">→</span></span>
-          </a>
-        </article>
-
-        <article class="contact-feature">
-          <div class="contact-feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"/><path d="M8 6v12M16 6v12M4 10h16"/></svg>
-          </div>
-          <div class="contact-feature-copy">
-            <span class="contact-feature-label">DUSUN</span>
-            <h3>Kadus Setoyo</h3>
-            <p>Pelayanan dan koordinasi masyarakat di wilayah Dusun Setoyo.</p>
-          </div>
-          <a class="contact-feature-call" href="tel:+6283838579933">
-            <span class="contact-call-number">0838-3857-9933</span>
-            <span class="contact-call-action">Hubungi Kadus Setoyo <span aria-hidden="true">→</span></span>
-          </a>
-        </article>
-
-        <article class="contact-feature">
-          <div class="contact-feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"/><path d="M8 6v12M16 6v12M4 10h16"/></svg>
-          </div>
-          <div class="contact-feature-copy">
-            <span class="contact-feature-label">DUSUN</span>
-            <h3>Kadus Keji</h3>
-            <p>Pelayanan dan koordinasi masyarakat di wilayah Dusun Keji.</p>
-          </div>
-          <a class="contact-feature-call" href="tel:+6281901106777">
-            <span class="contact-call-number">0819-0110-6777</span>
-            <span class="contact-call-action">Hubungi Kadus Keji <span aria-hidden="true">→</span></span>
-          </a>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer" id="site-footer">
+  <footer class="footer" id="kontak">
     <div class="footer-brand">
       <img class="footer-mark" src="logo-skews.png" alt="Logo SKEWS" />
       <div class="footer-title">SKEWS Desa Keji<span>Ungaran Barat</span></div>
@@ -1337,7 +1007,7 @@
           <span>Kantor Kepala Desa Keji, Kecamatan Ungaran Barat, Kabupaten Semarang</span>
         </div>
         <div class="footer-contact-row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.7 3.5 9 8 6.3 10.2c1.2 2.6 3 4.5 5.7 5.7l2.2-2.7 4.5 2.3c.4.2.6.7.5 1.1l-.7 3.1c-.1.5-.6.8-1.1.8C9.8 20.5 3.5 14.2 3.5 6.6c0-.5.3-.9.8-1.1l3.1-.7c.4-.1.9.1-1.1.5Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.7 3.5 9 8 6.3 10.2c1.2 2.6 3 4.5 5.7 5.7l2.2-2.7 4.5 2.3c.4.2.6.7.5 1.1l-.7 3.1c-.1.5-.6.8-1.1.8C9.8 20.5 3.5 14.2 3.5 6.6c0-.5.3-.9.8-1.1l3.1-.7c.4-.1.9.1 1.1.5Z"/></svg>
           <a href="tel:+6281329442688">+62 813-2944-2688</a>
         </div>
         <div class="footer-contact-row">
