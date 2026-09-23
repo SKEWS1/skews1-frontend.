@@ -448,11 +448,11 @@
       perspective:1100px;
       perspective-origin:center center;
       transform-style:preserve-3d;
-      cursor:grab;
-      touch-action:none;
+      cursor:default;
+      touch-action:auto;
       user-select:none;
     }
-    .about-3d-stage:active{cursor:grabbing}
+    .about-3d-stage:active{cursor:default}
     .about-3d-stage:before{
       content:"";
       position:absolute;
@@ -467,13 +467,16 @@
     }
     .about-device-3d{
       position:absolute;
-      inset:0;
+      left:50%;
+      top:50%;
       width:100%;
       height:100%;
+      max-width:100%;
+      max-height:100%;
       background:transparent;
-      --poster-color:transparent;
-      --progress-bar-color:transparent;
       filter:drop-shadow(14px 18px 18px rgba(7,55,42,.18));
+      transform:translate(-50%,-50%);
+      display:block;
     }
     .about-badge{
       position:absolute;
@@ -858,21 +861,16 @@
             <model-viewer
               class="about-device-3d"
               id="skews3dModel"
-              src="skews-device-3d.glb"
+              src="skews-3D.glb"
               alt="Model 3D perangkat SKEWS Desa Keji"
               camera-controls
-              auto-rotate
-              auto-rotate-delay="900"
-              rotation-per-second="18deg"
-              interaction-prompt="none"
-              camera-orbit="-25deg 72deg 4.2m"
-              min-camera-orbit="auto auto 2.8m"
-              max-camera-orbit="auto auto 6m"
-              shadow-intensity="1.2"
-              shadow-softness="0.8"
+              disable-tap
+              shadow-intensity="0.2"
               exposure="1.05"
-              environment-image="neutral"
-              touch-action="pan-y">
+              interaction-prompt="none"
+              camera-orbit="0deg 75deg auto"
+              field-of-view="30deg"
+              style="--poster-color: transparent;">
             </model-viewer>
           </div>
           <div class="about-badge">Perangkat SKEWS Desa Keji</div>
@@ -1345,6 +1343,8 @@
       if (event.key === "Escape") document.querySelectorAll(".modal.show").forEach(m => m.classList.remove("show"));
     });
   </script>
+
+</script>
 
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 
