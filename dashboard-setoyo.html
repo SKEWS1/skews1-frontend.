@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#075540">
-  <title>SKEWS Desa Keji | Dashboard Dusun Setoyo</title>
+  <title>SKEWS - Dusun Setoyo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -44,6 +44,7 @@
     .hero p{margin:0;color:rgba(255,255,255,.86);font-size:13px}
     .hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
     .meta{padding:9px 12px;border-radius:11px;background:rgba(255,255,255,.1);font-size:10px}
+    .coordinates{display:inline-block;margin-top:3px;color:rgba(255,255,255,.82);font-size:9px}
     .section-title{margin:24px 0 12px;color:#164c3d;font-size:18px;font-weight:800}
     .latest-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
     .latest{
@@ -105,16 +106,16 @@
         <div class="brand-sub">Desa Keji, Ungaran Barat</div>
       </div>
     </a>
-    <a class="back-btn" href="index.html">← Kembali ke SKEWS</a>
+    <a class="back-btn" href="index.html">← Kembali</a>
   </header>
 
   <main class="container">
     <section class="hero">
       <div class="eyebrow"><span class="dot"></span> SISTEM PEMANTAUAN RISIKO LONGSOR</div>
-      <h1>Dashboard SKEWS — Dusun Setoyo</h1>
+      <h1>SKEWS - Dusun Setoyo</h1>
       <p>Monitoring data sensor dan riwayat kondisi tanah secara berkala.</p>
       <div class="hero-meta">
-        <div class="meta">Lokasi: Desa Keji, Ungaran Barat</div>
+        <div class="meta">Lokasi: Dusun Setoyo, Desa Keji, Ungaran Barat<br><span class="coordinates">Koordinat: -7.1294947, 110.3785400</span></div>
         <div class="meta">Update: <span id="lastUpdate">Menunggu data</span></div>
         <div class="meta">Status koneksi: <span id="connection">Menunggu backend</span></div>
       </div>
@@ -149,26 +150,35 @@
           <div id="legend" class="legend"></div>
         </div>
       </div>
-      <div class="analysis-card">
-        <h3>Makna Status</h3>
-        <div class="legend">
-          <div class="legend-row"><span class="legend-dot" style="background:#25bd72"></span><span>Aman</span><span class="legend-value">Kondisi normal</span></div>
-          <div class="legend-row"><span class="legend-dot" style="background:#e9b51c"></span><span>Siaga</span><span class="legend-value">Perlu waspada</span></div>
-          <div class="legend-row"><span class="legend-dot" style="background:#e33d4f"></span><span>Bahaya</span><span class="legend-value">Perlu tindakan</span></div>
-        </div>
-      </div>
     </section>
 
-    <div class="note">
-      Dashboard ini tidak menggunakan data sensor contoh. Sebelum backend terhubung, seluruh data akan tetap
-      <b>“Menunggu data”</b>. Setelah backend tersedia, fungsi <b>window.updateSKEWSData()</b> dapat digunakan
-      untuk mengirim data terbaru dan riwayat ke halaman ini.
-    </div>
   </main>
 
   <footer>SKEWS Desa Keji — Untuk Masa Depan yang Lebih Aman</footer>
 
 <script>
+function updateDashboardTime() {
+  const el = document.getElementById("lastUpdate");
+  if (!el) return;
+
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat("id-ID", {
+    timeZone: "Asia/Jakarta",
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).formatToParts(now);
+
+  const get = type => parts.find(p => p.type === type)?.value || "";
+  el.textContent = `${get("day")} ${get("month")} ${get("year")} pukul ${get("hour")}:${get("minute")} WIB`;
+}
+
+updateDashboardTime();
+setInterval(updateDashboardTime, 600000);
+
 const STATUS = ["Aman","Siaga","Bahaya"];
 const STATUS_COLOR = {Aman:"#25bd72",Siaga:"#e9b51c",Bahaya:"#e33d4f"};
 const FIELDS = ["curahHujan","kemiringan","pergeseran","kelembabanTanah","suhu"];
@@ -302,7 +312,7 @@ window.updateSKEWSData=function(payload){
           suhu:[{time:"14:00",value:27.5}]
         },
         statusHistory:[{time:"14:00",status:"Aman"}],
-        statusDistribution: {Aman: 6, Siaga: 0, Bahaya: 0}
+        statusDistribution:{Aman:10,Siaga:2,Bahaya:1}
       }
     }
   */
@@ -315,11 +325,11 @@ window.addEventListener("resize",()=>render(window.__SKEWS_LAST_DATA||{}));
 
 /* Data demo untuk presentasi: kondisi AMAN. */
 const DEMO_DATA = {
-  curahHujan: "50 mm",
-  kemiringan: "1°",
+  curahHujan: "0 mm",
+  kemiringan: "0°",
   pergeseran: "0 cm",
   kelembabanTanah: "30 %",
-  suhu: "27 °C",
+  suhu: "28 °C",
   status: "Aman",
   updatedAt: new Intl.DateTimeFormat("id-ID", {
     timeZone: "Asia/Jakarta",
